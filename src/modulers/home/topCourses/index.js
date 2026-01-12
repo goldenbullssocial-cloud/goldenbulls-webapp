@@ -98,8 +98,6 @@ export default function TopCourses() {
           >
             {courses[activeTab]?.length > 0 ? (
               courses[activeTab]?.map((item) => (
-                console.log(item, "!!!!item"),
-
                 <CoursesCard
                   key={item?._id}
                   title={item?.CourseName}

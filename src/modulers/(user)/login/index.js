@@ -83,7 +83,7 @@ export default function Login() {
                 toast.success("Login successfully.");
 
                 const cookieOptions = rememberMe
-                    ? { expires: 30 } 
+                    ? { expires: 30 }
                     : {};
 
                 setCookie("userToken", data.payload.token, cookieOptions);
@@ -103,7 +103,6 @@ export default function Login() {
                 );
             }
         } catch (error) {
-            console.error("Login error:", error);
 
             const serverMessage = error.response?.data?.message;
 

@@ -90,7 +90,6 @@ export default function NewPassword() {
         setErrors(prev => ({ ...prev, submit: errorMessages[data?.message] ?? "Failed to update password." }));
       }
     } catch (error) {
-      console.error("Update password error:", error);
       const serverMessage = error.response?.data?.message;
       if (serverMessage && errorMessages[serverMessage]) {
         toast.dismiss();

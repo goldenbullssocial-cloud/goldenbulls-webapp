@@ -40,7 +40,6 @@ export default function Footer() {
         toast.error(res.message || "Failed to subscribe.");
       }
     } catch (error) {
-      console.error("Newsletter error:", error);
       toast.error(error?.response?.data?.message || "Something went wrong.");
     } finally {
       setLoading(false);
