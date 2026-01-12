@@ -67,7 +67,6 @@ export default function ResetPassword() {
 
                 setEmail("");
 
-                // Optionally redirect to login after a delay
                 setTimeout(() => {
                     router.push(`/otp-screen?email=${encodeURIComponent(email)}`);
                 }, 5000);
