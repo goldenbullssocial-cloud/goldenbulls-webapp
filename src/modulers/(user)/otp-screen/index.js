@@ -131,6 +131,7 @@ function OtpScreenContent() {
         return `${name.substring(0, visibleLen)}*****@${domain}`;
     };
 
+
     return (
         <div className={styles.resetpasswordWrapper}>
             <Toaster position="top-right" />
