@@ -1,0 +1,217 @@
+@use '../../../../scss/main.scss' as *;
+@use '../../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../../scss/font/font.scss' as *;
+
+.courseDetails {
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 540px;
+        gap: 20px;
+
+        .griditems {
+
+            .contnetStyle {
+                max-width: 896px;
+
+                .leftBottomAlignment {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+
+                    .dot {
+                        width: 7px;
+                        height: 7px;
+                        background-color: #B6B6B6;
+                        border-radius: 7px;
+                    }
+
+                    .dotButton {
+                        display: flex;
+                        align-items: center;
+                        gap: 14px;
+
+                        .dot {
+                            width: 7px;
+                            height: 7px;
+                            background-color: #B6B6B6;
+                            border-radius: 7px;
+                        }
+
+                        button {
+                            background-color: transparent;
+                            border-radius: 50px;
+                            border: 1px solid var(--GOLD, #F9F490);
+                            font-size: 18.411px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                            padding: 6px 23px;
+                            @include font-normal;
+
+                            span {
+                                background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                                background-clip: text;
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                            }
+                        }
+                    }
+
+                    .ratingAlignment {
+                        display: flex;
+                        align-items: center;
+                        gap: 14px;
+
+                        .dot {
+                            width: 7px;
+                            height: 7px;
+                            background-color: #B6B6B6;
+                            border-radius: 7px;
+                        }
+
+                        .rating {
+                            display: flex;
+                            align-items: center;
+                            gap: 4px;
+
+                            span {
+                                @include gradient-text;
+                                font-size: 23.014px;
+                                font-style: normal;
+                                font-weight: 500;
+                                line-height: normal;
+                                @include font-medium;
+
+                                @include respond-to("sm") {
+                                    font-size: 20px;
+                                    font-style: normal;
+                                    font-weight: 500;
+                                    line-height: normal;
+                                }
+                            }
+                        }
+                    }
+
+                    .time {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+
+                        span {
+                            color: #B6B6B6;
+                            font-size: 20px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: normal;
+                            @include font-medium;
+
+                            @include respond-to("sm") {
+                                font-size: 20px;
+                                font-style: normal;
+                                font-weight: 500;
+                                line-height: normal;
+                            }
+                        }
+                    }
+
+                }
+
+                .subtitle {
+                    padding: 0 0 24px 0;
+
+                    h3 {
+                        color: #F5F5F5;
+                        font-size: 48px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 150%;
+                        margin: 24px 0;
+                        text-transform: uppercase;
+                        @include heading-font;
+                    }
+
+                    p {
+                        max-width: 896px;
+                        color: rgba(255, 255, 255, 0.70);
+                        font-size: 22.303px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        @include font-normal;
+                    }
+
+                    span {
+                        color: #B6B6B6;
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                        @include font-medium;
+                        @include font-normal;
+                        @include gradient-text;
+                    }
+                }
+            }
+
+            .card {
+                border-radius: 30px;
+                background: #0C0C0C;
+                padding: 28px;
+                position: relative;
+
+                &::before {
+                    @include border;
+                }
+
+                .image {
+                    img {
+                        width: 100%;
+                        height: 326px;
+                        display: block;
+                        border-radius: 12px;
+                    }
+                }
+
+                .details {
+                    padding: 30px 0 0 0;
+
+                    .button {
+                        button {
+                            width: 100%;
+                        }
+                    }
+
+                    .twoText {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                        padding: 0 0 30px 0;
+
+                        ul {
+                            margin: 0;
+                            padding: 0 0 0 15px;
+
+                            li {
+                                color: #B6B6B6;
+                                font-size: 23.014px;
+                                font-style: normal;
+                                font-weight: 500;
+                                @include font-medium;
+                                line-height: normal;
+                            }
+                        }
+
+                        h4 {
+                            color: #FFF;
+                            font-size: 40px;
+                            font-style: normal;
+                            font-weight: 700;
+                            line-height: normal;
+                            @include font-bold;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

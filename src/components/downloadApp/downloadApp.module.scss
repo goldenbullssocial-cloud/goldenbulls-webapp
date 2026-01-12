@@ -1,0 +1,92 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.downloadAppWrapper {
+    transition: opacity .3s ease-in-out, visibility .3s ease-in-out;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    -webkit-backdrop-filter: blur(6.9444441795px);
+    backdrop-filter: blur(6.9444441795px);
+    background: rgba(0, 0, 0, .6);
+    z-index: 999999;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal {
+        border-radius: 12px;
+        background: #0C0C0C;
+        max-width: 500px;
+        width: 100%;
+        padding: 20px 32px 40px 32px;
+        position: relative;
+
+        @include respond-to("sm") {
+            max-width: calc(100% - 16px);
+        }
+
+        &::before {
+            @include border;
+        }
+
+        .twoButtonAlignment {
+            padding: 40px 0 0 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+
+            @include respond-to("sm") {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            img {
+                max-width: 200px;
+                display: block;
+                cursor: pointer;
+
+                @include respond-to("sm") {
+                    margin: 0 auto;
+                }
+            }
+        }
+
+        .modalHeader {
+            display: flex;
+            justify-content: space-between;
+
+            img {
+                max-width: 100px;
+                display: block;
+                cursor: pointer;
+            }
+
+            svg {
+                position: relative;
+                top: 10px;
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                transition: .3s ease-in-out;
+
+                &:hover {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+
+
+    }
+}

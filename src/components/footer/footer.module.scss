@@ -1,0 +1,377 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.footer {
+    background: #141414;
+    padding: 60px 0 32px 0;
+
+    .bottomText {
+        @include respond-to("xl") {
+            display: flex;
+            justify-content: center;
+        }
+
+        img {
+            display: block;
+            opacity: .5;
+
+            @include respond-to("xl") {
+                max-width: 90%;
+            }
+
+            @include respond-to("sm") {
+                max-width: 100%;
+            }
+        }
+    }
+
+    .footerDetails {
+        padding: 60px 0;
+
+        @include respond-to("xl") {
+            padding: 40px 0;
+        }
+
+        @include respond-to("sm") {
+            padding: 48px 0;
+        }
+
+        p:last-child {
+            margin: 0;
+        }
+
+        p {
+            color: #A1A1A1;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 21.01px;
+            margin: 0 0 20px 0;
+            @include font-normal;
+
+            @include respond-to("xl") {
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            @include respond-to("sm") {
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 21.01px;
+                max-width: 400px;
+            }
+        }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 375px 1fr;
+        gap: 63px;
+        padding: 0 0 64px 0;
+        border-bottom: 1px solid #5B5B5B;
+
+        @include respond-to("xl") {
+            gap: 50px;
+        }
+
+        @include respond-to("md") {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @include respond-to("sm") {
+            gap: 48px;
+        }
+
+        .griditems:last-child {
+            display: flex;
+            justify-content: space-between;
+
+            @include respond-to("md") {
+                grid-template-columns: 1fr 1fr 1fr;
+                display: grid;
+                gap: 40px 20px;
+            }
+
+            @include respond-to("sm") {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .newsletter {
+                max-width: 442px;
+
+                @include respond-to("md") {
+                    max-width: 100%;
+                    grid-column: span 3;
+                }
+
+                @include respond-to("sm") {
+                    grid-column: span 2;
+                }
+
+                .checkboxText {
+                    padding: 32px 0 0 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+
+                    input[type="checkbox"] {
+                        width: 22px;
+                        height: 22px;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    label {
+                        display: block;
+                        color: #FFF;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 28px;
+                        @include font-normal;
+                    }
+                }
+
+                .input {
+                    position: relative;
+
+                    .rightAlignment {
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        right: 8px;
+                        display: flex;
+                        align-items: center;
+
+                        .buttonDesign {
+                            button {
+                                color: #000;
+                                font-size: 16px;
+                                font-style: normal;
+                                font-weight: 700;
+                                line-height: normal;
+                                padding: 10px 29px;
+                            }
+                        }
+                    }
+
+                    input {
+                        width: 100%;
+                        border-radius: 70px;
+                        border: 1px solid rgba(255, 255, 255, 0.13);
+                        background: #0C0C0C;
+                        height: 56px;
+                        color: #fff;
+                        padding-left: 20px;
+                        padding-right: 120px;
+                        font-size: 18px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        @include font-normal;
+                        transition: .3s ease-in-out;
+
+                        &:focus {
+                            border: 1px solid #EEB92B;
+                            outline: none;
+                        }
+                    }
+
+                    ::placeholder {
+                        color: #A1A1A1;
+                        font-size: 18px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        @include font-normal;
+                    }
+                }
+
+                p {
+                    color: #A1A1A1;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 28px;
+                    max-width: 424px;
+                    margin: 0 0 30px 0;
+                    @include font-normal;
+
+                    @include respond-to("xl") {
+                        font-size: 16px;
+                    }
+
+                    @include respond-to("sm") {
+                        font-size: 18px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 28px;
+                        max-width: 392px;
+                    }
+                }
+
+                h3 {
+                    color: #FFF;
+                    font-size: 30px;
+                    font-style: normal;
+                    margin: 0 0 11px 0;
+                    font-weight: 500;
+                    line-height: 30px;
+                    @include font-medium;
+
+                    @include respond-to("xl") {
+                        font-size: 24px;
+                    }
+
+                    @include respond-to("sm") {
+                        margin: 0 0 25px 0;
+                        font-size: 30px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: 30px;
+                    }
+                }
+            }
+
+            .text {
+                h2 {
+                    color: #FFF;
+                    font-size: 24px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 24px;
+                    margin: 0 0 13px 0;
+                    @include font-medium;
+
+                    @include respond-to("xl") {
+                        font-size: 22px;
+                    }
+                }
+
+                .line {
+                    background: #EEB92B;
+                    width: 40px;
+                    margin: 0 0 35px 0;
+                    height: 2px;
+
+                    @include respond-to("sm") {
+                        margin: 0 0 27px 0;
+                    }
+                }
+
+                a {
+                    display: block;
+                    padding: 0 0 18px 0;
+                    color: #A1A1A1;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: 21.01px;
+                    cursor: pointer;
+                    @include font-normal;
+                    transition: .3s ease-in-out;
+
+                    @include respond-to("xl") {
+                        font-size: 16px;
+                    }
+
+                    @include respond-to("sm") {
+                        font-size: 18px;
+                    }
+
+                    &:hover {
+                        color: #fff;
+                    }
+                }
+
+                a:last-child {
+                    padding: 0;
+                }
+            }
+        }
+
+        .footerLogo {
+            @include respond-to("sm") {
+                padding: 0 0 48px 0;
+            }
+
+            img {
+                display: block;
+                cursor: pointer;
+                max-width: 117px;
+            }
+        }
+
+        .socialIconAlignment {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            @include respond-to("sm") {
+                padding: 16px 0 0 0;
+            }
+
+            .icon {
+                border-radius: 23px;
+                border: 1px solid #2A303C;
+                width: 46px;
+                height: 46px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: 0.3s ease-in-out;
+
+                &:hover {
+                    border: 1px solid #EEB92B;
+                }
+            }
+        }
+
+        .text {
+            padding: 12px 0 25px 0;
+
+            @include respond-to("sm") {
+                padding: 0;
+            }
+
+            p {
+                color: #A1A1A1;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 28px;
+                @include font-normal;
+            }
+        }
+    }
+}
+
+.copyRight {
+    padding: 12px 0;
+    text-align: center;
+    background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+
+    @include respond-to("sm") {
+        padding: 15px 0;
+    }
+
+    p {
+        color: #000;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 28px;
+        @include font-normal;
+
+        @include respond-to("sm") {
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+    }
+}

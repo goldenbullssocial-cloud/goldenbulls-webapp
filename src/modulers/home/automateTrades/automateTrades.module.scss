@@ -1,0 +1,304 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.automateTrades {
+    background: url('/assets/images/automate.png'), #000;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    padding: 120px 0;
+
+    @include respond-to("xl") {
+        padding: 90px 0;
+    }
+
+    @include respond-to("sm") {
+        padding: 60px 0;
+        background: none;
+        background-color: #000;
+    }
+
+    .title {
+        padding: 0 0 60px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 40px 0;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 140%;
+            @include gradient-text;
+            @include heading-font;
+            text-transform: uppercase;
+
+            @include respond-to("sm") {
+                text-align: center;
+                font-size: 32px;
+                font-weight: 400;
+                line-height: 140%;
+            }
+        }
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    .paginationWrapper {
+        @include respond-to("sm") {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        :global(.swiper-pagination) {
+            position: relative;
+            margin-top: 40px;
+            bottom: 0;
+
+            @include respond-to("sm") {
+                margin-top: 30px;
+            }
+        }
+
+        :global(.swiper-pagination-bullet) {
+            width: 10px;
+            height: 10px;
+            background: #666;
+            opacity: 1;
+            margin: 0 6px;
+            transition: all 0.3s ease;
+        }
+
+        :global(.swiper-pagination-bullet-active) {
+            background: linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%);
+            width: 10px;
+            height: 10px;
+        }
+    }
+
+    .navBtn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -70px;
+        z-index: 99;
+        background-color: transparent;
+        border: none;
+
+        @include respond-to("xl") {
+            position: inherit;
+            top: 0;
+            left: 0;
+            transform: none;
+        }
+
+        svg {
+            max-width: 40px;
+            cursor: pointer;
+        }
+    }
+
+    .twoButtonAlignment {
+        @include respond-to("xl") {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px 0 0 0;
+        }
+
+        @include respond-to("sm") {
+            display: none;
+        }
+
+    }
+
+    .rightButton {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: -70px;
+        z-index: 99;
+        background-color: transparent;
+        border: none;
+
+        @include respond-to("xl") {
+            position: inherit;
+            top: 0;
+            right: 0;
+            transform: none;
+        }
+
+
+
+
+        svg {
+            max-width: 40px;
+            cursor: pointer;
+            transform: rotate(180deg);
+        }
+    }
+
+    .box {
+        background-image: url('/assets/images/card-img.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        padding: 49px 0 20px 0;
+        border-radius: 16px;
+
+        @include respond-to("xl") {
+            padding: 40px 0 20px 0;
+        }
+
+        @include respond-to("sm") {
+            padding: 24px 0 20px 0;
+        }
+
+        .btn {
+            padding: 24px 0 0 0;
+
+            @include respond-to("xl") {
+                padding: 20px 0 0 0;
+            }
+
+            @include respond-to("sm") {
+                padding: 12px 0 0 0;
+            }
+
+            button {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+        }
+
+        .leftRightAlignment {
+            padding: 0 20px;
+
+            p {
+                margin: 62px 0 20px 0;
+                color: #FFF;
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                @include font-normal;
+
+                @include respond-to("xl") {
+                    font-size: 20px;
+                }
+            }
+
+            .line {
+                width: 100%;
+                height: 1px;
+                background: linear-gradient(90deg, #FFF 0%, rgba(153, 153, 153, 0.00) 100%);
+            }
+
+            h5 {
+                color: #FFF;
+                font-size: 28px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+                margin: 14px 0 0 0;
+                @include font-bold;
+
+                @include respond-to("xl") {
+                    font-size: 24px;
+                }
+
+                span {
+                    @include font-normal;
+                    font-weight: 400;
+                }
+            }
+        }
+
+
+        .detailsBox {
+            position: relative;
+            border-radius: 25.929px;
+            padding: 24px;
+            max-width: 280px;
+            background: #0C0C0C;
+
+            @include respond-to("sm") {
+                padding: 20px;
+                max-width: 248px;
+            }
+
+            h4 {
+                color: #E1E1E1;
+                font-size: 20px;
+                @include font-medium;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+
+                @include respond-to("sm") {
+                    font-size: 20px;
+                    font-style: normal;
+                    line-height: normal;
+                }
+
+                span {
+                    color: #F33;
+                }
+            }
+
+            h3 {
+                color: #E1E1E1;
+                font-size: 20px;
+                margin: 0 0 4px 0;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                @include font-medium;
+
+                @include respond-to("sm") {
+                    font-size: 20px;
+                    font-style: normal;
+                    line-height: normal;
+                }
+
+                small {
+                    font-size: 14px;
+                }
+
+                span {
+                    &.green {
+                        color: #33FF60;
+                    }
+                }
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: 24px;
+                border-radius: inherit;
+                padding: 1px;
+                /* border width */
+                background: linear-gradient(180deg, #666666 0%, #000000 100%);
+                -webkit-mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+                transition: .3s ease-in-out;
+
+                @include respond-to("xl") {
+                    border-radius: 18px;
+                }
+            }
+        }
+    }
+}

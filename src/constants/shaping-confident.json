@@ -1,0 +1,52 @@
+[
+  {
+    "id": "8f1c6c3a-1b6f-4f3a-9a7d-9d2b6a1f1a01",
+    "title": ["Structured", "Learning"],
+    "icon": "/assets/icons/shaping-confident-icon-1.svg"
+  },
+  {
+    "id": "d3c7a5b2-9e64-4e3b-8f91-2a6b5e4c2b02",
+    "title": ["Clear", "Guidance"],
+    "icon": "/assets/icons/shaping-confident-icon-2.svg"
+  },
+  {
+    "id": "4b9e2c1d-7a3f-4f52-bf2d-1c8a9e3d3c03",
+    "title": ["Real", "Charts"],
+    "icon": "/assets/icons/shaping-confident-icon-3.svg"
+  },
+  {
+    "id": "a1e6d5b4-2c7f-4d91-9b3a-6f8c2e4d4d04",
+    "title": ["Pro", "Strategies"],
+    "icon": "/assets/icons/shaping-confident-icon-4.svg"
+  },
+  {
+    "id": "c5b2a9d8-3f6e-4a7c-8e21-9d4f1a5e5e05",
+    "title": ["Risk", "Mastery"],
+    "icon": "/assets/icons/shaping-confident-icon-5.svg"
+  },
+  {
+    "id": "e7d1c4a3-8b2f-4e6a-9f35-2a6d9c7f6f06",
+    "title": ["Market", "Insights"],
+    "icon": "/assets/icons/shaping-confident-icon-6.svg"
+  },
+  {
+    "id": "2f9e8d7c-6b5a-4c31-8e42-1d3a6b9c7g07",
+    "title": ["Actionable", "Lessons"],
+    "icon": "/assets/icons/shaping-confident-icon-7.svg"
+  },
+  {
+    "id": "9a6c3e5d-1f8b-4d72-9c54-7e2a4b1d8h08",
+    "title": ["Community", "Support"],
+    "icon": "/assets/icons/shaping-confident-icon-8.svg"
+  },
+  {
+    "id": "5e4b9d2a-7c1f-4a86-8b63-3d9e6c2f9i09",
+    "title": ["Lifetime", "Access"],
+    "icon": "/assets/icons/shaping-confident-icon-9.svg"
+  },
+  {
+    "id": "1c7a9e5d-4b2f-4e98-9a74-6d3c8b5e0j10",
+    "title": ["Beginner", "Friendly"],
+    "icon": "/assets/icons/shaping-confident-icon-10.svg"
+  }
+]

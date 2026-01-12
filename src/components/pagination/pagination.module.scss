@@ -1,0 +1,76 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.paginationAlignment {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+
+    @include respond-to("sm") {
+        gap: 10px;
+    }
+
+    .round:first-child,
+    .round:last-child {
+        color: var(--White, #FFF);
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 500;
+        border: none;
+        background: transparent;
+        line-height: normal;
+        @include font-medium;
+
+        @include respond-to("sm") {
+            font-size: 14px;
+            font-style: normal;
+            line-height: normal;
+        }
+    }
+
+    .round {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--Gray, #BCBCBC);
+        text-align: center;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        @include font-bold;
+        transition: .3s ease-in-out;
+
+        @include respond-to("sm") {
+            width: 40px;
+            height: 40px;
+            font-size: 14px;
+            line-height: normal;
+        }
+
+        &:hover:not(.disabled) {
+            border: 1px solid var(--GOLD, #F9F490);
+            color: #030303;
+            background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+        }
+
+        &.active {
+            border: 1px solid var(--GOLD, #F9F490);
+            color: #030303;
+            background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+        }
+
+        &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}

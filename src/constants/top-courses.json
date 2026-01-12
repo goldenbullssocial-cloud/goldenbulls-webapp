@@ -1,0 +1,103 @@
+{
+  "recorded": [
+    {
+      "id": "b7a3e1c2-6f4d-4a1a-9c91-01a9c8b4d101",
+      "title": "Forex Trading Masterclass",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "12 Hours",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/record-courses-1.png"
+    },
+    {
+      "id": "a92c71d4-5f2e-4b3f-9a20-8f1a61c24b02",
+      "title": "Crypto Made Easy",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "12 Hours",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/record-courses-2.png"
+    },
+    {
+      "id": "c4e8129a-0f6e-4a5a-8c39-2f9d1e72c303",
+      "title": "Forex Trading Masterclass for Beginners",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "12 Hours",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/record-courses-3.png"
+    }
+  ],
+
+  "live": [
+    {
+      "id": "f19b4e63-28a2-4c59-bf42-6b6cb9bdf404",
+      "title": "Forex New Session Live",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "14 Days",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/live-courses-1.png"
+    },
+    {
+      "id": "0de7d3c2-13c9-4d59-9ad4-91c6d06c7505",
+      "title": "Crypto / Bitcoin Live Trading",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "14 Days",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/live-courses-2.png"
+    },
+    {
+      "id": "6b2c0f6e-0c3e-4c83-9d9e-8c8b0f2b4606",
+      "title": "Live Day Trading",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "14 Days",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/live-courses-3.png"
+    }
+  ],
+
+  "inPerson": [
+    {
+      "id": "9a1f3c88-4f16-4d1f-89b2-5e4c3a27b707",
+      "title": "How to Do Forex Trading",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "12 Hours",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/In-person-courses-1.png",
+      "location":"Dubai"
+    },
+    {
+      "id": "4d8a9f2a-9e0a-41ff-9c33-12b6d7b6d808",
+      "title": "Top 5 Secret Profitable Trading Strategies",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "12 Hours",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/In-person-courses-2.png",
+      "location":"Dubai"
+    },
+    {
+      "id": "e3a2b7f1-6a9d-4c0a-9e1f-91c44f45d909",
+      "title": "Option Trading",
+      "price": "$129",
+      "author": "Johnathan Doe",
+      "duration": "12 Hours",
+      "rating": 4.5,
+      "level": "Beginner",
+      "image": "/assets/images/courses/In-person-courses-3.png",
+      "location":"Dubai"
+    }
+  ]
+}

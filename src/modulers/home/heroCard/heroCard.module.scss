@@ -1,0 +1,138 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.heroCardAlignment {
+    background: #0C0C0C;
+    padding: 32px 0;
+
+    @include respond-to("sm") {
+        padding: 60px 0 40px 0;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+            gap: 30px;
+        }
+
+        .griditems {
+            padding: 32px 32px 42px 32px;
+            border-radius: 24px;
+            // border: 1px solid #66666657;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(153, 153, 153, 0.00) 100%);
+
+            @include respond-to("xl") {
+                padding: 30px;
+                border-radius: 18px;
+            }
+
+            &:hover {
+
+                &::after {
+                    animation: shimmer .8s ease-in-out forwards;
+                    left: 0;
+                }
+
+                &::before {
+                    background: linear-gradient(180deg, #E4AB40 0%, #000000 100%);
+                }
+
+
+            }
+
+            @keyframes shimmer {
+                0% {
+                    transform: translateX(-100%);
+                }
+
+                100% {
+                    transform: translateX(100%);
+                }
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgb(249 244 144 / 4%), rgba(0, 0, 0, 0));
+                pointer-events: none;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: 24px;
+                border-radius: inherit;
+                padding: 1px;
+                /* border width */
+                background: linear-gradient(180deg, #666666 0%, #000000 100%);
+                -webkit-mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+                transition: .3s ease-in-out;
+
+                @include respond-to("xl") {
+                    border-radius: 18px;
+                }
+            }
+
+            h3 {
+                font-family: "Roboto Condensed", sans-serif;
+                background: linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%);
+                background-clip: text;
+                -webkit-background-clip: text;
+                font-size: 69px;
+                font-style: normal;
+                font-weight: 600;
+                margin: 0 0 2px 0;
+                line-height: 100%;
+                -webkit-text-fill-color: transparent;
+
+                @include respond-to("xl") {
+                    font-size: 50px;
+                }
+
+                @include respond-to("sm") {
+                    font-size: 72px;
+                    line-height: 72px;
+                }
+            }
+
+            p {
+                color: rgba(255, 255, 255, 0.70);
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                @include font-medium;
+
+                @include respond-to("xl") {
+                    @include font18;
+                }
+
+                @include respond-to("sm") {
+                    font-size: 24px;
+                    line-height: normal;
+                }
+            }
+        }
+    }
+}

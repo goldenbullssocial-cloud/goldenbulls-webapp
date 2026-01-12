@@ -1,0 +1,322 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.topCourses {
+    padding: 120px 0;
+    background: url('/assets/images/light-background.png'), #0C0C0C;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-size: cover;
+    width: 100%;
+    background-position: bottom bottom;
+
+    @include respond-to("xl") {
+        padding: 90px 0;
+    }
+
+    @include respond-to("sm") {
+        padding: 60px 0;
+        background-image: none;
+        background: #0C0C0C;
+    }
+
+    .title {
+        padding: 0 0 30px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 24px 0;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 140%;
+            @include gradient-text;
+            @include heading-font;
+            text-transform: uppercase;
+
+            @include respond-to("sm") {
+                font-size: 32px;
+                font-weight: 400;
+                line-height: 140%;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .tabCenter {
+        display: flex;
+        justify-content: center;
+        padding: 0 0 48px 0;
+
+        @include respond-to("xl") {
+            padding: 0 0 40px 0;
+        }
+
+        @include respond-to("sm") {
+            display: none;
+        }
+
+        .tabGroup {
+            border-radius: 86.905px;
+            border: 0.869px solid var(--GOLD, #F9F490);
+            padding: 10px;
+            background-color: #0C0C0C;
+            display: flex;
+            align-items: center;
+            gap: 26px;
+
+            @include respond-to("xl") {
+                gap: 20px;
+            }
+
+            button {
+                border: none;
+                font-size: 20.857px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                padding: 12px 30px;
+                @include font-medium;
+                background-color: transparent;
+                cursor: pointer;
+                border-radius: 99px;
+
+                @include respond-to("xl") {
+                    @include font18;
+                    padding: 10px 26px;
+                }
+
+                &.active {
+                    background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+
+                    span {
+                        background: none;
+                        color: #000;
+                        background-clip: inherit;
+                        -webkit-text-fill-color: #000;
+                        -webkit-background-clip: inherit;
+
+                    }
+                }
+
+                span {
+                    background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+            }
+        }
+    }
+
+    .buttonCenter {
+        padding: 48px 0 0 0;
+        display: flex;
+        justify-content: center;
+
+        @include respond-to("sm") {
+            padding: 16px 0 0 0;
+        }
+
+        a {
+            @include respond-to("sm") {
+                display: block;
+                width: 100%;
+            }
+        }
+
+        button {
+            background-color: transparent;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            cursor: pointer;
+            @include font-medium;
+            border: 1px solid #F9F490;
+
+            @include respond-to("xl") {
+                @include font18;
+                padding: 12px 26px;
+                line-height: normal;
+            }
+
+            @include respond-to("sm") {
+                width: 100%;
+                font-size: 20px;
+                padding: 15px 26px;
+                line-height: normal;
+            }
+
+            span {
+                @include gradient-text;
+            }
+        }
+    }
+
+    .mobileDropdown {
+        display: none;
+
+        @include respond-to("sm") {
+            display: flex;
+            justify-content: center;
+        }
+
+        .relativeDiv {
+            button {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background-color: transparent;
+                padding: 12px 30px;
+                border-radius: 99px;
+                border: 2px solid var(--GOLD, #F9F490);
+
+                .icons {
+                    &.rotate {
+                        svg {
+                            transform: rotate(180deg);
+                            transition: .3s ease-in-out;
+                        }
+                    }
+
+                    svg {
+                        transition: .3s ease-in-out;
+                    }
+                }
+
+                span {
+                    @include gradient-text;
+                    font-size: 20.588px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    @include font-bold;
+                }
+
+                .dropdown {
+                    border-radius: 12px;
+                    width: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 55px;
+                    z-index: 99;
+
+                    &.hide {
+                        max-height: 0px;
+                        overflow: hidden;
+                        transition: .3s ease-in-out;
+                    }
+
+                    &.show {
+                        max-height: 100dvh;
+                        overflow: hidden;
+                        transition: .3s ease-in-out;
+                    }
+
+                    .dropdownDesign {
+                        border: 1px solid #666;
+                        background: #0C0C0C;
+                    }
+
+                    .dropdownSpacing {
+                        padding: 16px;
+
+                        p {
+                            color: #FFF;
+                            font-size: 20px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                            @include font-normal;
+                            text-align: left;
+                            margin: 0 0 15px 0;
+                        }
+
+                        p:last-child {
+                            margin: 0;
+                        }
+
+
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+            gap: 16px;
+            padding: 40px 0 0 0;
+        }
+
+        .noData {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 492px;
+            width: 100%;
+            gap: 24px;
+
+            .iconWrapper {
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: linear-gradient(180deg, rgba(249, 244, 144, 0.1) 0%, rgba(249, 244, 144, 0.02) 100%);
+                border: 1px solid rgba(249, 244, 144, 0.3);
+                box-shadow: 0 0 30px rgba(249, 244, 144, 0.1);
+
+                svg {
+                    width: 36px;
+                    height: 36px;
+
+                    path {
+                        stroke: #F9F490;
+                    }
+                }
+            }
+
+            h3 {
+                @include gradient-text;
+                font-size: 28px;
+                @include font-bold;
+                text-transform: uppercase;
+                margin: 0;
+            }
+
+            p {
+                color: #FFF;
+                font-size: 16px;
+                @include font-medium;
+                opacity: 0.6;
+                text-align: center;
+                max-width: 300px;
+                margin: 0;
+                line-height: 1.6;
+            }
+        }
+    }
+}

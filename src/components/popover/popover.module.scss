@@ -1,0 +1,75 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.popoverWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.trigger {
+    cursor: pointer;
+}
+
+.popoverContent {
+    position: absolute;
+    top: calc(100% + 8px);
+    z-index: 50;
+    min-width: 200px;
+    background: #1A1A1A;
+    border: 1px solid #2A2A2A;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    animation: popoverIn 0.15s ease-out;
+
+    &.center {
+        left: 50%;
+        transform: translateX(-50%);
+        animation: popoverInCenter 0.15s ease-out;
+    }
+
+    &.left {
+        left: 0;
+        animation: popoverInLeft 0.15s ease-out;
+    }
+
+    &.right {
+        right: 0;
+        animation: popoverInRight 0.15s ease-out;
+    }
+}
+
+@keyframes popoverInLeft {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popoverInRight {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popoverInCenter {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}

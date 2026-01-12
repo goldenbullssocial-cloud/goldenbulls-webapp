@@ -1,0 +1,281 @@
+[
+  {
+    "id": "1e8a1d2c-1111-4b2a-9c01-a1b2c3d40001",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-1",
+    "author": "Johnathan Doe",
+    "category": "Finance",
+    "date": "2023-11-01",
+    "dateLabel": "01 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "2f9b2e3d-2222-4c3b-9d02-b2c3d4e50002",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-2",
+    "author": "Johnathan Doe",
+    "category": "Stock Market",
+    "date": "2023-11-02",
+    "dateLabel": "02 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "3a0c3f4e-3333-4d4c-9e03-c3d4e5f60003",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-3",
+    "author": "Johnathan Doe",
+    "category": "Investing",
+    "date": "2023-11-03",
+    "dateLabel": "03 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "4b1d405f-4444-4e5d-9f04-d4e5f6070004",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-4",
+    "author": "Johnathan Doe",
+    "category": "Trading",
+    "date": "2023-11-04",
+    "dateLabel": "04 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "5c2e5160-5555-4f6e-a005-e5f607180005",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-5",
+    "author": "Johnathan Doe",
+    "category": "Finance",
+    "date": "2023-11-05",
+    "dateLabel": "05 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+
+  {
+    "id": "6d3f6271-6666-406f-a106-f60718290006",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-6",
+    "author": "Johnathan Doe",
+    "category": "Crypto",
+    "date": "2023-11-06",
+    "dateLabel": "06 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "7e407382-7777-4170-a207-0718293a0007",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-7",
+    "author": "Johnathan Doe",
+    "category": "Stock Market",
+    "date": "2023-11-07",
+    "dateLabel": "07 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "8f518493-8888-4271-a308-18293a4b0008",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-8",
+    "author": "Johnathan Doe",
+    "category": "Investing",
+    "date": "2023-11-08",
+    "dateLabel": "08 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "905295a4-9999-4372-a409-293a4b5c0009",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-9",
+    "author": "Johnathan Doe",
+    "category": "Trading",
+    "date": "2023-11-09",
+    "dateLabel": "09 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "a163a6b5-aaaa-4473-a50a-3a4b5c6d0010",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-10",
+    "author": "Johnathan Doe",
+    "category": "Finance",
+    "date": "2023-11-10",
+    "dateLabel": "10 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+
+  {
+    "id": "b274b7c6-bbbb-4574-a60b-4b5c6d7e0011",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-11",
+    "author": "Johnathan Doe",
+    "category": "Crypto",
+    "date": "2023-11-11",
+    "dateLabel": "11 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "c385c8d7-cccc-4675-a70c-5c6d7e8f0012",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-12",
+    "author": "Johnathan Doe",
+    "category": "Stock Market",
+    "date": "2023-11-12",
+    "dateLabel": "12 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "d496d9e8-dddd-4776-a80d-6d7e8f900013",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-13",
+    "author": "Johnathan Doe",
+    "category": "Investing",
+    "date": "2023-11-13",
+    "dateLabel": "13 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "e5a7eaf9-eeee-4877-a90e-7e8f90110014",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-14",
+    "author": "Johnathan Doe",
+    "category": "Trading",
+    "date": "2023-11-14",
+    "dateLabel": "14 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "f6b8fb0a-ffff-4978-aa0f-8f9011220015",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-15",
+    "author": "Johnathan Doe",
+    "category": "Finance",
+    "date": "2023-11-15",
+    "dateLabel": "15 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+
+  {
+    "id": "07c90c1b-1010-4a79-ab10-901122330016",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-16",
+    "author": "Johnathan Doe",
+    "category": "Crypto",
+    "date": "2023-11-16",
+    "dateLabel": "16 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "18da1d2c-2020-4b7a-ac11-011223440017",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-17",
+    "author": "Johnathan Doe",
+    "category": "Stock Market",
+    "date": "2023-11-17",
+    "dateLabel": "17 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "29eb2e3d-3030-4c7b-ad12-112233550018",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-18",
+    "author": "Johnathan Doe",
+    "category": "Investing",
+    "date": "2023-11-18",
+    "dateLabel": "18 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "3afc3f4e-4040-4d7c-ae13-223344660019",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-19",
+    "author": "Johnathan Doe",
+    "category": "Trading",
+    "date": "2023-11-19",
+    "dateLabel": "19 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "4b0d405f-5050-4e7d-af14-334455770020",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-20",
+    "author": "Johnathan Doe",
+    "category": "Finance",
+    "date": "2023-11-20",
+    "dateLabel": "20 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+
+  {
+    "id": "5c1e5160-6060-4f7e-b015-445566880021",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-21",
+    "author": "Johnathan Doe",
+    "category": "Crypto",
+    "date": "2023-11-21",
+    "dateLabel": "21 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "6d2f6271-7070-407f-b116-556677990022",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-22",
+    "author": "Johnathan Doe",
+    "category": "Stock Market",
+    "date": "2023-11-22",
+    "dateLabel": "22 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "7e307382-8080-4170-b217-667788aa0023",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-23",
+    "author": "Johnathan Doe",
+    "category": "Investing",
+    "date": "2023-11-23",
+    "dateLabel": "23 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "8f418493-9090-4271-b318-778899bb0024",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-24",
+    "author": "Johnathan Doe",
+    "category": "Trading",
+    "date": "2023-11-24",
+    "dateLabel": "24 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  },
+  {
+    "id": "905295a4-a0a0-4372-b419-8899aacc0025",
+    "title": "The Beginner’s Roadmap to Understanding Financial Markets",
+    "slug": "beginners-roadmap-financial-markets-25",
+    "author": "Johnathan Doe",
+    "category": "Finance",
+    "date": "2023-11-25",
+    "dateLabel": "25 November 2023",
+    "image": "/assets/images/blog-card.png",
+    "alt": "Blog Card Image"
+  }
+]

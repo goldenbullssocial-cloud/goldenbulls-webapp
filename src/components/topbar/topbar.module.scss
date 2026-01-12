@@ -1,0 +1,46 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.topbar {
+    border: 1px solid rgba(202, 202, 202, 0.00);
+    padding: 11px 20px;
+    background: linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%);
+
+    @include respond-to("xl") {
+        padding: 8px 20px;
+    }
+
+    @include respond-to("md") {
+        padding: 6px 15px;
+    }
+
+    p {
+        color: #000;
+        font-size: 22.303px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        @include font-bold;
+        text-align: center;
+
+        @include respond-to("xl") {
+            font-size: 16px;
+        }
+
+        br {
+            display: none;
+
+            @include respond-to("md") {
+                display: block;
+            }
+        }
+
+        @include respond-to("md") {
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+    }
+}

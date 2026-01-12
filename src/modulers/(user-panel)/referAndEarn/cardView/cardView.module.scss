@@ -1,0 +1,87 @@
+@use '../../../../scss/main.scss' as *;
+@use '../../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../../scss/font/font.scss' as *;
+
+.cardView {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 0 0 34px 0;
+
+    .items {
+        position: relative;
+        padding: 24px;
+        border-radius: 20px;
+        background: linear-gradient(106deg, rgba(15, 15, 15, 0.00) 1.04%, rgba(255, 255, 255, 0.10) 98.96%);
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+
+
+        &::before {
+            @include border;
+        }
+
+        .iconright {
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            img {
+                display: block;
+            }
+        }
+
+        h3 {
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 500;
+            margin: 0 0 16px 0;
+            color: #fff;
+            @include font-medium;
+            line-height: normal;
+
+            &.spaceRemove {
+                margin: 0 0 5px 0;
+            }
+        }
+
+        h4 {
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 700;
+            @include font-bold;
+            @include gradient-text;
+            line-height: normal;
+        }
+
+        .linkCopy {
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr 24px;
+            align-items: center;
+            gap: 10px;
+
+            span {
+                display: block;
+                color: #B6B6B6;
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                @include font-medium;
+            }
+
+            svg {
+                cursor: pointer;
+            }
+
+            &::before {
+                @include border;
+            }
+        }
+    }
+}

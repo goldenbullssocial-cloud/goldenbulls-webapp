@@ -1,0 +1,55 @@
+@use '../../../../scss/main.scss' as *;
+@use '../../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../../scss/font/font.scss' as *;
+
+.referAndEarnTab {
+    border-bottom: 1px solid #272727;
+    display: flex;
+    margin: 0 0 32px 0;
+    align-items: center;
+    gap: 0px;
+
+    button {
+        background-color: transparent;
+        padding: 16px 24px;
+        border: none;
+        color: #FFF;
+        cursor: pointer;
+        @include font-medium;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        position: relative;
+
+        &:hover {
+            color: #E4AB40;
+
+            &::before {
+                width: 100%;
+            }
+        }
+
+        &.active {
+            color: #E4AB40;
+
+            &::before {
+                width: 100%;
+            }
+        }
+
+        &::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            content: " ";
+            color: transparent;
+            background: #F9F490;
+            height: 2px;
+            width: 0;
+            transition: .4s ease-in-out;
+        }
+    }
+}

@@ -1,0 +1,101 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.transparentPricing {
+    background: #0C0C0C;
+    padding: 120px 0;
+
+    @include respond-to("xl") {
+        padding: 90px 0;
+    }
+
+    @include respond-to("sm") {
+        padding: 60px 0;
+    }
+
+    .title {
+        padding: 0 0 56px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 40px 0;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 140%;
+            text-transform: uppercase;
+            @include heading-font;
+            @include gradient-text;
+
+            @include respond-to("sm") {
+                @include heading32;
+                text-align: center;
+            }
+        }
+    }
+
+    .grid {
+        gap: 20px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+            max-width: 345px;
+            margin: 0 auto;
+        }
+
+        .griditems {
+            position: relative;
+            border-radius: 20px;
+            background: linear-gradient(106deg, rgba(15, 15, 15, 0.00) 1.04%, rgba(255, 255, 255, 0.10) 98.96%);
+            padding: 24px;
+
+            .buttonWidth {
+                padding: 24px 0 0 0;
+
+                button {
+                    width: 100%;
+                }
+            }
+
+            .cardHeader {
+                padding: 0 0 24px 0;
+                border-bottom: 1px solid #fff;
+
+                h2 {
+                    font-size: 40px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    @include font-bold;
+
+                    .lgText {
+                        @include gradient-text;
+                    }
+
+                    .smallText {
+                        color: var(--Backgrounds-Primary, #FFF);
+                        font-size: 24px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                        @include font-medium;
+                    }
+                }
+            }
+
+            &::before {
+                @include border;
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "9c1f3d2a-7e6f-4b2f-9a3d-1e2c4f6a8b01",
+    "step": "01",
+    "title": "Industry Focused Curriculum",
+    "description": "Our courses are designed to bridge the gap between theory and real world trading knowledge. Every lesson is structured to help learners understand how financial markets work, why price moves the way it does, and how to build a logical trading routine. Instead of overwhelming students with complicated jargon, we focus on clarity, structure, and practical learning that builds strong foundations over time.",
+    "highlights": [
+      "Well structured lessons",
+      "Step by step learning",
+      "Market focused education",
+      "Practical examples"
+    ],
+    "image": "/assets/images/why-choose-icon-1.png"
+  },
+  {
+    "id": "4a8e2f9d-1c5b-4f3a-8d7e-9a6c2b1e0f02",
+    "step": "02",
+    "title": "Expert Led Learning Experience",
+    "description": "We believe quality education comes from experience. Our training material is created by experienced market analysts and educators who understand both the technical and psychological aspects of trading. This ensures that students receive guidance that is realistic, responsible, and centered on skill development rather than shortcuts or unrealistic promises.",
+    "highlights": [
+      "Experienced mentors",
+      "Practical knowledge base",
+      "Research driven lessons",
+      "Strategy focused approach"
+    ],
+    "image": "/assets/images/why-choose-icon-2.png"
+  },
+  {
+    "id": "d7b3f1a9-5c6e-4a2b-8f0d-3e9a1c4b2d03",
+    "step": "03",
+    "title": "Supportive Learning Community",
+    "description": "Learning is more powerful when it’s supported by a strong community. We provide access to an active learning environment where students can interact, ask questions, and grow together. Our community is built around collaboration, accountability, and shared progress, creating an atmosphere that encourages consistent improvement.",
+    "highlights": [
+      "Active student groups",
+      "Peer to peer learning",
+      "Live doubt clearing",
+      "Discussion based support"
+    ],
+    "image": "/assets/images/why-choose-icon-3.png"
+  },
+  {
+    "id": "2f9e4a7b-8d1c-4e5a-9b6f-0a3c7d2e1f04",
+    "step": "04",
+    "title": "Ethical Trading Education",
+    "description": "We focus on responsible trading education that emphasizes discipline, proper risk management, and long term thinking. Our academy promotes ethical learning by clearly stating that trading involves risk and that our goal is to educate, not to provide financial guarantees or investment advice. This approach helps students build sustainable habits and realistic expectations.",
+    "highlights": [
+      "Risk management focus",
+      "Capital protection mindset",
+      "Ethical teaching approach",
+      "No fake promises"
+    ],
+    "image": "/assets/images/why-choose-icon-4.png"
+  }
+]

@@ -1,0 +1,52 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.liveCourses {
+    padding: 120px 0;
+
+    @include respond-to("xl") {
+        padding: 90px 0;
+    }
+
+    .title {
+        position: relative;
+
+        .text {
+            background: #000;
+            position: relative;
+            z-index: 9;
+            padding-right: 24px;
+            width: fit-content;
+        }
+
+        .line {
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            height: 2px;
+            background: #C29255;
+        }
+
+        h2 {
+            @include heading-font;
+            @include gradient-text;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            position: relative;
+            line-height: 140%;
+            text-transform: uppercase;
+        }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        padding: 60px 0 0 0;
+
+    }
+}

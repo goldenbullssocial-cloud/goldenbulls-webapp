@@ -1,0 +1,150 @@
+@use '../../../../scss/main.scss' as *;
+@use '../../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../../scss/font/font.scss' as *;
+
+
+.courseContentUser {
+    padding: 0 0 120px 0;
+
+    .childwidth {
+        max-width: 832px;
+    }
+
+    .title {
+        padding: 0 0 24px 0;
+
+        h2 {
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+            text-transform: uppercase;
+            @include gradient-text;
+            @include heading-font;
+
+            @include respond-to("sm") {
+                @include heading32;
+                text-align: center;
+            }
+        }
+    }
+
+    .allBoxAlignment {
+        max-width: 832px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0 0 100px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 60px 0;
+            max-width: 100%;
+        }
+
+        .box {
+            border-radius: 12px;
+            background: #0F0F0F;
+            position: relative;
+
+            .boxBody {
+                &.hide {
+                    max-height: 0px;
+                    overflow: hidden;
+                    transition: .3s ease-in-out;
+                }
+
+                &.shpw {
+                    max-height: 100vh;
+                    overflow: hidden;
+                    transition: .3s ease-in-out;
+                }
+
+                .spacing {
+                    padding: 24px 16px;
+                    border-top: 1px solid rgb(255, 255, 255, .1);
+
+                    @include respond-to("sm") {
+                        padding: 20px 16px;
+                    }
+
+                    p {
+                        margin: 0 0 20px 0;
+                        color: rgba(255, 255, 255, 0.70);
+                        font-size: 18px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        @include font-normal;
+                    }
+
+                    p:last-child {
+                        padding: 0;
+                    }
+                }
+            }
+
+            .boxHeader {
+                padding: 24px 16px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                @include respond-to("sm") {
+                    padding: 16px;
+                }
+
+
+                h3 {
+                    color: rgba(255, 255, 255, 0.70);
+                    font-size: 22px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    @include font-bold;
+
+                    @include respond-to("sm") {
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: normal;
+                    }
+
+                    span {
+                        color: rgba(255, 255, 255, 0.70);
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        @include font-normal;
+
+                        @include respond-to("sm") {
+                            font-size: 16px;
+                            display: block;
+                            padding: 5px 0 0 0;
+                        }
+                    }
+                }
+
+                p {
+                    color: rgba(255, 255, 255, 0.70);
+                    font-size: 22.303px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                    @include font-medium;
+
+                    @include respond-to("sm") {
+                        font-size: 16px;
+                        font-weight: 500;
+                        line-height: normal;
+                    }
+                }
+            }
+
+            &::before {
+                @include border;
+            }
+        }
+    }
+}

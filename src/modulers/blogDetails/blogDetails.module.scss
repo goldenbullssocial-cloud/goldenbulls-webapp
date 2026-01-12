@@ -1,0 +1,197 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.blogDetailsAlignment {
+    padding: 200px 0 60px 0;
+    background-image: url('/assets/images/blog-details.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    width: 100%;
+
+    @include respond-to("md") {
+        height: auto;
+    }
+
+    @include respond-to("sm") {
+        background-image: url('/assets/images/mobile-common.png');
+        padding: 160px 0 0 0;
+        position: relative;
+    }
+
+    .blogImage {
+        img {
+            display: block;
+            width: 100%;
+            border-radius: 12px;
+
+            @include respond-to("sm") {
+                height: 500px;
+                object-fit: cover;
+            }
+        }
+    }
+
+    .blogtitle {
+        padding: 30px 0 0 0;
+
+        .twoText {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            @include respond-to("sm") {
+                justify-content: center;
+            }
+
+            p {
+                color: #FFF;
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 150%;
+                @include font-normal;
+
+                @include respond-to("sm") {
+                    font-size: 16px;
+                }
+            }
+
+            ul {
+                margin: 0;
+                padding: 0 0 0 15px;
+
+                li {
+                    color: #FFF;
+                    font-size: 24px;
+                    font-style: normal;
+                    font-weight: 400;
+                    @include font-normal;
+                    line-height: 150%;
+
+                    @include respond-to("sm") {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+
+        h2 {
+            color: #D09C3D;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+            text-transform: uppercase;
+            margin: 0 0 16px 0;
+            @include heading-font;
+            @include gradient-text;
+
+            @include respond-to("sm") {
+                @include heading32;
+                text-align: center;
+            }
+        }
+    }
+}
+
+.tableofContentDetails {
+    padding: 60px 0;
+
+    .grid {
+        display: grid;
+        grid-template-columns: 400px 1fr;
+        gap: 56px;
+
+        @include respond-to("md") {
+            grid-template-columns: 1fr;
+            gap: 60px;
+        }
+
+        .griditems {
+            .box {
+                border-radius: 24px;
+                background: #0C0C0C;
+                padding: 24px;
+                position: sticky;
+                top: 120px;
+
+                ol {
+                    padding: 24px 0 0 24px;
+                    margin: 0;
+
+                    li:last-child {
+                        padding: 0;
+                    }
+
+                    li {
+                        color: #FFF;
+                        font-size: 20px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: 150%;
+                        padding: 0 0 10px 0;
+                        @include font-normal;
+
+                        @include respond-to("sm") {
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                .boxHeader {
+                    padding: 0 0 24px 0;
+                    border-bottom: 1px solid #3C3C3C;
+
+                    h2 {
+                        font-size: 28px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: 150%;
+                        @include gradient-text;
+
+                    }
+                }
+            }
+
+            h3 {
+                color: #FFF;
+                @include heading-font;
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 150%;
+                margin: 0 0 16px 0;
+                text-transform: uppercase;
+
+                @include respond-to("sm") {
+                    font-size: 20px;
+                    line-height: 30px;
+                }
+            }
+
+            .spacer {
+                padding: 48px 0 0 0;
+
+                @include respond-to("sm") {
+                    padding: 30px 0 0 0;
+                }
+            }
+
+            p {
+                color: rgba(255, 255, 255, 0.70);
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 150%;
+                @include font-normal;
+
+                @include respond-to("sm") {
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+            }
+        }
+    }
+}

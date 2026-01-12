@@ -1,0 +1,295 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.coursesDetailsBanner {
+    .box {
+        background-image: url('/assets/images/courses-details.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        background-position: center;
+        border-radius: 30px;
+        padding: 218px 0 60px 0;
+
+        @include respond-to("sm") {
+            padding: 160px 0 60px 0;
+            background-image: none;
+            background: #000;
+            position: relative;
+        }
+
+        @include respond-to("sm") {
+            &::before {
+                border-radius: 302px;
+                opacity: 0.8;
+                position: absolute;
+                background: #FFEEBF;
+                filter: blur(200px);
+                width: 300px;
+                height: 300px;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                content: '';
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 540px;
+            gap: 20px;
+            align-items: center;
+
+            @include respond-to("sm") {
+                grid-template-columns: 1fr;
+                background-position: top;
+                position: relative;
+                z-index: 9;
+                gap: 25px;
+            }
+
+            .griditems:first-child {
+                @include respond-to("sm") {
+                    order: 2;
+                }
+            }
+
+            h1 {
+                font-size: 48px;
+                font-style: normal;
+                margin: 0 0 24px 0;
+                font-weight: 400;
+                line-height: 150%;
+                text-transform: uppercase;
+                color: #fff;
+                @include heading-font;
+
+                @include respond-to("sm") {
+                    text-align: center;
+                    font-size: 32px;
+                    font-weight: 400;
+                    margin: 0 0 16px 0;
+                    line-height: 140%;
+                }
+
+                span {
+                    @include gradient-text;
+                }
+            }
+
+            .leftBottomAlignment {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                .dot {
+                    width: 7px;
+                    height: 7px;
+                    background-color: #B6B6B6;
+                    border-radius: 7px;
+                }
+
+                .dotButton {
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+
+                    .dot {
+                        width: 7px;
+                        height: 7px;
+                        background-color: #B6B6B6;
+                        border-radius: 7px;
+                    }
+
+                    button {
+                        background-color: transparent;
+                        border-radius: 50px;
+                        border: 1px solid var(--GOLD, #F9F490);
+                        font-size: 18.411px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        padding: 6px 23px;
+                        @include font-normal;
+
+                        span {
+                            background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                            background-clip: text;
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                        }
+                    }
+                }
+
+                .ratingAlignment {
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+
+                    .dot {
+                        width: 7px;
+                        height: 7px;
+                        background-color: #B6B6B6;
+                        border-radius: 7px;
+                    }
+
+                    .rating {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+
+                        span {
+                            @include gradient-text;
+                            font-size: 23.014px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: normal;
+                            @include font-medium;
+
+                            @include respond-to("sm") {
+                                font-size: 20px;
+                                font-style: normal;
+                                font-weight: 500;
+                                line-height: normal;
+                            }
+                        }
+                    }
+                }
+
+                .time {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+
+                    span {
+                        display: block;
+                        color: #B6B6B6;
+                        font-size: 23.014px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                        @include font-medium;
+
+                        @include respond-to("sm") {
+                            font-size: 20px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: normal;
+                        }
+                    }
+                }
+
+            }
+
+            p {
+                color: rgba(255, 255, 255, 0.70);
+                font-size: 22.303px;
+                font-style: normal;
+                font-weight: 400;
+                margin: 0 0 24px 0;
+                max-width: 832px;
+                line-height: normal;
+
+                @include respond-to("sm") {
+                    text-align: center;
+                    font-size: 20px;
+                    font-weight: 400;
+                    line-height: normal;
+                }
+            }
+
+            .card {
+                border-radius: 30px;
+                background: #0C0C0C;
+                padding: 29px;
+                position: relative;
+
+                @include respond-to("sm") {
+                    padding: 20px;
+                    border-radius: 22px;
+                }
+
+                .details {
+                    padding: 34px 0 0 0;
+
+                    @include respond-to("sm") {
+                        padding: 24px 0 0 0;
+                    }
+
+                    .buttonWidth {
+                        button {
+                            width: 100%;
+                        }
+                    }
+
+                    .contentAlignment {
+                        display: flex;
+                        gap: 16px;
+                        padding: 0 0 34px 0;
+                        align-items: center;
+
+                        @include respond-to("sm") {
+                            padding: 0 0 24px 0;
+                        }
+
+                        h3 {
+                            color: #FFF;
+                            font-size: 40px;
+                            font-style: normal;
+                            font-weight: 700;
+                            line-height: normal;
+                            @include font-bold;
+
+                            @include respond-to("sm") {
+                                font-size: 29.63px;
+                                font-weight: 700;
+                                line-height: normal;
+                            }
+                        }
+
+                        ul {
+                            margin: 0;
+                            padding: 0 0 0 15px;
+
+                            li {
+                                color: #B6B6B6;
+                                font-size: 23.014px;
+                                font-style: normal;
+                                font-weight: 500;
+                                line-height: normal;
+                                @include font-medium;
+
+                                @include respond-to("sm") {
+                                    font-size: 17.047px;
+                                    font-weight: 500;
+                                    line-height: normal;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .cardImage {
+                    .image {
+                        img {
+                            height: 269px;
+                            width: 100%;
+                            border-radius: 16px;
+                            object-fit: cover;
+
+                            @include respond-to("sm") {
+                                height: 200px;
+                                border-radius: 12px;
+                            }
+                        }
+                    }
+                }
+
+                &::before {
+                    @include border;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,196 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+
+.reviewsContentAlignment {
+    max-width: 832px;
+
+    @include respond-to("sm") {
+        max-width: 100%;
+    }
+
+    &.smallSize {
+        .titleTextAlignment {
+            padding: 0 0 20px 0;
+
+            h2 {
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 150%;
+                text-transform: uppercase;
+            }
+
+            .line {
+                height: 32px;
+            }
+
+            span {
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+            }
+        }
+    }
+
+    .titleTextAlignment {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        padding: 0 0 56px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 32px 0;
+        }
+
+        h2 {
+            @include heading-font;
+            @include gradient-text;
+            font-size: 40px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+            text-transform: uppercase;
+
+            @include respond-to("sm") {
+                font-size: 24px;
+                font-weight: 400;
+                line-height: 150%;
+            }
+        }
+
+        .line {
+            width: 1px;
+            height: 47px;
+            background-color: #fff;
+
+            @include respond-to("sm") {
+                height: 32px;
+            }
+        }
+
+        span {
+            display: block;
+            color: rgba(255, 255, 255, 0.70);
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            @include font-normal;
+
+            @include respond-to("sm") {
+                font-size: 24px;
+                font-weight: 400;
+                line-height: normal;
+            }
+        }
+    }
+
+    .loadMore {
+        padding: 56px 0 0 0;
+
+        @include respond-to("sm") {
+            padding: 32px 0 0 0;
+        }
+
+        button {
+            width: 100%;
+            background-color: transparent;
+            border-radius: 50px;
+            border: 1px solid var(--GOLD, #F9F490);
+            padding: 14px;
+            cursor: pointer;
+
+            span {
+                @include font-bold;
+                @include gradient-text;
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+            }
+        }
+    }
+
+    .box {
+        padding: 24px 0;
+        border-bottom: 1px solid #363636;
+
+        .boxBottomAlignment {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .leftcontent {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                .profile {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 500px;
+                    background: #1A1A1A;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: rgba(255, 255, 255, 0.70);
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    @include font-normal;
+                }
+
+                p {
+                    color: rgba(255, 255, 255, 0.70);
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    @include font-bold;
+                }
+
+                .ratingAlignment {
+                    padding: 4px 0 0 0;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            .right {
+                h4 {
+                    color: rgba(255, 255, 255, 0.70);
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    @include font-normal;
+                }
+            }
+        }
+
+        .text {
+            padding: 0 0 16px 0;
+
+            p {
+                color: #FFF;
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                @include font-normal;
+
+                @include respond-to("sm") {
+                    color: rgba(255, 255, 255, 0.70);
+                    font-size: 20px;
+                    font-weight: 400;
+                    line-height: normal;
+                }
+            }
+        }
+    }
+}
