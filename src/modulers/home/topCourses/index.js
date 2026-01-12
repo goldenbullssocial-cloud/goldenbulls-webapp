@@ -59,8 +59,8 @@ export default function TopCourses() {
               <span>Live Online Courses</span>
             </button>
             <button
-              className={activeTab === "inPerson" ? styles.active : ""}
-              onClick={() => setActiveTab("inPerson")}
+              className={activeTab === "physical" ? styles.active : ""}
+              onClick={() => setActiveTab("physical")}
             >
               <span>In Person Courses</span>
             </button>
