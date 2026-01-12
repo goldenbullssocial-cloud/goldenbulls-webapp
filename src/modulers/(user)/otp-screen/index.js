@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Suspense } from 'react';
 import styles from './otp-screen.module.scss';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
@@ -9,7 +9,7 @@ import { errorMessages } from '@/utils/constant';
 
 const LoginBullImage = '/assets/images/login-bull.png';
 
-export default function OtpScreen() {
+function OtpScreenContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const email = searchParams.get('email');
@@ -187,4 +187,12 @@ export default function OtpScreen() {
             </div>
         </div>
     )
+}
+
+export default function OtpScreen() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <OtpScreenContent />
+        </Suspense>
+    );
 }
