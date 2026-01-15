@@ -26,9 +26,9 @@ export default function Courses() {
   return (
     <div>
       <CoursesBanner />
-      <OnDemandCourses title='Recorded courses' data={courses?.recorded} bgColor='#0C0C0C' />
-      <OnDemandCourses title="Live online courses" data={courses?.live} bgColor='#000' />
-      <OnDemandCourses title='In person courses' data={courses?.physical} bgColor='#0C0C0C' />
+      <OnDemandCourses title='Recorded courses' data={courses?.recorded} activeType={"recorded"} bgColor='#0C0C0C' />
+      <OnDemandCourses title="Live online courses" data={courses?.live} activeType={"live"} bgColor='#000' />
+      <OnDemandCourses title='In person courses' data={courses?.physical} activeType={"physical"} bgColor='#0C0C0C' />
       <TrustedSection />
       <ClassroominYourPocket spacingRemove />
       <FaqSection />

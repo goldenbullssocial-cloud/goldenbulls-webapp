@@ -31,7 +31,7 @@ const itemVariants = {
   },
 };
 
-export default function OnDemandCourses({ title, data, bgColor = "#0C0C0C" }) {
+export default function OnDemandCourses({ title, data, activeType, bgColor = "#0C0C0C" }) {
   return (
     <motion.section
       className={styles.onDemandCourses}
@@ -80,7 +80,7 @@ export default function OnDemandCourses({ title, data, bgColor = "#0C0C0C" }) {
                   rating={3.5}
                   image={item.courseVideo}
                   location={item?.location || ""}
-                  btnLink={`/courses/${item._id}`}
+                  btnLink={`/courses/${item._id}?courseType=${activeType}`}
                 />
               </Link>
             </motion.div>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -9,10 +9,24 @@ import {
 import styles from './blogSection.module.scss';
 import LeftIcon from '@/icons/leftIcon';
 import Link from 'next/link';
+import { useQuery } from "@apollo/client/react";
+import { GET_ALL_BLOG_DATA } from '@/graphql/getBlogData';
 const BlogImage = '/assets/images/blog-image.png';
 export default function BlogSection() {
     const [prevEl, setPrevEl] = useState(null);
     const [nextEl, setNextEl] = useState(null);
+    const [blogs, setBlogs] = useState([]);
+
+    const {
+        data: blogData,
+    } = useQuery(GET_ALL_BLOG_DATA);
+
+    useEffect(() => {
+        if (blogData) {
+            setBlogs(blogData?.blogs_connection?.nodes);
+        }
+    }, [blogData]);
+
     return (
         <div className={styles.blogSectionAlignment}>
             <div className='container-md'>
@@ -72,24 +86,33 @@ export default function BlogSection() {
                             }}
                         >
                             {
-                                [...Array(5)].map((_, index) => {
+                                blogs?.map((item, index) => {
+                                    console.log(item, "`````itemitem");
+
                                     return (
                                         <SwiperSlide key={index}>
                                             <div className={styles.card}>
                                                 <div className={styles.cardImage}>
-                                                    <img src={BlogImage} alt='BlogImage' />
+                                                    <img src={
+                                                        process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL +
+                                                        item?.coverImage?.url
+                                                    } alt='BlogImage' />
                                                 </div>
                                                 <div className={styles.details}>
                                                     <h3>
-                                                        Forex trading masterclass for absolute beginners, and market enthusiasts
+                                                        {item?.title}
                                                     </h3>
                                                     <div className={styles.twoContent}>
                                                         <span>
-                                                            Johnathan Doe
+                                                            {item?.author?.name}
                                                         </span>
                                                         <ul>
                                                             <li>
-                                                                19 November 2023
+                                                                {item?.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', {
+                                                                    day: 'numeric',
+                                                                    month: 'long',
+                                                                    year: 'numeric'
+                                                                }) : " "}
                                                             </li>
                                                         </ul>
                                                     </div>

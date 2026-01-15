@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import styles from "./latestBlog.module.scss";
 import Pagination from "@/components/pagination";
@@ -8,6 +8,8 @@ import Link from "next/link";
 import { blogsData } from "@/constants";
 import DownPrimaryIcon from '@/icons/downPrimaryIcon'
 import classNames from 'classnames'
+import { useQuery } from "@apollo/client/react";
+import { GET_ALL_BLOG_DATA, GET_BLOG_CATEGORIES } from "@/graphql/getBlogData";
 const ITEMS_PER_PAGE = 12;
 
 /* Container animation */
@@ -41,16 +43,39 @@ export default function LatestBlog() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [toggle, setToggle] = React.useState(false);
-  // Filter blogs by category
+  const [blogs, setBlogs] = useState([]);
+
+  const {
+    data: blogData,
+  } = useQuery(GET_ALL_BLOG_DATA);
+
+  useEffect(() => {
+    if (blogData) {
+      setBlogs(blogData?.blogs_connection?.nodes);
+    }
+  }, [blogData]);
+
+  /* Fetch Categories */
+  const { data: categoryData } = useQuery(GET_BLOG_CATEGORIES);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    if (categoryData) {
+      setCategories(categoryData.categories);
+    }
+  }, [categoryData]);
+
+  // Filter blogs by category using state data
   const filteredBlogs = useMemo(() => {
     if (selectedCategory === "all") {
-      return blogsData;
+      return blogs;
     }
-    return blogsData.filter(
-      (blog) =>
-        blog.category.toLowerCase().replace(" ", "-") === selectedCategory
+    return blogs.filter((blog) =>
+      blog.categories.some(
+        (cat) => cat.slug === selectedCategory
+      )
     );
-  }, [selectedCategory]);
+  }, [selectedCategory, blogs]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE);
@@ -59,9 +84,10 @@ export default function LatestBlog() {
   const currentBlogs = filteredBlogs.slice(startIndex, endIndex);
 
   // Handle category change
-  const handleCategoryChange = (categoryId) => {
-    setSelectedCategory(categoryId);
+  const handleCategoryChange = (slug) => {
+    setSelectedCategory(slug);
     setCurrentPage(1); // Reset to first page when category changes
+    setToggle(false);
   };
 
   // Handle page change
@@ -87,18 +113,43 @@ export default function LatestBlog() {
             />
           </div> */}
           <div className={styles.relativeDiv}>
-            <button>
+            <button onClick={() => setToggle(!toggle)}>
               <span>
-                All Categories
+                {selectedCategory === "all"
+                  ? "All Categories"
+                  : categories.find((c) => c.slug === selectedCategory)?.name ||
+                  "All Categories"}
               </span>
-              <div className={classNames(styles.icons, toggle ? styles.rotate : "")} onClick={() => setToggle(!toggle)}>
+              <div className={classNames(styles.icons, toggle ? styles.rotate : "")}>
                 <DownPrimaryIcon />
               </div>
-              <div className={classNames(styles.dropdown, toggle ? styles.show : styles.hide)}>
+              <div
+                className={classNames(
+                  styles.dropdown,
+                  toggle ? styles.show : styles.hide
+                )}
+              >
                 <div className={styles.dropdownDesign}>
                   <div className={styles.dropdownSpacing}>
-                    <p>All Categories</p>
-                    <p>All Categories</p>
+                    <p
+                      onClick={() => handleCategoryChange("all")}
+                      className={classNames({
+                        [styles.active]: selectedCategory === "all",
+                      })}
+                    >
+                      All Categories
+                    </p>
+                    {categories?.map((category, index) => (
+                      <p
+                        key={index}
+                        onClick={() => handleCategoryChange(category.slug)}
+                        className={classNames({
+                          [styles.active]: selectedCategory === category.slug,
+                        })}
+                      >
+                        {category.name}
+                      </p>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -115,19 +166,23 @@ export default function LatestBlog() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {currentBlogs.map((blog) => (
-            <Link key={blog.id} href={`/blog/${blog.slug}`}>
+          {currentBlogs?.map((blog, index) => (
+            <Link key={index} href={`/blog/${blog.slug}`}>
               <motion.div className={styles.griditems} variants={cardVariants}>
                 <div className={styles.cardImage}>
-                  <img src={blog.image} alt={blog.alt} />
+                  <img src={process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL + blog?.coverImage?.url} alt={blog.title} />
                 </div>
 
                 <div className={styles.details}>
                   <h3>{blog.title}</h3>
                   <div className={styles.twoContentAlignment}>
-                    <span>{blog.author}</span>
+                    <span>{blog?.author?.name}</span>
                     <ul>
-                      <li>{blog.dateLabel}</li>
+                      <li>{blog?.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                      }) : " "}</li>
                     </ul>
                   </div>
                 </div>

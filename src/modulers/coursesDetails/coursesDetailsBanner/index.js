@@ -58,7 +58,7 @@ const cardAnim = {
 export default function CoursesDetailsBanner() {
     const params = useParams();
     const [courseData, setCourseData] = useState([]);
-    console.log(params, "=====params");
+    const course = Array.isArray(courseData) ? courseData[0] : courseData;
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -77,9 +77,6 @@ export default function CoursesDetailsBanner() {
         fetchCourse();
     }, [params?.id]);
 
-    console.log(courseData, "-----courseData");
-
-
     return (
         <motion.div
             className={styles.coursesDetailsBanner}
@@ -97,11 +94,16 @@ export default function CoursesDetailsBanner() {
                             variants={container}
                         >
                             <motion.h1 variants={fadeUp}>
-                                <span> Advanced </span> forex trading Masterclass
+                                {course?.CourseName && (
+                                    <>
+                                        <span>{course.CourseName.split(' ').slice(0, 2).join(' ')} </span>
+                                        {course.CourseName.split(' ').slice(2).join(' ')}
+                                    </>
+                                )}
                             </motion.h1>
 
                             <motion.p variants={fadeUp}>
-                                Forex trading is one of the most dynamic and widely followed financial markets in the world, and learning how it works can open the door to powerful financial knowledge and disciplined decision-making. Our forex trading course is designed to help learners build a strong foundation in currency markets, understand how global economic events influence price movements, and develop a structured approach to market analysis.
+                                {course?.description}
                             </motion.p>
 
                             <motion.div
@@ -110,13 +112,13 @@ export default function CoursesDetailsBanner() {
                             >
                                 <div className={styles.time}>
                                     <ClockIcon />
-                                    <span>12 Hours</span>
+                                    <span>{course?.hours} Hours</span>
                                 </div>
 
                                 <div className={styles.dotButton}>
                                     <div className={styles.dot}></div>
                                     <button>
-                                        <span>Beginner</span>
+                                        <span>{course?.courseLevel}</span>
                                     </button>
                                 </div>
 
@@ -140,15 +142,15 @@ export default function CoursesDetailsBanner() {
                             <div className={styles.card}>
                                 <div className={styles.cardImage}>
                                     <div className={styles.image}>
-                                        <img src={CourseImage} alt="CourseImage" />
+                                        <img src={course?.courseVideo || CourseImage} alt="CourseImage" />
                                     </div>
                                 </div>
 
                                 <div className={styles.details}>
                                     <div className={styles.contentAlignment}>
-                                        <h3>$129</h3>
+                                        <h3>${course?.price}</h3>
                                         <ul>
-                                            <li>Johnathan Doe</li>
+                                            <li>{course?.instructor?.name}</li>
                                         </ul>
                                     </div>
 

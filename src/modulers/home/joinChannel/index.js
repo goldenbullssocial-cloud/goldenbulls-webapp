@@ -83,8 +83,6 @@ export default function JoinChannel() {
 
                         <motion.div
                             variants={textItem}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
                         >
                             <Link href="/telegram-channel">
                                 <Button

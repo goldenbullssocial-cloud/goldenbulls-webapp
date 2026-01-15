@@ -30,6 +30,27 @@ export const getCourseById = async (data) => {
   }
 };
 
+export const getCourseSyllabus = async (id) => {
+  try {
+    const response = await api.get(`/syllabus/getAllSyllabus?courseId=${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching course syllabus:", error);
+    throw error;
+  }
+};
+
+export const getBots = async () => {
+  try {
+    const res = await api.get(`/strategies?page=1&limit=3`);
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching bots", error);
+    throw error;
+  }
+};
+
 export const createNewsLetter = async (formData) => {
   try {
     const response = await api.post(`/newsletter/createNewsLetter`, formData);

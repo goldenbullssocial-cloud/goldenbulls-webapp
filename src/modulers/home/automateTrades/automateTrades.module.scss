@@ -186,8 +186,16 @@
                 font-size: 24px;
                 font-style: normal;
                 font-weight: 400;
-                line-height: normal;
                 @include font-normal;
+
+                // Enforce 2 lines
+                line-height: 1.4em;
+                height: 2.8em;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
 
                 @include respond-to("xl") {
                     font-size: 20px;

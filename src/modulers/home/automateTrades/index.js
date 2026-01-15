@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
     Pagination,
@@ -8,10 +8,29 @@ import {
 import styles from './automateTrades.module.scss';
 import Button from '@/components/button';
 import LeftIcon from '@/icons/leftIcon';
+import { getBots } from '@/services/dashboard';
 
 export default function AutomateTrades() {
     const [prevEl, setPrevEl] = useState(null);
     const [nextEl, setNextEl] = useState(null);
+    const [bots, setBots] = useState([]);
+
+    useEffect(() => {
+        const fetchBots = async () => {
+            try {
+                const res = await getBots();
+                if (res?.payload) {
+                    setBots(res?.payload?.data);
+                } else if (Array.isArray(res)) {
+                    setBots(res);
+                }
+            } catch (error) {
+                console.error("Error fetching bots:", error);
+            }
+        };
+
+        fetchBots();
+    }, []);
     return (
         <div className={styles.automateTrades}>
             <div className='container-md'>
@@ -72,7 +91,7 @@ export default function AutomateTrades() {
                             }}
                         >
                             {
-                                [...Array(5)].map((_, index) => {
+                                bots?.length > 0 ? bots.map((item, index) => {
                                     return (
                                         <SwiperSlide key={index}>
                                             <div className={styles.box}>
@@ -86,19 +105,18 @@ export default function AutomateTrades() {
                                                 </div>
                                                 <div className={styles.leftRightAlignment}>
                                                     <p>
-                                                        Forex's maximum movement tracking and
-                                                        analysis algobot
+                                                        {item?.title}
                                                     </p>
                                                     <div className={styles.line}></div>
                                                     <h5>
-                                                        $120 <span>/Month</span>
+                                                        {item?.strategyPlan[1]?.price} <span>/ {item?.strategyPlan[1]?.planType}</span>
                                                     </h5>
                                                     <Button text="Subscribe Now" className={styles.btn} />
                                                 </div>
                                             </div>
                                         </SwiperSlide>
                                     )
-                                })
+                                }) : null
                             }
 
                         </Swiper>

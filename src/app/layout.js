@@ -3,6 +3,7 @@ import '../scss/main.scss';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata = {
   title: "Golden Bulls Learning Academy Private Limited",
@@ -13,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

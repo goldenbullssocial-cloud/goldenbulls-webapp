@@ -108,7 +108,7 @@ export default function TopCourses() {
                   rating={4.5}
                   image={item?.courseVideo}
                   location={item?.location || ""}
-                  btnLink={`/courses/${item._id}`}
+                  btnLink={`/courses/${item._id}?courseType=${activeTab}`}
                 />
               ))
             ) : (

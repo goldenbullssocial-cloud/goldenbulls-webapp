@@ -9,7 +9,7 @@ export default function middleware(req) {
   // Protected routes
   const protectedPaths = [
     "/library",
-    "/contact-us",
+    // "/contact-us",
     "/my-courses",
     "/notification",
     "/paymentHistory",
@@ -42,7 +42,7 @@ export default function middleware(req) {
 export const config = {
   matcher: [
     "/library",
-    "/contact-us",
+    // "/contact-us",
     "/my-courses",
     "/notification",
     "/paymentHistory",

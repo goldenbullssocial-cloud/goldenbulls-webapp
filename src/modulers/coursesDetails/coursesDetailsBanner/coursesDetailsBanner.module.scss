@@ -38,7 +38,7 @@
         .grid {
             display: grid;
             grid-template-columns: 1fr 540px;
-            gap: 20px;
+            gap: 40px;
             align-items: center;
 
             @include respond-to("sm") {
