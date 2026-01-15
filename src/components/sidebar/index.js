@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import styles from './sidebar.module.scss';
 import UserIcon from '@/icons/userIcon';
 import DownIcon from '@/icons/downIcon';
@@ -17,11 +18,15 @@ import Link from 'next/link';
 
 export default function Sidebar() {
     const [user, setUser] = useState(null);
-        useEffect(() => {
-            const user = getCookie('user');    
-            const userName = (user && JSON.parse(user)?.name);
-            setUser(userName);
-        }, []);
+    useEffect(() => {
+        const user = getCookie('user');
+        const userName = (user && JSON.parse(user)?.name);
+        setUser(userName);
+    }, []);
+
+    const pathname = usePathname();
+
+    const isActive = (path) => pathname === path;
 
     return (
         <aside className={styles.sidebar}>
@@ -31,42 +36,42 @@ export default function Sidebar() {
                 </Link>
             </div>
             <div className={styles.asideBody}>
-                <div className={classNames(styles.active, styles.menu)}>
+                <Link href='/library' className={classNames({ [styles.active]: isActive('/library') }, styles.menu)}>
                     <LibraryIcon />
                     <span>
                         My Library
                     </span>
-                </div>
-                <div className={styles.menu}>
+                </Link>
+                <Link href='/recorded-courses' className={classNames({ [styles.active]: isActive('/recorded-courses') }, styles.menu)}>
                     <CoursesIcon />
                     <span>
                         Courses
                     </span>
-                </div>
-                <div className={styles.menu}>
+                </Link>
+                <Link href='/algobots' className={classNames({ [styles.active]: isActive('/algobots') }, styles.menu)}>
                     <AlgobotsIcon />
                     <span>
                         Algobots
                     </span>
-                </div>
-                <div className={styles.menu}>
+                </Link>
+                <Link href='/notifications' className={classNames({ [styles.active]: isActive('/notifications') }, styles.menu)}>
                     <NotificationsIcon />
                     <span>
                         Notifications
                     </span>
-                </div>
-                <div className={styles.menu}>
+                </Link>
+                <Link href='/payment-history' className={classNames({ [styles.active]: isActive('/payment-history') }, styles.menu)}>
                     <PaymentIcon />
                     <span>
                         Payment History
                     </span>
-                </div>
-                <div className={styles.menu}>
+                </Link>
+                <Link href='/refer-and-earn' className={classNames({ [styles.active]: isActive('/refer-and-earn') }, styles.menu)}>
                     <ReferIcon />
                     <span>
                         Refer and Earn
                     </span>
-                </div>
+                </Link>
             </div>
             <div className={styles.asideFooter}>
                 <div className={styles.profileBox}>

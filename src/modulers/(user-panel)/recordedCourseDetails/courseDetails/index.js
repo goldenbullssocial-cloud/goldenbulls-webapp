@@ -1,25 +1,51 @@
-import React from 'react'
+"use client";
+import React, { useEffect, useState } from 'react'
 import styles from './courseDetails.module.scss';
 import Button from '@/components/button';
 import ClockIcon from '@/icons/clockIcon';
 import StarIcon from '@/icons/starIcon';
-const CourseImage = '/assets/images/course-lg.png';
+import { useSearchParams } from 'next/navigation';
+import { getCourseById } from '@/services/dashboard';
+
+const CourseImageDefault = '/assets/images/course-lg.png';
+
 export default function CourseDetails() {
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
+    const [course, setCourse] = useState(null);
+
+    useEffect(() => {
+        const fetchCourse = async () => {
+            if (!id) return;
+            try {
+                const res = await getCourseById({ id });
+                if (res?.payload?.data) {
+                    setCourse(res?.payload?.data);
+                }
+            } catch (error) {
+                console.error("Error fetching course:", error);
+            }
+        };
+
+        fetchCourse();
+    }, [id]);
+
+    const courseData = Array.isArray(course) ? course[0] : course;
+
     return (
         <div className={styles.courseDetails}>
             <div className={styles.grid}>
                 <div className={styles.griditems}>
                     <div className={styles.contnetStyle}>
                         <div className={styles.subtitle}>
-                            <span>
-                                Recorded Course
+                            <span style={{ textTransform: 'capitalize' }}>
+                                {courseData?.courseType ? `${courseData?.courseType} Courses` : "Recorded Course"}
                             </span>
                             <h3>
-                                Advanced forex trading Masterclass
+                                {courseData?.CourseName}
                             </h3>
                             <p>
-                                Forex trading is one of the most dynamic and widely followed financial markets in the world, and learning how it works can open the door to powerful financial knowledge and disciplined  decision making. Our forex trading course is designed to help learners build a strong foundation in currency markets, understand how global economic events influence
-                                price movements, and develop a structured approach to market analysis.
+                                {courseData?.description}
                             </p>
                         </div>
                         <div
@@ -27,13 +53,13 @@ export default function CourseDetails() {
                         >
                             <div className={styles.time}>
                                 <ClockIcon />
-                                <span>12 Hours</span>
+                                <span>{courseData?.hours} Hours</span>
                             </div>
 
                             <div className={styles.dotButton}>
                                 <div className={styles.dot}></div>
                                 <button>
-                                    <span>Beginner</span>
+                                    <span style={{ textTransform: 'capitalize' }}>{courseData?.courseLevel}</span>
                                 </button>
                             </div>
 
@@ -44,23 +70,23 @@ export default function CourseDetails() {
                                     <span>4.5</span>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
                 <div className={styles.griditems}>
                     <div className={styles.card}>
                         <div className={styles.image}>
-                            <img src={CourseImage} alt='CourseImage' />
+                            <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
                         </div>
                         <div className={styles.details}>
                             <div className={styles.twoText}>
                                 <h4>
-                                    $129
+                                    ${courseData?.price}
                                 </h4>
                                 <ul>
                                     <li>
-                                        Johnathan Doe
+                                        {courseData?.instructor?.name}
                                     </li>
                                 </ul>
                             </div>

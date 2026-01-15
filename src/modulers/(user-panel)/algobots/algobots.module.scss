@@ -75,7 +75,13 @@
                     font-size: 20px;
                     font-style: normal;
                     font-weight: 400;
-                    line-height: normal;
+                    line-height: 30px;
+                    min-height: 60px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
                     @include font-normal;
 
                     @include respond-to("xl") {
@@ -110,18 +116,92 @@
                     }
                 }
 
-                h6 {
-                    color: #FFF;
-                    font-size: 25.101px;
-                    font-style: normal;
-                    font-weight: 700;
-                    line-height: normal;
-                    @include font-bold;
+                .dropdownContainer {
+                    position: relative;
+                    border-radius: 40px;
+                    padding: 10px 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
                     margin: 12px 0 18px 0;
+                    cursor: pointer;
+                    width: 100%;
 
                     span {
-                        @include font-normal;
-                        font-weight: 400;
+                        font-family: Outfit;
+                        font-size: 20px;
+                        font-weight: 500;
+                        background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                        text-fill-color: transparent;
+                    }
+
+                    .imgIcon {
+                        width: 32px;
+                        height: 32px;
+                        flex-shrink: 0;
+                        border-radius: 50%;
+                        background: #292929;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        img {
+                            width: 12px;
+                            height: auto;
+                            transition: transform 0.3s ease;
+                        }
+                    }
+
+                    // Gradient border using mask technique
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        border-radius: 40px;
+                        padding: 1px;
+                        /* border width */
+                        background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
+                        -webkit-mask:
+                            linear-gradient(#fff 0 0) content-box,
+                            linear-gradient(#fff 0 0);
+                        -webkit-mask-composite: xor;
+                        mask:
+                            linear-gradient(#fff 0 0) content-box,
+                            linear-gradient(#fff 0 0);
+                        mask-composite: exclude;
+                        pointer-events: none;
+                    }
+
+                    .dropdownList {
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        width: 100%;
+                        background: #1a1a1a;
+                        border-radius: 12px;
+                        margin-top: 8px;
+                        z-index: 100;
+                        overflow: hidden;
+                        border: 1px solid #333;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+                        .dropdownItem {
+                            padding: 12px 20px;
+                            color: #fff;
+                            font-size: 16px;
+                            transition: background 0.3s;
+
+                            &:hover {
+                                background: #333;
+                            }
+
+                            &:not(:last-child) {
+                                border-bottom: 1px solid #333;
+                            }
+                        }
                     }
                 }
             }
@@ -197,6 +277,9 @@
                         linear-gradient(#fff 0 0) content-box,
                         linear-gradient(#fff 0 0);
                     -webkit-mask-composite: xor;
+                    mask:
+                        linear-gradient(#fff 0 0) content-box,
+                        linear-gradient(#fff 0 0);
                     mask-composite: exclude;
                     pointer-events: none;
                     transition: .3s ease-in-out;

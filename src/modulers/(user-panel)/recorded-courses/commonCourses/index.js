@@ -1,11 +1,14 @@
+"use client";
 import React from 'react'
 import styles from './commonCourses.module.scss';
 import StarIcon from '@/icons/starIcon';
 import ClockInIcon from '@/icons/clockInIcon';
 import Button from '@/components/button';
+import { useRouter } from 'next/navigation';
 const CardImage = '/assets/images/course-user.png';
 const ClockIcon = "/assets/icons/calender-icon.png";
-export default function CommonCourses({ title }) {
+export default function CommonCourses({ title, courses }) {
+    const router = useRouter();
     return (
         <div className={styles.commonCourses}>
             <div className={styles.title}>
@@ -15,34 +18,34 @@ export default function CommonCourses({ title }) {
             </div>
             <div className={styles.grid}>
                 {
-                    [...Array(4)].map((_, i) => {
+                    courses?.map((course, i) => {
                         return (
                             <div className={styles.griditems} key={i}>
                                 <div className={styles.cardImage}>
-                                    <img src={CardImage} alt='CardImage' />
+                                    <img src={course?.courseVideo} alt='CardImage' />
                                 </div>
                                 <div className={styles.details}>
                                     <h3>
-                                        Forex trading mastferclass for absolute beginners, and market enthusiasts
+                                        {course?.CourseName}
                                     </h3>
                                     <div className={styles.secContent}>
                                         <h4>
-                                            $129
+                                            ${course?.price}
                                         </h4>
                                         <ul>
-                                            <li>Johnathan Does</li>
+                                            <li>{course?.instructor?.name}</li>
                                         </ul>
                                     </div>
                                     <div className={styles.listAlignment}>
                                         <div className={styles.time}>
                                             <ClockInIcon />
-                                            <span>12 Hours</span>
+                                            <span>{course?.hours} Hours</span>
                                         </div>
 
                                         <div className={styles.dotButton}>
                                             <div className={styles.dot}></div>
                                             <button>
-                                                <span>Beginner</span>
+                                                <span>{course?.courseLevel}</span>
                                             </button>
                                         </div>
 
@@ -55,7 +58,7 @@ export default function CommonCourses({ title }) {
                                         </div>
                                     </div>
                                     <div className={styles.buttonDesign}>
-                                        <Button text="Enroll Now" />
+                                        <Button text="Enroll Now" onClick={() => {router.push(`/recorded-course-details?id=${course?._id}&type=${course?.courseType}`) }} />
                                     </div>
                                 </div>
                             </div>

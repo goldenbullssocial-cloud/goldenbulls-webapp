@@ -87,8 +87,6 @@ export default function BlogSection() {
                         >
                             {
                                 blogs?.map((item, index) => {
-                                    console.log(item, "`````itemitem");
-
                                     return (
                                         <SwiperSlide key={index}>
                                             <div className={styles.card}>

@@ -29,7 +29,6 @@ export default function CourseContent() {
             if (params?.id) {
                 try {
                     const response = await getCourseSyllabus(params.id);
-                    console.log(response,"---response");
                     
                     if (response?.payload?.data) {
                         setCourseData(response.payload.data);
@@ -40,10 +39,7 @@ export default function CourseContent() {
             }
         };
         fetchSyllabus();
-    }, [params?.id]);
-
-    console.log(courseData,"===courseData");
-    
+    }, [params?.id]);    
 
     return (
         <div className={styles.courseContent}>
