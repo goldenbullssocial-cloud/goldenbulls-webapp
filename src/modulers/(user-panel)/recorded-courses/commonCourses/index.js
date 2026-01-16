@@ -7,7 +7,7 @@ import Button from '@/components/button';
 import { useRouter } from 'next/navigation';
 const CardImage = '/assets/images/course-user.png';
 const ClockIcon = "/assets/icons/calender-icon.png";
-export default function CommonCourses({ title, courses }) {
+export default function CommonCourses({ title, courses, loading }) {
     const router = useRouter();
     return (
         <div className={styles.commonCourses}>
@@ -17,7 +17,38 @@ export default function CommonCourses({ title, courses }) {
                 </h2>
             </div>
             <div className={styles.grid}>
-                {
+                {loading ? (
+                    Array(4).fill(0).map((_, i) => (
+                        <div className={styles.griditems}>
+                            <div className={`${styles.cardImage} ${styles.skeleton} ${styles.skeletonImage}`} />
+
+                            <div className={styles.details}>
+                                <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+
+                                <div className={styles.secContent}>
+                                    <div
+                                        className={`${styles.skeleton} ${styles.skeletonText}`}
+                                        style={{ width: "40%" }}
+                                    />
+                                    <div
+                                        className={`${styles.skeleton} ${styles.skeletonText}`}
+                                        style={{ width: "50%" }}
+                                    />
+                                </div>
+
+                                <div className={styles.listAlignment}>
+                                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                                </div>
+
+                                <div className={styles.buttonDesign}>
+                                    <div className={`${styles.skeleton} ${styles.skeletonButton}`} />
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : (
                     courses?.map((course, i) => {
                         return (
                             <div className={styles.griditems} key={i}>
@@ -58,13 +89,13 @@ export default function CommonCourses({ title, courses }) {
                                         </div>
                                     </div>
                                     <div className={styles.buttonDesign}>
-                                        <Button text="Enroll Now" onClick={() => {router.push(`/recorded-course-details?id=${course?._id}&type=${course?.courseType}`) }} />
+                                        <Button text="Enroll Now" onClick={() => { router.push(`/recorded-course-details?id=${course?._id}&type=${course?.courseType}`) }} />
                                     </div>
                                 </div>
                             </div>
                         )
                     })
-                }
+                )}
             </div>
         </div>
     )

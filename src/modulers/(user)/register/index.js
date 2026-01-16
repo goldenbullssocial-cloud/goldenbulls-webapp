@@ -114,14 +114,11 @@ export default function Register() {
 
         setIsSubmitting(true);
 
-        // Combine first and last name for API
-        const fullName = `${data.firstName} ${data.lastName}`.trim();
-
         signUp({
-            name: fullName,
+            firstName: data.firstName,
+            lastName: data.lastName,
             email: data.email,
             password: data.password,
-            // Sending empty strings for location as they are not in UI now
             country: "",
             state: "",
             city: "",

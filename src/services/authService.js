@@ -4,7 +4,8 @@ import { auth, provider } from "../../firebase";
 
 export const signUp = async (data) => {
   const fromdata = new FormData();
-  fromdata.append("name", data.name);
+  fromdata.append("firstName", data.firstName);
+  fromdata.append("lastName", data.lastName);
   fromdata.append("email", data.email);
   fromdata.append("password", data.password);
   fromdata.append("country", data.country);
@@ -44,7 +45,8 @@ export const loginWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = {
       email: result.user.email,
-      name: result.user.displayName,
+      firstName: result.user.firstName,
+      lastName: result.user.lastName,
       accessToken: result.user.stsTokenManager.accessToken,
       profileImage: result.user.photoURL,
     }

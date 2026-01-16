@@ -40,9 +40,33 @@ export const getCourseSyllabus = async (id) => {
   }
 };
 
-export const getBots = async () => {
+export const getPaymentUrl = async (data) => {
   try {
-    const res = await api.get(`/strategies?page=1&limit=3`);
+    const response = await api.post(`/payment/createPayment`, data);
+
+    const responseData = await response.data;
+    return responseData;
+  } catch (error) {
+    console.error("Error creating payment URL:", error);
+    throw error;
+  }
+};
+
+export const purchasedAllCourses = async ({ type, page, limit }) => {
+  try {
+    const response = await api.get(
+      `/payment/getMyCourseHistory?page=${page}&limit=${limit}&type=${type}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+};
+
+export const getBots = async (page = 1, limit = 10) => {
+  try {
+    const res = await api.get(`/strategies?page=${page}&limit=${limit}`);
     const data = await res.data;
     return data;
   } catch (error) {
@@ -61,3 +85,13 @@ export const createNewsLetter = async (formData) => {
     throw error;
   }
 };
+
+export const getProfile = async (id) => {
+  try {
+    const response = await api.get(`/user/get?id=${id}`)
+    return response.data;
+  } catch (error) {
+    console.log("error", error)
+    throw error;
+  }
+}
