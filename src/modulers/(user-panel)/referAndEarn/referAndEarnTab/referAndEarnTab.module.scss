@@ -21,20 +21,31 @@
         font-weight: 500;
         line-height: normal;
         position: relative;
+        transition: color 0.3s ease;
 
         &:hover {
-            color: #E4AB40;
+            background: linear-gradient(90deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
 
             &::before {
                 width: 100%;
+                background: linear-gradient(90deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);
             }
         }
 
         &.active {
-            color: #E4AB40;
+            background: linear-gradient(90deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
 
             &::before {
                 width: 100%;
+                background: linear-gradient(90deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);
             }
         }
 
@@ -45,8 +56,7 @@
             right: 0;
             margin: auto;
             content: " ";
-            color: transparent;
-            background: #F9F490;
+            background: linear-gradient(90deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);
             height: 2px;
             width: 0;
             transition: .4s ease-in-out;
