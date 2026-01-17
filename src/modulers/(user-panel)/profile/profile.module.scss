@@ -32,6 +32,7 @@
         height: 200px;
         position: relative;
         border-radius: 50%;
+        cursor: pointer;
 
         .img {
             width: 200px;
@@ -63,6 +64,240 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 16px 24px;
             padding: 0 0 32px 0;
+        }
+
+        .telephoninputmain {
+            .dropdownrelative {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+
+                label {
+                    color: #fff;
+                    font-size: 16px;
+                    font-weight: 400;
+                    @include font-normal;
+                }
+
+                .countrycodeselectormain {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    position: relative;
+                    background: #272727;
+                    border: 1px solid #66666693;
+                    border-radius: 12px;
+                    padding: 0 20px;
+                    height: 56px;
+
+                    &:focus-within {
+                        border-color: #E4AB40;
+                    }
+
+                    .countrycodeselectorrelative {
+                        position: relative;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+
+                        .countrycodeselector {
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            color: #fff;
+                            font-size: 16px;
+                            @include font-normal;
+
+                            .dropdownarrow {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-left: 4px;
+
+                                svg {
+                                    width: 16px;
+                                    height: 16px;
+                                    stroke: #999;
+                                }
+                            }
+                        }
+
+                        .dropdown {
+                            position: absolute;
+                            top: calc(100% + 8px);
+                            left: -20px;
+                            width: 300px;
+                            background: #1a1a1a;
+                            border: 1px solid #66666693;
+                            border-radius: 12px;
+                            z-index: 1000;
+                            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+                            overflow: hidden;
+
+                            .searchContainer {
+                                padding: 12px;
+                                border-bottom: 1px solid #333;
+
+                                .searchInput {
+                                    width: 100%;
+                                    padding: 8px 12px;
+                                    background: #272727;
+                                    border: 1px solid #444;
+                                    border-radius: 8px;
+                                    color: #fff;
+                                    outline: none;
+
+                                    &:focus {
+                                        border-color: #E4AB40;
+                                    }
+                                }
+                            }
+
+                            .dropdownSpacing {
+                                max-height: 250px;
+                                overflow-y: auto;
+
+                                .iconText {
+                                    padding: 10px 16px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 12px;
+                                    cursor: pointer;
+                                    transition: background 0.2s;
+
+                                    &:hover {
+                                        background: #272727;
+                                    }
+
+                                    .countryCode {
+                                        color: #fff;
+                                        font-weight: 600;
+                                        min-width: 45px;
+                                    }
+
+                                    .countryName {
+                                        color: #999;
+                                        font-size: 14px;
+                                    }
+                                }
+
+                                &::-webkit-scrollbar {
+                                    width: 6px;
+                                }
+
+                                &::-webkit-scrollbar-thumb {
+                                    background: #444;
+                                    border-radius: 10px;
+                                }
+                            }
+                        }
+                    }
+
+                    .separator {
+                        color: #66666693;
+                        font-size: 18px;
+                        font-weight: 300;
+                        margin-bottom: 2px;
+                        user-select: none;
+                    }
+
+                    .phoneInput {
+                        flex: 1;
+                        height: 100%;
+                        background: transparent;
+                        border: none;
+                        color: #fff;
+                        font-size: 16px;
+                        @include font-normal;
+                        outline: none;
+                        padding-left: 0;
+
+                        &::placeholder {
+                            color: #666;
+                        }
+                    }
+                }
+
+                .errorMessage {
+                    position: absolute;
+                    bottom: -20px;
+                    left: 0;
+                    color: #ff4d4d;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .selectWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            label {
+                color: #fff;
+                font-size: 16px;
+                font-weight: 400;
+                @include font-normal;
+            }
+
+            .customSelect {
+                background: #1a1a1a;
+                border: 1px solid #66666693;
+                border-radius: 12px;
+                padding: 16px 20px;
+                color: #fff;
+                font-size: 16px;
+                @include font-normal;
+                outline: none;
+                cursor: pointer;
+                width: 100%;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 20px center;
+                background-size: 20px;
+                padding-right: 50px;
+
+                &:focus {
+                    border-color: #E4AB40;
+                }
+
+                option {
+                    background: #1a1a1a;
+                    color: #fff;
+                    padding: 12px 20px;
+                }
+            }
+
+            :global(.rcs-select-container) {
+                width: 100%;
+
+                :global(.rcs-select) {
+                    border: 1px solid #66666693;
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    color: #000;
+                    font-size: 16px;
+                    @include font-normal;
+                    outline: none;
+                    cursor: pointer;
+
+                    &:focus {
+                        border-color: #E4AB40;
+                    }
+                }
+
+                :global(.rcs-select-option) {
+                    color: #fff;
+                    padding: 12px 20px;
+
+                    &:hover {
+                        background: #272727;
+                    }
+                }
+            }
         }
 
         .saveButton {

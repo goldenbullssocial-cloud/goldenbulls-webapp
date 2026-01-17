@@ -103,12 +103,38 @@ export const editProfile = async (userId, formData) => {
       formData,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         }
       }
     );
     return response.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const uploadImage = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('image', file, file.name || 'profile-image.jpg');
+
+    const response = await api.post(`/user/upload-image`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      transformRequest: [(data, headers) => {
+        delete headers['Content-Type'];
+        return data;
+      }]
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error during image upload:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
     throw error;
   }
 };

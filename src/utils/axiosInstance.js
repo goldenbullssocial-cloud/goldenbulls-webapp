@@ -29,6 +29,9 @@ function createAxios({ getToken } = {}) {
 
       if (token) {
         config.headers["x-auth-token"] = token;
+      }
+
+      if (!config.headers["Content-Type"] && !(config.data instanceof FormData)) {
         config.headers["Content-Type"] = "application/json";
       }
 

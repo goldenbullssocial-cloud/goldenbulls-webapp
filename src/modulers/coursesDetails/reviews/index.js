@@ -1,9 +1,11 @@
 'use client'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './reviews.module.scss';
 import StarIconXs from '@/icons/starIconXs';
 import { motion } from 'framer-motion';
 import classNames from 'classnames';
+import { getCourseRating } from '@/services/courses';
+import { useSearchParams } from 'next/navigation';
 
 const containerVariants = {
     hidden: {},
@@ -30,10 +32,32 @@ const cardVariants = {
     },
 };
 
-export default function Reviews({smallFont}) {
+export default function Reviews({ smallFont }) {
+    const [courseRating, setCourseRating] = useState(null);
+    const id = useSearchParams().get('id');
+
+    useEffect(() => {
+        const fetchCourseRating = async () => {
+            try {
+                const response = await getCourseRating(id);
+                if (response?.success && response?.payload) {
+                    setCourseRating(response?.payload?.data);
+                } else {
+                    setCourseRating(response?.payload);
+                }
+            } catch (error) {
+                console.error("Error fetching course rating:", error);
+            }
+        };
+
+        if (id) {
+            fetchCourseRating();
+        }
+    }, [id]);
+
     return (
         <motion.div
-            className={ classNames(styles.reviewsContentAlignment , smallFont ? styles.smallSize : "") }
+            className={classNames(styles.reviewsContentAlignment, smallFont ? styles.smallSize : "")}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
@@ -54,7 +78,7 @@ export default function Reviews({smallFont}) {
 
             {/* Reviews Grid */}
             <motion.div className={styles.allBox} variants={containerVariants}>
-                {[...Array(6)].map((_, index) => (
+                {[...Array(2)].map((_, index) => (
                     <motion.div
                         key={index}
                         className={styles.box}

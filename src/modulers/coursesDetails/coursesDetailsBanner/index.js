@@ -77,6 +77,13 @@ export default function CoursesDetailsBanner() {
         fetchCourse();
     }, [params?.id]);
 
+    const getYoutubeId = (url) => {
+        if (!url) return null;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    };    
+
     return (
         <motion.div
             className={styles.coursesDetailsBanner}
@@ -142,7 +149,34 @@ export default function CoursesDetailsBanner() {
                             <div className={styles.card}>
                                 <div className={styles.cardImage}>
                                     <div className={styles.image}>
-                                        <img src={course?.courseVideo || CourseImage} alt="CourseImage" />
+                                        {course?.courseIntroVideo ? (
+                                            getYoutubeId(course.courseIntroVideo) ? (
+                                                <iframe
+                                                    width="100%"
+                                                    height="100%"
+                                                    src={`https://www.youtube.com/embed/${getYoutubeId(course.courseIntroVideo)}?autoplay=1&mute=1&loop=1&controls=1&playlist=${getYoutubeId(course.courseIntroVideo)}`}
+                                                    title="Course Video"
+                                                    frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    allowFullScreen
+                                                    style={{ borderRadius: '12px', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                                ></iframe>
+                                            ) : (
+                                                <video
+                                                    src={course.courseIntroVideo}
+                                                    poster={course?.courseVideo || CourseImage}
+                                                    autoPlay
+                                                    muted
+                                                    loop
+                                                    playsInline
+                                                    controls
+                                                    width="100%"
+                                                    style={{ borderRadius: '12px', objectFit: 'cover', height: '100%' }}
+                                                />
+                                            )
+                                        ) : (
+                                            <img src={course?.courseVideo || CourseImage} alt="CourseImage" />
+                                        )}
                                     </div>
                                 </div>
 
