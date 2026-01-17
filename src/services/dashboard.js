@@ -95,3 +95,20 @@ export const getProfile = async (id) => {
     throw error;
   }
 }
+
+export const editProfile = async (userId, formData) => {
+  try {
+    const response = await api.put(
+      `/user/update?id=${userId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import React, { useEffect, useState, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './sidebar.module.scss';
+import toast from 'react-hot-toast';
 import UserIcon from '@/icons/userIcon';
 import DownIcon from '@/icons/downIcon';
 import UpIcon from '@/icons/upIcon';
@@ -13,20 +14,54 @@ import PaymentIcon from '@/icons/paymentIcon';
 import ReferIcon from '@/icons/referIcon';
 import classNames from 'classnames';
 const Logo = '/assets/logo/logo.svg';
-import { getCookie } from '../../../cookie';
+const ProfileIcon = '/assets/icons/profileIcon.svg';
+const LogoutIcon = '/assets/icons/logoutIcon.svg';
+import { getCookie, removeCookie } from '../../../cookie';
 import Link from 'next/link';
 
 export default function Sidebar() {
     const [user, setUser] = useState(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    const router = useRouter();
+
     useEffect(() => {
         const user = getCookie('user');
-        const userName = (user && JSON.parse(user)?.name);
-        setUser(userName);
+        if (user) {
+            const parsedUser = JSON.parse(user);
+            const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
+            setUser(userName);
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const pathname = usePathname();
-
     const isActive = (path) => pathname === path;
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    const handleLogout = async () => {
+    try {
+      removeCookie("userToken");
+      removeCookie("user");
+      toast.success("Logout successfully.");
+      await router.push('/login');
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to log out', error);
+    }
+  };
 
     return (
         <aside className={styles.sidebar}>
@@ -73,8 +108,24 @@ export default function Sidebar() {
                     </span>
                 </Link>
             </div>
-            <div className={styles.asideFooter}>
-                <div className={styles.profileBox}>
+            <div className={styles.asideFooter} ref={dropdownRef}>
+                {isDropdownOpen && (
+                    <div className={styles.dropdownMenu}>
+                        <Link href="/profile" className={styles.dropdownItem} onClick={() => setIsDropdownOpen(false)}>
+                            <img src={ProfileIcon} alt="Profile" />
+                            <span>Profile</span>
+                        </Link>
+                        <div className={styles.divider}></div>
+                        <div className={styles.dropdownItem} onClick={handleLogout}>
+                            <img src={LogoutIcon} alt="Logout" />
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                )}
+                <div
+                    className={classNames(styles.profileBox, { [styles.active]: isDropdownOpen })}
+                    onClick={toggleDropdown}
+                >
                     <div className={styles.profile}>
                         <UserIcon />
                     </div>
@@ -82,7 +133,9 @@ export default function Sidebar() {
                         <span>
                             {user}
                         </span>
-                        <UpIcon />
+                        <div className={classNames(styles.arrow, { [styles.open]: isDropdownOpen })}>
+                            <UpIcon />
+                        </div>
                     </div>
                 </div>
             </div>

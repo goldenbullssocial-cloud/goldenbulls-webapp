@@ -7,7 +7,8 @@ export default function UserHeader() {
     const [user, setUser] = useState(null);
     useEffect(() => {
         const user = getCookie('user');
-        const userName = (user && JSON.parse(user)?.name);
+        const parsedUser = JSON.parse(user);
+        const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
         setUser(userName);
     }, []);
 

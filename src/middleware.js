@@ -28,11 +28,11 @@ export default function middleware(req) {
 
   // If not authenticated, block protected routes
   if (!isAuthenticated && isProtected) {
-    return NextResponse.redirect(new URL("/signin", origin));
+    return NextResponse.redirect(new URL("/login", origin));
   }
 
   // If authenticated, block auth routes
-  if (isAuthenticated && ["/signin", "/signup"].includes(pathname)) {
+  if (isAuthenticated && ["/login", "/signup"].includes(pathname)) {
     return NextResponse.redirect(new URL("/library", origin));
   }
 
@@ -47,7 +47,7 @@ export const config = {
     "/notification",
     "/paymentHistory",
     "/profile",
-    "/signin",
+    "/login",
     "/signup",
 
     // Courses routes (with dynamic segments)
