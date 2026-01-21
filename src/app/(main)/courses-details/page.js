@@ -1,10 +1,12 @@
 import CoursesDetails from '@/modulers/coursesDetails'
-import React from 'react'
+import React, { Suspense } from 'react';
 
 export default function page() {
     return (
         <div>
-            <CoursesDetails />
+            <Suspense fallback={<div>Loading...</div>}>
+                <CoursesDetails />
+            </Suspense>
         </div>
     )
 }
