@@ -30,6 +30,19 @@ export const getCourseById = async (data) => {
   }
 };
 
+export const getChapters = async (id) => {
+  try {
+    const res = await api.get(
+      `/chapter/getChapterByCourse?courseId=${id}&sortBy=chapterNo&sortOrder=1`
+    );
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching chapters", error);
+    throw error;
+  }
+};
+
 export const getCourseSyllabus = async (id) => {
   try {
     const response = await api.get(`/syllabus/getAllSyllabus?courseId=${id}`);
@@ -135,6 +148,16 @@ export const uploadImage = async (file) => {
       response: error.response?.data,
       status: error.response?.status
     });
+    throw error;
+  }
+};
+
+export const getCouponByName = async (couponCode) => {
+  try {
+    const response = await api.get(`/coupon/get-coupon-name?couponCode=${couponCode}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching coupon by name:", error);
     throw error;
   }
 };

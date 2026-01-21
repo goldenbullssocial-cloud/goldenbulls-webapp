@@ -72,7 +72,7 @@ export default function CardView() {
             <div className={styles.items}>
                 <div>
                     <h3 className={styles.spaceRemove}>
-                        Total Earning
+                        Wallet Balance
                     </h3>
                     <h4>
                         ${withdrawalData?.walletBalance}
@@ -85,7 +85,7 @@ export default function CardView() {
             <div className={styles.items}>
                 <div>
                     <h3 className={styles.spaceRemove}>
-                        Total Earning
+                        Requested Amount
                     </h3>
                     <h4>
                         ${withdrawalData?.pendingWithdrawal}

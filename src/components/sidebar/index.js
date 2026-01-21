@@ -52,16 +52,15 @@ export default function Sidebar() {
     };
 
     const handleLogout = async () => {
-    try {
-      removeCookie("userToken");
-      removeCookie("user");
-      toast.success("Logout successfully.");
-      await router.push('/login');
-      window.location.reload();
-    } catch (error) {
-      console.error('Failed to log out', error);
-    }
-  };
+        try {
+            removeCookie("userToken");
+            removeCookie("user");
+            toast.success("Logout successfully.");
+            await router.push('/login');
+        } catch (error) {
+            console.error('Failed to log out', error);
+        }
+    };
 
     return (
         <aside className={styles.sidebar}>

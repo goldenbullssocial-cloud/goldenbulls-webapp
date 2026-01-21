@@ -49,8 +49,6 @@ export default function Profile() {
 
                     if (response.success) {
                         const data = response.payload.data[0];
-                        console.log("data", data);
-
                         setFormData({
                             firstName: data.firstName || '',
                             lastName: data.lastName || '',

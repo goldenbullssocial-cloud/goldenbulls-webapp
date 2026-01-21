@@ -4,10 +4,10 @@ import styles from './courseContent.module.scss';
 import classNames from 'classnames'
 import { motion, AnimatePresence } from 'framer-motion'
 import Reviews from '@/modulers/coursesDetails/reviews';
-import { getCourseSyllabus } from '@/services/dashboard';
+import { getChapters } from '@/services/dashboard';
 import { useSearchParams } from 'next/navigation';
 const titleAnim = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { y: 30 },
     show: {
         opacity: 1,
         y: 0,
@@ -17,28 +17,53 @@ const titleAnim = {
         },
     },
 };
-export default function CourseContent() {
+
+const CheckIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="12" fill="#F9F490" />
+        <path d="M7 12L10.5 15.5L17 9" stroke="#0F0F0F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+const PlayCircleIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="11" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+        <path d="M15.5 12L10.25 15.0311L10.25 8.96891L15.5 12Z" fill="rgba(255,255,255,0.4)" />
+    </svg>
+);
+
+export default function CourseContent({ onVideoSelect, chapters, onChaptersLoaded }) {
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const [syllabusData, setSyllabusData] = useState([]);
+    const [chaptersData, setChaptersData] = useState([]);
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
 
     useEffect(() => {
-        const fetchSyllabus = async () => {
+        if (chapters && chapters.length > 0) {
+            setChaptersData(chapters);
+            return;
+        }
+
+        const fetchChapters = async () => {
             if (id) {
                 try {
-                    const response = await getCourseSyllabus(id);
-                    
+                    const response = await getChapters(id);
                     const data = response?.payload?.data || (Array.isArray(response?.payload) ? response.payload : (Array.isArray(response) ? response : []));
-                    setSyllabusData(data);
+                    setChaptersData(data);
+                    if (onChaptersLoaded) onChaptersLoaded(data);
+
+                    // Set initial video if data exists and no video selected
+                    if (data && data.length > 0 && !chapters) {
+                        onVideoSelect({ url: data[0]?.chapterVideo, chapterId: data[0]?.courseTracking?.chapterId, chapterTrakingId: data[0]?.courseTracking?._id, percentageCompleted: data[0]?.courseTracking?.percentage });
+                    }
                 } catch (error) {
-                    console.error("Error fetching syllabus:", error);
+                    console.error("Error fetching chapters:", error);
                 }
             }
         };
-        fetchSyllabus();
-    }, [id]);
+        fetchChapters();
+    }, [id, chapters]);
 
     return (
         <div className={styles.courseContentUser}>
@@ -53,7 +78,7 @@ export default function CourseContent() {
                     <h2>Course content</h2>
                 </motion.div>
                 <div className={styles.allBoxAlignment}>
-                    {syllabusData?.map((item, index) => (
+                    {chaptersData?.map((item, index) => (
                         <motion.div
                             key={index}
                             className={styles.box}
@@ -65,16 +90,24 @@ export default function CourseContent() {
                             {/* HEADER */}
                             <div
                                 className={styles.boxHeader}
-                                onClick={() =>
-                                    setActiveIndex(activeIndex === index ? null : index)
-                                }
+                                onClick={() => {
+                                    setActiveIndex(activeIndex === index ? null : index);
+                                    if (item?.chapterVideo) {
+                                        onVideoSelect({ url: item?.chapterVideo, chapterId: item?._id, chapterTrakingId: item?.courseTracking?._id, percentageCompleted: item?.courseTracking?.percentage });
+                                    }
+                                }}
                             >
                                 <h3>
-                                    CHAPTER {index + 1}
-                                    <span> {item.title}</span>
+                                    CHAPTER {item?.chapterNo} <span> | {item?.chapterName}</span>
                                 </h3>
-                                {/* Fallback duration if not available */}
-                                <p>{item.duration || ""}</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <p>{`${item?.duration} Min` || ""}</p>
+                                    {parseInt(item?.courseTracking?.percentage) >= 100 ? (
+                                        <CheckIcon />
+                                    ) : (
+                                        <PlayCircleIcon />
+                                    )}
+                                </div>
                             </div>
 
                             {/* BODY */}

@@ -31,3 +31,16 @@ export const createWithdrawalRequest = async (data) => {
     throw error;
   }
 };
+
+export const addWithdrawalRequest = async (withdrawalData) => {
+  try {
+    const response = await api.post(
+      `/withdrawal/addWithdrawalRequest`,
+      withdrawalData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding withdrawal request:", error);
+    throw error;
+  }
+};

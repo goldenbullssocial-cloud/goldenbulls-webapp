@@ -3,6 +3,12 @@
 @use '../../../../scss/font/font.scss' as *;
 
 .courseDetails {
+
+    /* Hide the play button from default video controls */
+    video::-webkit-media-controls-play-button {
+        display: none !important;
+    }
+
     .grid {
         display: grid;
         grid-template-columns: 1fr 540px;
@@ -177,16 +183,70 @@
                 }
 
                 .image {
+                    position: relative;
+
                     img {
                         width: 100%;
                         height: 326px;
                         display: block;
                         border-radius: 12px;
                     }
+
+                    .playButtonOverlay {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        z-index: 10;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: transform 0.2s ease;
+
+                        &:hover {
+                            transform: translate(-50%, -50%) scale(1.1);
+                        }
+                    }
                 }
 
                 .details {
-                    padding: 30px 0 0 0;
+                    padding: 16px 0 0 0;
+
+                    .progressContainer {
+                        width: 100%;
+                    }
+
+                    .bottomText {
+                        padding: 4px 0 16px 0;
+
+                        span {
+                            display: block;
+                            color: #B6B6B6;
+                            font-size: 16px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: normal;
+                            @include font-medium;
+                        }
+                    }
+
+                    .progress {
+                        width: 100%;
+                        position: relative;
+                        border-radius: 50px;
+                        background: rgba(255, 255, 255, 0.20);
+                        height: 10px;
+
+                        .active {
+                            height: 100%;
+                            border-radius: 50px;
+                            background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                        }
+                    }
 
                     .button {
                         button {

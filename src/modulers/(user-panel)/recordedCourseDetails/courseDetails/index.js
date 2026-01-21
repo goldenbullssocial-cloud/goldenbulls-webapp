@@ -8,7 +8,16 @@ import classNames from 'classnames';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getPaymentUrl } from '@/services/dashboard';
 import toast from 'react-hot-toast';
-import { getCourses, submitReview } from '@/services/courses';
+import { getCourses, submitReview, updateVideoProgress } from '@/services/courses';
+import { getChapters } from '@/services/dashboard';
+import { useRef } from 'react';
+
+const PlayIcon = () => (
+    <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="34" cy="34" r="34" fill="black" fillOpacity="0.4" />
+        <path d="M45 34L28.5 43.5263L28.5 24.4737L45 34Z" fill="white" />
+    </svg>
+);
 
 const CourseImageDefault = '/assets/images/course-lg.png';
 
@@ -18,32 +27,116 @@ const CloseIcon = () => (
     </svg>
 );
 
-export default function CourseDetails() {
+export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const id = searchParams.get('id');
     const [course, setCourse] = useState(null);
+    const [chapters, setChapters] = useState([]);
+    const [currentPercentage, setCurrentPercentage] = useState(0); // This tracks the saved/highest percentage
+    const [displayPercentage, setDisplayPercentage] = useState(0); // This tracks the live UI percentage
+    const [currentChapter, setCurrentChapter] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoRef = useRef(null);
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
     const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
 
     useEffect(() => {
-        const fetchCourse = async () => {
+        const fetchCourseData = async () => {
             if (!id) return;
             try {
+                // Fetch course details
                 const res = await getCourses({ id });
                 if (res?.payload?.data) {
                     const data = res?.payload?.data;
                     setCourse(Array.isArray(data) ? data[0] : data);
                 }
+
+                // If chapters aren't passed yet, we can fetch them here for initial state
+                if (!selectedVideo) {
+                    const chaptersRes = await getChapters(id);
+                    const chaptersData = chaptersRes?.payload?.data || [];
+                    setChapters(chaptersData);
+
+                    if (chaptersData.length > 0) {
+                        const firstChapter = chaptersData[0];
+                        const savedPercent = parseFloat(firstChapter?.courseTracking?.percentage || 0);
+                        setCurrentChapter(firstChapter);
+                        setCurrentPercentage(savedPercent);
+                        setDisplayPercentage(savedPercent);
+                    }
+                }
             } catch (error) {
-                console.error("Error fetching course:", error);
+                console.error("Error fetching course data:", error);
             }
         };
 
-        fetchCourse();
-    }, [id]);
+        fetchCourseData();
+    }, [id, selectedVideo]);
+
+    useEffect(() => {
+        if (selectedVideo) {
+            const savedPercent = parseFloat(selectedVideo?.percentageCompleted || 0);
+            setCurrentChapter(selectedVideo);
+            setCurrentPercentage(savedPercent);
+            setDisplayPercentage(savedPercent);
+        }
+    }, [selectedVideo]);
+
+    const handleVideoPause = async () => {
+        if (!videoRef.current || !currentChapter) return;
+
+        const video = videoRef.current;
+        const playedPercentage = (video.currentTime / video.duration) * 100;
+
+        // Update percentage only if it's higher than what's already saved
+        if (playedPercentage > currentPercentage) {
+            try {
+                const trackingId = currentChapter?.chapterTrakingId || currentChapter?.courseTracking?._id;
+                const chapterId = currentChapter?.chapterId || currentChapter?._id;
+
+                if (trackingId && chapterId && id) {
+                    const roundedPercent = Math.round(playedPercentage);
+                    await updateVideoProgress(trackingId, chapterId, id, roundedPercent);
+                    setCurrentPercentage(roundedPercent);
+                    setDisplayPercentage(roundedPercent);
+                    if (onProgressUpdate) onProgressUpdate();
+                }
+            } catch (error) {
+                console.error("Error updating video progress:", error);
+            }
+        }
+    };
+
+    const handleTimeUpdate = () => {
+        if (videoRef.current) {
+            const playedPercentage = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+            // Only update display if it's progressing forward or meaningful change
+            if (playedPercentage > displayPercentage) {
+                setDisplayPercentage(playedPercentage);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (isPlaying && videoRef.current) {
+            videoRef.current.play();
+        }
+    }, [isPlaying]);
+
+    const handleLoadedMetadata = () => {
+        if (videoRef.current && currentPercentage > 0 && currentPercentage < 100) {
+            const resumeTime = (currentPercentage / 100) * videoRef.current.duration;
+            videoRef.current.currentTime = resumeTime;
+            setDisplayPercentage(currentPercentage);
+        }
+    };
+
+    const handlePlayVideo = () => {
+        setIsPlaying(true);
+    };
 
     const courseData = Array.isArray(course) ? course[0] : course;
 
@@ -157,22 +250,67 @@ export default function CourseDetails() {
                 <div className={styles.griditems}>
                     <div className={styles.card}>
                         <div className={styles.image}>
-                            <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                            {(courseData?.isPayment && (isPlaying || selectedVideo?.url)) ? (
+                                <video
+                                    ref={videoRef}
+                                    src={selectedVideo?.url || currentChapter?.chapterVideo}
+                                    controls
+                                    onPause={handleVideoPause}
+                                    onEnded={handleVideoPause}
+                                    onLoadedMetadata={handleLoadedMetadata}
+                                    onTimeUpdate={handleTimeUpdate}
+                                    autoPlay={isPlaying}
+                                    width="100%"
+                                    height="326px"
+                                    style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                />
+                            ) : (
+                                <>
+                                    <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                                    {courseData?.isPayment && (
+                                        <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
+                                            <PlayIcon />
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
                         <div className={styles.details}>
-                            <div className={styles.twoText}>
-                                <h4>
-                                    ${courseData?.price}
-                                </h4>
-                                <ul>
-                                    <li>
-                                        {courseData?.instructor?.name}
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className={styles.button}>
-                                <Button text={`${courseData?.isPayment ? "Resume Now" : "Enroll Now"}`} onClick={handlePayment} />
-                            </div>
+                            {courseData?.isPayment ? (
+                                <div className={styles.progressContainer}>
+                                    <div className={styles.progress}>
+                                        <div
+                                            className={styles.active}
+                                            style={{ width: `${displayPercentage}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className={styles.bottomText}>
+                                        <span>{Math.round(displayPercentage)}% Completed</span>
+                                    </div>
+                                    <div className={styles.button}>
+                                        <Button
+                                            text="Resume Course"
+                                            onClick={handlePlayVideo}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className={styles.twoText}>
+                                        <h4>
+                                            ${courseData?.price}
+                                        </h4>
+                                        <ul>
+                                            <li>
+                                                {courseData?.instructor?.name}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.button}>
+                                        <Button text="Enroll Now" onClick={handlePayment} />
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

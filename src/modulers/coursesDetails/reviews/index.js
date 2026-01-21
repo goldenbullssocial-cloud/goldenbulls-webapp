@@ -1,11 +1,11 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import styles from './reviews.module.scss';
-import StarIconXs from '@/icons/starIconXs';
-import { motion } from 'framer-motion';
-import classNames from 'classnames';
-import { getCourseRating } from '@/services/courses';
-import { useSearchParams } from 'next/navigation';
+"use client";
+import React, { useEffect, useState } from "react";
+import styles from "./reviews.module.scss";
+import StarIconXs from "@/icons/starIconXs";
+import { motion } from "framer-motion";
+import classNames from "classnames";
+import { getCourseRating } from "@/services/courses";
+import { useSearchParams } from "next/navigation";
 
 const containerVariants = {
     hidden: {},
@@ -27,14 +27,14 @@ const cardVariants = {
         y: 0,
         transition: {
             duration: 0.6,
-            ease: 'easeOut',
+            ease: "easeOut",
         },
     },
 };
 
 export default function Reviews({ smallFont }) {
     const [courseRating, setCourseRating] = useState(null);
-    const id = useSearchParams().get('id');
+    const id = useSearchParams().get("id");
 
     useEffect(() => {
         const fetchCourseRating = async () => {
@@ -55,73 +55,58 @@ export default function Reviews({ smallFont }) {
         }
     }, [id]);
 
+    const ratingData = Array.isArray(courseRating) ? courseRating[0] : courseRating;
+    console.log(ratingData, "-----ratingData");
+
+    const reviews = ratingData?.usersRating || [];
+
     return (
-        <motion.div
-            className={classNames(styles.reviewsContentAlignment, smallFont ? styles.smallSize : "")}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={containerVariants}
-        >
+        <motion.div className={classNames(styles.reviewsContentAlignment, smallFont ? styles.smallSize : "")} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={containerVariants}>
             {/* Title */}
-            <motion.div
-                className={styles.titleTextAlignment}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-            >
+            <motion.div className={styles.titleTextAlignment} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
                 <h2>Reviews</h2>
                 <div className={styles.line}></div>
-                <span>4.6 Course Rating</span>
+                <span>{ratingData?.averageRating} Course Rating</span>
             </motion.div>
 
             {/* Reviews Grid */}
-            <motion.div className={styles.allBox} variants={containerVariants}>
-                {[...Array(2)].map((_, index) => (
-                    <motion.div
-                        key={index}
-                        className={styles.box}
-                        variants={cardVariants}
-                    >
+            <motion.div className={styles.allBox}>
+                {reviews.map((item, index) => (
+                    <div key={index} className={styles.box}>
                         <div className={styles.text}>
-                            <p>
-                                The course structure is very clear and easy to follow.
-                                Concepts that once felt confusing now make sense.
-                                It gave me a solid foundation in trading.
-                            </p>
+                            <p>{item?.review}</p>
                         </div>
 
                         <div className={styles.boxBottomAlignment}>
                             <div className={styles.leftcontent}>
-                                <div className={styles.profile}>MT</div>
+                                <div className={styles.profile}>{item?.uid?.firstName?.slice(0, 1) + item?.uid?.lastName?.slice(0, 1)}</div>
                                 <div>
-                                    <p>Mark Twein</p>
+                                    <p>{item?.uid?.firstName} {item?.uid?.lastName}</p>
                                     <div className={styles.ratingAlignment}>
-                                        <StarIconXs />
-                                        <StarIconXs />
-                                        <StarIconXs />
-                                        <StarIconXs />
-                                        <StarIconXs />
+                                        {[...Array(5)].map((_, i) => (
+                                            <StarIconXs
+                                                key={i}
+                                                id={`star-review-${index}-${i}`}
+                                                fillPercent={i < (item?.rating || 0) ? 100 : 0}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             </div>
                             <div className={styles.right}>
-                                <h4>14 November 2025</h4>
+                                <h4>{new Date(item?.createdAt).toLocaleDateString('en-GB', {
+                                    day: '2-digit',
+                                    month: 'long',
+                                    year: 'numeric',
+                                })}</h4>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 ))}
             </motion.div>
 
             {/* Load More */}
-            <motion.div
-                className={styles.loadMore}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                viewport={{ once: true }}
-            >
+            <motion.div className={styles.loadMore} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} viewport={{ once: true }}>
                 <button>
                     <span>Load More</span>
                 </button>

@@ -37,7 +37,6 @@ export const getCourses = async ({
 };
 
 export const submitReview = async (data) => {
-  console.log("data", data);
   try {
     const response = await api.post("/courseRating/addCourseRating", data);
     return response.data;
@@ -52,6 +51,25 @@ export const getCourseRating = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching course rating:', error);
+    throw error;
+  }
+};
+
+export const updateVideoProgress = async (
+  id,
+  chapterId,
+  courseId,
+  percentage
+) => {
+  try {
+    const res = await api.put(
+      `/chapter/updateChapterTracking?id=${id}&chapterId=${chapterId}&courseId=${courseId}`,
+      { percentage: percentage.toString() }
+    );
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching dashboard data", error);
     throw error;
   }
 };

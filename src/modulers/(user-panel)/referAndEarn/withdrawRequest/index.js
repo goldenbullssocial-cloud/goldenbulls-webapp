@@ -1,13 +1,23 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './withdrawRequest.module.scss';
 import Button from '@/components/button';
 import toast from 'react-hot-toast';
-import { createWithdrawalRequest } from '@/services/referAndEarn';
+import { createWithdrawalRequest, addWithdrawalRequest } from '@/services/referAndEarn';
+import { getCookie } from '../../../../../cookie';
 
 export default function WithdrawRequest() {
     const [amount, setAmount] = useState('');
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const userCookie = getCookie('user');
+        if (userCookie) {
+            const parsedUser = JSON.parse(userCookie);
+            setUser(parsedUser);
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,10 +25,16 @@ export default function WithdrawRequest() {
             toast.error("Please enter a valid amount");
             return;
         }
+        const withdrawalData = {
+            name: user ? `${user.firstName} ${user.lastName}` : "",
+            email: user?.email || "",
+            phone: user?.phone || "",
+            amount: amount,
+        };
 
         try {
             setLoading(true);
-            const res = await createWithdrawalRequest({ amount: Number(amount) });
+            const res = await addWithdrawalRequest(withdrawalData);
             if (res) {
                 toast.success(res.message || "Withdraw request submitted successfully!");
                 setAmount('');

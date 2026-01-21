@@ -2,7 +2,21 @@
 import React, { useEffect, useState } from 'react'
 import styles from './algobots.module.scss';
 import Button from '@/components/button';
-import { getBots } from '@/services/dashboard';
+import toast from 'react-hot-toast';
+import { getBots, getCouponByName, getPaymentUrl } from '@/services/dashboard';
+
+const CloseIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+const getYouTubeEmbedUrl = (url) => {
+    if (!url) return "";
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : "";
+};
 
 export default function Algobots() {
     const [bots, setBots] = useState([]);
@@ -46,7 +60,89 @@ export default function Algobots() {
 
 const BotCard = ({ bot }) => {
     const [open, setOpen] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState(bot?.strategyPlan?.[0] || {});
+    const [couponCode, setCouponCode] = useState("");
+    const [appliedCoupon, setAppliedCoupon] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [useWalletBalance, setUseWalletBalance] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    const handleApplyCoupon = async () => {
+        if (couponCode) {
+            setLoading(true);
+            try {
+                const res = await getCouponByName(couponCode);
+
+                if (res?.success) {
+                    setAppliedCoupon(res?.payload);
+                    toast.success("Coupon Applied Successfully");
+                } else {
+                    toast.error(res?.message || "Invalid coupon code");
+                    setAppliedCoupon(null);
+                    return;
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error(error?.response?.data?.message || "Failed to verify coupon");
+                setAppliedCoupon(null);
+                return;
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            toast.error("Please enter a coupon code");
+        }
+    };
+
+    const handleSubscribeClick = () => {
+        // If wallet balance is checked, show confirmation modal
+        if (useWalletBalance) {
+            setShowConfirmModal(true);
+        } else {
+            // Otherwise, proceed directly to payment
+            processPayment();
+        }
+    };
+
+    const processPayment = async () => {
+        setLoading(true);
+        setShowConfirmModal(false); // Close confirmation modal if open
+        try {
+            // Prepare payment data
+            const paymentData = {
+                strategyId: bot?._id,
+                planId: selectedPlan?._id,
+                amount: selectedPlan?.initialPrice,
+                planType: selectedPlan?.planType,
+                useWalletBalance: useWalletBalance,
+            };
+
+            // Add coupon if applied
+            if (appliedCoupon) {
+                paymentData.couponId = appliedCoupon?._id;
+                paymentData.couponCode = couponCode;
+            }
+
+            console.log("Payment Data:", paymentData);
+
+            // Call payment API
+            const response = await getPaymentUrl(paymentData);
+
+            if (response?.success && response?.payload?.url) {
+                toast.success("Redirecting to payment...");
+                // Redirect to payment URL
+                window.location.href = response.payload.url;
+            } else {
+                toast.error(response?.message || "Failed to create payment");
+            }
+        } catch (error) {
+            console.error("Payment error:", error);
+            toast.error(error?.response?.data?.message || "Failed to initiate payment");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className={styles.box}>
@@ -87,9 +183,155 @@ const BotCard = ({ bot }) => {
                     )}
                 </div>
                 <div className={styles.buttonStyle}>
-                    <Button text="Subscribe Now" />
+                    <Button text="Subscribe Now" onClick={() => setShowModal(true)} />
                 </div>
             </div>
+
+            {showModal && (
+                <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
+                            <CloseIcon />
+                        </button>
+
+                        <div className={styles.modalBody}>
+                            <div className={styles.statsRow}>
+                                <div className={styles.statBox}>
+                                    <span className={styles.label}>Returns:</span>
+                                    <span className={styles.value}> <span className={styles.green}>110%</span> (28 Days)</span>
+                                    <span className={styles.divider}>|</span>
+                                    <span className={styles.label}>Risk:</span>
+                                    <span className={styles.value}> <span className={styles.red}>High</span></span>
+                                </div>
+                            </div>
+                            <h2 className={styles.modalTitle}>{bot?.title}</h2>
+
+                            <p className={styles.modalDescription}>
+                                Our Forex Trading Bot is a powerful automation tool designed to assist traders with disciplined, rule-based execution in the financial markets. Built on predefined strategies and market conditions, the bot helps reduce emotional decision-making and ensures consistency across trades. It continuously monitors the market, identifies potential opportunities, and executes trades based on configured parameters.
+                            </p>
+
+                            <div className={styles.selectionRow}>
+                                <div className={styles.modalDropdown} onClick={() => setOpen(!open)}>
+                                    <span>${selectedPlan?.initialPrice}/{selectedPlan?.planType}</span>
+                                    <img src="/assets/icons/vector.svg" alt="arrow" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    {open && (
+                                        <div className={styles.dropdownList}>
+                                            {bot?.strategyPlan?.map((plan, i) => (
+                                                <div
+                                                    key={i}
+                                                    className={styles.dropdownItem}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedPlan(plan);
+                                                        setOpen(false);
+                                                    }}
+                                                >
+                                                    {plan?.initialPrice}$/{plan?.planType}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.walletBalanceSection}>
+                                <label className={styles.checkboxContainer}>
+                                    <input
+                                        type="checkbox"
+                                        checked={useWalletBalance}
+                                        onChange={(e) => setUseWalletBalance(e.target.checked)}
+                                        className={styles.checkboxInput}
+                                    />
+                                    <span className={styles.checkboxCustom}></span>
+                                    <span className={styles.checkboxLabel}>
+                                        Use Wallet Balance
+                                        <span className={styles.walletAmount}>(Available: $100.00)</span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div className={styles.actionRow}>
+                                <div className={styles.inputWrapper}>
+                                    <input
+                                        type="text"
+                                        placeholder="Apply Coupon"
+                                        className={styles.couponInput}
+                                        value={couponCode}
+                                        onChange={(e) => setCouponCode(e.target.value)}
+                                    />
+                                    <div className={styles.applyCouponBtn}>
+                                        <Button
+                                            text="Apply"
+                                            onClick={handleApplyCoupon}
+                                        />
+                                    </div>
+                                </div>
+                                <Button
+                                    text={loading ? "Processing..." : "Subscribe Now"}
+                                    className={styles.modalSubscribeBtn}
+                                    onClick={handleSubscribeClick}
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className={styles.videoContainer}>
+                                <div className={styles.videoPlaceholder}>
+                                    <iframe
+                                        width="100%"
+                                        height="100%"
+                                        src={getYouTubeEmbedUrl(bot?.link)}
+                                        title={`Tutorial Video - ${bot?.title || ""}`}
+                                        frameBorder="0"
+                                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                        style={{ borderRadius: "16px" }}
+                                    ></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showConfirmModal && (
+                <div className={styles.confirmModalOverlay} onClick={() => setShowConfirmModal(false)}>
+                    <div className={styles.confirmModalContent} onClick={(e) => e.stopPropagation()}>
+                        <button className={styles.closeBtn} onClick={() => setShowConfirmModal(false)}>
+                            <CloseIcon />
+                        </button>
+
+                        <h2 className={styles.confirmTitle}>Confirm Wallet Usage</h2>
+
+                        <div className={styles.confirmBody}>
+                            <ul className={styles.confirmList}>
+                                <li>
+                                    Are you sure you want to use your wallet balance of <strong>$100.00</strong>?
+                                </li>
+                                <li>
+                                    This amount will be deducted from your wallet and the remaining{" "}
+                                    <strong>${selectedPlan?.initialPrice > 100 ? (selectedPlan?.initialPrice - 100).toFixed(2) : '0.00'}</strong>{" "}
+                                    will be charged to your payment method.
+                                </li>
+                            </ul>
+
+                            <div className={styles.confirmActions}>
+                                <button
+                                    className={styles.cancelBtn}
+                                    onClick={() => setShowConfirmModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <Button
+                                    text={loading ? "Processing..." : "Confirm"}
+                                    className={styles.modalSubscribeBtn}
+                                    onClick={processPayment}
+                                    disabled={loading}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
