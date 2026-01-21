@@ -6,6 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Reviews from '@/modulers/coursesDetails/reviews';
 import { getChapters } from '@/services/dashboard';
 import { useSearchParams } from 'next/navigation';
+const CheckIcon = '/assets/icons/checkCourse.svg'
+const PlayIcon = '/assets/icons/playCourse.svg'
+
 const titleAnim = {
     hidden: { y: 30 },
     show: {
@@ -17,20 +20,6 @@ const titleAnim = {
         },
     },
 };
-
-const CheckIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="12" fill="#F9F490" />
-        <path d="M7 12L10.5 15.5L17 9" stroke="#0F0F0F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const PlayCircleIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="11" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-        <path d="M15.5 12L10.25 15.0311L10.25 8.96891L15.5 12Z" fill="rgba(255,255,255,0.4)" />
-    </svg>
-);
 
 export default function CourseContent({ onVideoSelect, chapters, onChaptersLoaded }) {
 
@@ -103,9 +92,9 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                     <p>{`${item?.duration} Min` || ""}</p>
                                     {parseInt(item?.courseTracking?.percentage) >= 100 ? (
-                                        <CheckIcon />
+                                        <img src={CheckIcon} alt="CheckIcon" />
                                     ) : (
-                                        <PlayCircleIcon />
+                                        <img src={PlayIcon} alt="PlayIcon" />
                                     )}
                                 </div>
                             </div>
