@@ -5,7 +5,8 @@ export default function page() {
     return (
         <div>
             <Suspense fallback={<div>Loading...</div>}>
-            <RecordedCourseDetails />
+                <RecordedCourseDetails />
+
             </Suspense>
         </div>
     )
