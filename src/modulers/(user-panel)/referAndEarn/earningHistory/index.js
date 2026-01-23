@@ -26,7 +26,7 @@ export default function EarningHistory({ activeTab }) {
 
                 if (res && res.payload) {
                     // Use userPayment for Earning History, and data for others if applicable
-                    const data = activeTab === 'Earning History' ? res.payload.userPayment : res.payload.data;
+                    const data = activeTab === 'Earning History' ? res.payload.userPayment : res.payload.findTotalWithdrawal;
                     setHistoryData(data || []);
                     setTotal(res.payload.totalCount || 0);
                 } else {
@@ -78,8 +78,10 @@ export default function EarningHistory({ activeTab }) {
                             </tr>
                         ) : historyData.length > 0 ? (
                             historyData.map((item, index) => (
+                                console.log(item,"-----item"),
+                                
                                 <tr key={item._id || index}>
-                                    <td>{(page - 1) * limit + index + 1}</td>
+                                    <td>{index + 1}</td>
                                     {isEarning ? (
                                         <>
                                             <td>{item?.user?.name || '-'}</td>

@@ -44,3 +44,13 @@ export const addWithdrawalRequest = async (withdrawalData) => {
     throw error;
   }
 };
+
+export const getAllChain = async () => {
+  try {
+    const response = await api.get(`/cryptoChain/getAllChain`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching withdrawal history:", error);
+    throw error;
+  }
+};
