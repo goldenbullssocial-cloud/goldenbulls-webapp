@@ -18,8 +18,9 @@ const ProfileIcon = '/assets/icons/profileIcon.svg';
 const LogoutIcon = '/assets/icons/logoutIcon.svg';
 import { getCookie, removeCookie } from '../../../cookie';
 import Link from 'next/link';
+import { getSocket } from '@/utils/webSocket';
 
-export default function Sidebar() {
+export default function Sidebar({ unreadCount, toogle, setToogle }) {
     const [user, setUser] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -63,7 +64,7 @@ export default function Sidebar() {
     };
 
     return (
-        <aside className={styles.sidebar}>
+        <aside className={`${styles.sidebar} ${toogle ? styles.open : ''}`}>
             <div className={styles.sidebarlogo}>
                 <Link href='/'>
                     <img src={Logo} alt='Logo' />
@@ -89,7 +90,14 @@ export default function Sidebar() {
                     </span>
                 </Link>
                 <Link href='/notifications' className={classNames({ [styles.active]: isActive('/notifications') }, styles.menu)}>
-                    <NotificationsIcon />
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <NotificationsIcon />
+                        {unreadCount >= 0 && (
+                            <span className={styles.notificationBadge}>
+                                {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                        )}
+                    </div>
                     <span>
                         Notifications
                     </span>

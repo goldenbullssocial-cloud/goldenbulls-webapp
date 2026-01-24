@@ -82,6 +82,28 @@
                 }
             }
 
+            .notificationBadge {
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                background: linear-gradient(180deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);
+                color: #000 !important;
+                -webkit-text-fill-color: #000 !important;
+                -webkit-background-clip: unset !important;
+                background-clip: unset !important;
+                border-radius: 50%;
+                padding: 4px 6px;
+                font-size: 10px;
+                font-weight: bold;
+                min-width: 18px;
+                height: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid #000;
+                z-index: 1;
+            }
+
             span {
                 display: block;
                 font-size: 18px;
