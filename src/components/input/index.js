@@ -1,12 +1,17 @@
 import React from 'react'
 import styles from './input.module.scss';
 import classNames from 'classnames';
-export default function Input({ label, placeholder, smallInput , icon, type = 'text', error, onIconClick, ...rest }) {
+export default function Input({ label, placeholder, smallInput, icon, type = 'text', error, onIconClick, ...rest }) {
     return (
-        <div className={ classNames(styles.input , smallInput ? styles.inputChange : "") }>
-            <label>
-                {label}
-            </label>
+        <div className={classNames(styles.input, smallInput ? styles.inputChange : "")}>
+            {
+                label && (
+                    <label>
+                        {label}
+                    </label>
+                )
+            }
+
             <div className={styles.relativeInput}>
                 <input type={type} placeholder={placeholder} {...rest} />
                 {icon && (

@@ -5,7 +5,8 @@ import Button from '@/components/button';
 import toast from 'react-hot-toast';
 import { getAlgobot, getCouponByName, getPaymentUrl, getProfile } from '@/services/dashboard';
 import { getCookie } from '../../../../cookie';
-
+import Input from '@/components/input';
+const BlackChartImage = '/assets/images/black-chart.png';
 const CloseIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M18 6L6 18M6 6L18 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -26,8 +27,8 @@ export default function Algobots() {
         const fetchBots = async () => {
             try {
                 const res = await getAlgobot();
-                console.log(res?.payload,"=====res");
-                
+                console.log(res?.payload, "=====res");
+
                 if (res?.payload) {
                     setBots(res?.payload?.result);
                 } else if (Array.isArray(res)) {
@@ -49,10 +50,10 @@ export default function Algobots() {
                 </h2>
             </div>
             <div className={styles.grid}>
-                {console.log(bots,"wwwwwwwwwbots")}
+                {console.log(bots, "wwwwwwwwwbots")}
                 {
                     bots?.map((bot, index) => {
-                        console.log(bot,"====bot");
+                        console.log(bot, "====bot");
                         return (
                             <BotCard bot={bot} key={index} />
                         )
@@ -220,8 +221,10 @@ const BotCard = ({ bot }) => {
                         <button className={styles.closeBtn} onClick={() => setShowModal(false)}>
                             <CloseIcon />
                         </button>
-
-                        <div className={styles.modalBody}>
+                        <div className={styles.modalFirstContent}>
+                            <div className={styles.chartBlackImage}>
+                                <img src={BlackChartImage} alt="BlackChartImage" />
+                            </div>
                             <div className={styles.statsRow}>
                                 <div className={styles.statBox}>
                                     <span className={styles.label}>Returns:</span>
@@ -231,16 +234,17 @@ const BotCard = ({ bot }) => {
                                     <span className={styles.value}> <span className={styles.red}>High</span></span>
                                 </div>
                             </div>
-                            <h2 className={styles.modalTitle}>{bot?.title}</h2>
-
-                            <p className={styles.modalDescription}>
-                                Our Forex Trading Bot is a powerful automation tool designed to assist traders with disciplined, rule-based execution in the financial markets. Built on predefined strategies and market conditions, the bot helps reduce emotional decision-making and ensures consistency across trades. It continuously monitors the market, identifies potential opportunities, and executes trades based on configured parameters.
-                            </p>
-
+                            <div className={styles.textstyle}>
+                                <h2>{bot?.title}</h2>
+                                <p>
+                                    Our Forex Trading Bot is a powerful automation tool designed to assist traders with disciplined, rule-based execution in the financial markets. Built on predefined strategies and market conditions, the bot helps reduce emotional decision-making and ensures consistency across trades. It continuously monitors the market,
+                                    identifies potential opportunities, and executes trades based on configured parameters.
+                                </p>
+                            </div>
                             <div className={styles.selectionRow}>
                                 <div className={styles.modalDropdown} onClick={() => setOpen(!open)}>
                                     <span>${selectedPlan?.initialPrice}/{selectedPlan?.planType}</span>
-                                    <img src="/assets/icons/vector.svg" alt="arrow" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                                    <img src="/assets/icons/down-fill.svg" alt="arrow" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                                     {open && (
                                         <div className={styles.dropdownList}>
                                             {bot?.strategyPlan?.map((plan, i) => (
@@ -260,6 +264,29 @@ const BotCard = ({ bot }) => {
                                     )}
                                 </div>
                             </div>
+                            <div className={styles.applyCoupon}>
+                                <Input placeholder='Apply Coupon' />
+                                <Button text="Subscribe Now" className={styles.widthfull} />
+                            </div>
+                        </div>
+                        <div className={styles.modalFrameDesign}>
+                            <div className={styles.box}>
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    src={getYouTubeEmbedUrl(bot?.link)}
+                                    title={`Tutorial Video - ${bot?.title || ""}`}
+                                    frameBorder="0"
+                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    style={{ borderRadius: "16px" }}
+                                ></iframe>
+                            </div>
+                        </div>
+
+                        {/* <div className={styles.modalBody}>
+
+
 
                             {user?.earningBalance > 0 && (
                                 <div className={styles.walletBalanceSection}>
@@ -303,21 +330,8 @@ const BotCard = ({ bot }) => {
                                 />
                             </div>
 
-                            <div className={styles.videoContainer}>
-                                <div className={styles.videoPlaceholder}>
-                                    <iframe
-                                        width="100%"
-                                        height="100%"
-                                        src={getYouTubeEmbedUrl(bot?.link)}
-                                        title={`Tutorial Video - ${bot?.title || ""}`}
-                                        frameBorder="0"
-                                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                        style={{ borderRadius: "16px" }}
-                                    ></iframe>
-                                </div>
-                            </div>
-                        </div>
+                           
+                        </div> */}
                     </div>
                 </div>
             )}

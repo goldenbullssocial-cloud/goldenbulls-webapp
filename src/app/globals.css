@@ -60,3 +60,42 @@ img {
   -moz-user-select: none;
   -ms-user-select: none;
 }
+/* Width */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(
+    --GOLD,
+    linear-gradient(
+      90deg,
+      #f9f490 0%,
+      #e4ab40 25.48%,
+      #fefba5 75%,
+      #bd894e 100%
+    )
+  );
+
+  border-radius: 10px;
+}
+
+/* Hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(
+    --GOLD,
+    linear-gradient(
+      90deg,
+      #f9f490 0%,
+      #e4ab40 25.48%,
+      #fefba5 75%,
+      #bd894e 100%
+    )
+  );
+}
