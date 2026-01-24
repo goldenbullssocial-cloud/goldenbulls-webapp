@@ -26,7 +26,6 @@ export default function Algobots() {
         const fetchBots = async () => {
             try {
                 const res = await getAlgobot();
-                console.log(res?.payload,"=====res");
                 
                 if (res?.payload) {
                     setBots(res?.payload?.result);
@@ -175,10 +174,10 @@ const BotCard = ({ bot }) => {
         <div className={styles.box}>
             <div className={styles.detailsBox}>
                 <h3>
-                    Returns: <span className={styles.green}>110%</span> <small>(28 Days)</small>
+                    Returns: <span className={styles.green}>{bot?.return}%</span> <small>(28 Days)</small>
                 </h3>
                 <h4>
-                    Risk: <span>High</span>
+                    Risk: <span>{bot?.risk}</span>
                 </h4>
             </div>
             <div className={styles.leftRightAlignment}>

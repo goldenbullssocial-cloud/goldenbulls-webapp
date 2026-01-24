@@ -92,7 +92,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                 <Link href='/notifications' className={classNames({ [styles.active]: isActive('/notifications') }, styles.menu)}>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         <NotificationsIcon />
-                        {unreadCount >= 0 && (
+                        {unreadCount > 0 && (
                             <span className={styles.notificationBadge}>
                                 {unreadCount > 9 ? '9+' : unreadCount}
                             </span>
