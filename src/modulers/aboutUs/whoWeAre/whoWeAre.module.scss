@@ -88,6 +88,12 @@
             padding: 40px;
             margin: 0 0 24px 0;
 
+            &:hover {
+                &::before {
+                    @include border-hover;
+                }
+            }
+
             &::before {
                 @include border;
                 border-radius: 32px;
