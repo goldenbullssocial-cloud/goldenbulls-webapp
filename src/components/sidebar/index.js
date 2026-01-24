@@ -56,6 +56,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
         try {
             removeCookie("userToken");
             removeCookie("user");
+            toast.dismiss();
             toast.success("Logout successfully.");
             await router.push('/login');
         } catch (error) {

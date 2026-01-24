@@ -299,8 +299,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
+    background: #FFFFFF0A;
+    backdrop-filter: blur(30px);
     z-index: 1000;
     display: flex;
     justify-content: center;
@@ -309,29 +309,14 @@
 }
 
 .modalContent {
-    background: #0C0C0C;
+    border-radius: 24px;
+    background: #000;
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     border-radius: 24px;
     position: relative;
-    padding: 40px;
-    overflow-y: auto;
-    max-height: 90vh;
-    border: 1px solid #333;
-
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 24px;
-        padding: 1.5px;
-        background: linear-gradient(180deg, #666666 0%, #000000 100%);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        pointer-events: none;
-    }
+    max-height: calc(100dvh - 100px);
+    overflow: auto;
 
     .closeBtn {
         position: absolute;
@@ -349,18 +334,24 @@
         }
     }
 
-    .modalBody {
-        .statsRow {
-            margin-bottom: 24px;
+    .modalFirstContent {
+        padding: 25px;
+        position: relative;
 
+        .chartBlackImage {
+            position: absolute;
+            right: 0;
+            top: 100px;
+        }
+
+        .statsRow {
             .statBox {
                 display: inline-flex;
                 align-items: center;
-                gap: 12px;
+                gap: 7px;
                 background: #000;
                 padding: 8px 24px;
                 border-radius: 50px;
-                border: 1px solid #333;
                 position: relative;
 
                 &::before {
@@ -368,25 +359,31 @@
                     position: absolute;
                     inset: 0;
                     border-radius: 50px;
+                    border-radius: inherit;
                     padding: 1px;
-                    background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
-                    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                    background: linear-gradient(180deg, #666666 0%, rgba(102, 102, 102, 0.2) 100%);
+
+
+                    -webkit-mask:
+                        linear-gradient(#fff 0 0) content-box,
+                        linear-gradient(#fff 0 0);
                     -webkit-mask-composite: xor;
-                    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
                     mask-composite: exclude;
                     pointer-events: none;
+                    transition: .3s ease-in-out;
                 }
+
 
                 .label {
                     color: #FFF;
-                    font-size: 20px;
-                    font-weight: 500;
+                    font-size: 18px;
+                    @include font-medium;
                 }
 
                 .value {
                     color: #FFF;
-                    font-size: 20px;
-                    font-weight: 500;
+                    font-size: 17px;
+                    @include font-medium;
 
                     .green {
                         color: #33FF60;
@@ -399,36 +396,40 @@
 
                 .divider {
                     color: #666;
-                    font-size: 20px;
+                    font-size: 16px;
                     margin: 0 5px;
                 }
             }
         }
 
-        .modalTitle {
-            font-size: 40px;
-            font-weight: 700;
-            color: #FFF;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            @include heading-font;
+        .textstyle {
+            padding: 16px 0 20px 0;
+            position: relative;
 
-            @include respond-to("sm") {
-                font-size: 28px;
+            h2 {
+                color: var(--White, #FFF);
+                font-size: 32px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                margin: 0 0 16px 0;
+                text-transform: uppercase;
+                max-width: 548px;
+                @include heading-font;
+            }
+
+            p {
+                @include font-normal;
+                max-width: 614px;
+                color: #B6B6B6;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
             }
         }
 
-        .modalDescription {
-            color: #E1E1E1;
-            font-size: 16px;
-            line-height: 24px;
-            margin-bottom: 32px;
-            font-weight: 400;
-            @include font-normal;
-        }
-
         .selectionRow {
-            margin-bottom: 24px;
 
             .modalDropdown {
                 position: relative;
@@ -463,7 +464,8 @@
                 }
 
                 img {
-                    width: 14px;
+                    width: 24px;
+                    height: 24px;
                     transition: transform 0.3s;
                 }
             }
@@ -500,78 +502,91 @@
             }
         }
 
-        .walletBalanceSection {
-            margin-bottom: 24px;
+        .applyCoupon {
+            padding: 24px 0 0 0;
+            max-width: 580px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 16px;
 
-            .checkboxContainer {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                cursor: pointer;
-                user-select: none;
-                position: relative;
-
-                .checkboxInput {
-                    position: absolute;
-                    opacity: 0;
-                    cursor: pointer;
-                    height: 0;
-                    width: 0;
-
-                    &:checked~.checkboxCustom {
-                        background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
-                        border-color: transparent;
-
-                        &::after {
-                            display: block;
-                        }
-                    }
-                }
-
-                .checkboxCustom {
-                    position: relative;
-                    height: 24px;
-                    width: 24px;
-                    background: transparent;
-                    border: 2px solid #666;
-                    border-radius: 6px;
-                    transition: all 0.3s ease;
-                    flex-shrink: 0;
-
-                    &::after {
-                        content: "";
-                        position: absolute;
-                        display: none;
-                        left: 7px;
-                        top: 3px;
-                        width: 6px;
-                        height: 11px;
-                        border: solid #000;
-                        border-width: 0 2px 2px 0;
-                        transform: rotate(45deg);
-                    }
-                }
-
-                &:hover .checkboxCustom {
-                    border-color: #BD894E;
-                }
-
-                .checkboxLabel {
-                    color: #E1E1E1;
-                    font-size: 18px;
-                    font-weight: 500;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    flex-wrap: wrap;
-
-                    .walletAmount {
-                        color: #999;
-                        font-size: 16px;
-                        font-weight: 400;
-                    }
+            .widthfull {
+                button {
+                    width: 100%;
                 }
             }
+
+            input {
+                padding-left: 16px;
+                height: 45px;
+            }
+
+            label {
+                padding: 0;
+            }
+        }
+    }
+
+    .modalFrameDesign {
+        padding: 25px;
+
+        .box {
+            position: relative;
+            border-radius: 24px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+
+            iframe {
+                width: 100%;
+                aspect-ratio: 89/50;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: 24px;
+                border-radius: inherit;
+                padding: 1px;
+                background: linear-gradient(180deg, #666666 0%, rgba(102, 102, 102, 0.2) 100%);
+                -webkit-mask:
+                    linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+                transition: .3s ease-in-out;
+
+                @include respond-to("xl") {
+                    border-radius: 18px;
+                }
+            }
+        }
+    }
+
+    .modalBody {
+
+
+        .modalTitle {
+            font-size: 40px;
+            font-weight: 700;
+            color: #FFF;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            @include heading-font;
+
+            @include respond-to("sm") {
+                font-size: 28px;
+            }
+        }
+
+        .modalDescription {
+            color: #E1E1E1;
+            font-size: 16px;
+            line-height: 24px;
+            margin-bottom: 32px;
+            font-weight: 400;
+            @include font-normal;
         }
 
         .actionRow {
@@ -652,54 +667,6 @@
                     color: #000;
                     border: none;
                     cursor: pointer;
-                }
-            }
-        }
-
-        .videoContainer {
-            border-radius: 20px;
-            overflow: hidden;
-            background: #1A1A1A;
-            border: 1px solid #333;
-            position: relative;
-
-            &::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                border-radius: 20px;
-                padding: 1px;
-                background: linear-gradient(180deg, #666 0%, #000 100%);
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                mask-composite: exclude;
-                pointer-events: none;
-            }
-
-            .videoPlaceholder {
-                position: relative;
-                width: 100%;
-                aspect-ratio: 16 / 9;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                .chartImg {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
-
-                .playButton {
-                    position: absolute;
-                    cursor: pointer;
-                    transition: transform 0.3s;
-                    z-index: 2;
-
-                    &:hover {
-                        transform: scale(1.1);
-                    }
                 }
             }
         }
@@ -848,49 +815,81 @@
                     opacity: 0;
                     transition: opacity 0.3s;
                 }
+            }
+        }
+    }
+}
 
-                &:hover:not(:disabled) {
-                    background: rgba(255, 255, 255, 0.05);
+.walletBalanceSection {
+    margin-top: 24px;
 
-                    &::before {
-                        opacity: 1;
-                    }
+    .checkboxContainer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+
+        .checkboxInput {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+
+            &:checked~.checkboxCustom {
+                background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
+                border-color: transparent;
+
+                &::after {
+                    display: block;
                 }
             }
+        }
 
-            // .confirmBtn {
-            //     background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
-            //     color: #000;
-            //     position: relative;
-            //     overflow: hidden;
+        .checkboxCustom {
+            position: relative;
+            height: 24px;
+            width: 24px;
+            background: transparent;
+            border: 2px solid #666;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
 
-            //     &::after {
-            //         content: "";
-            //         position: absolute;
-            //         inset: 0;
-            //         background: linear-gradient(90deg, #FEFBA5, #F9F490, #E4AB40);
-            //         opacity: 0;
-            //         transition: opacity 0.3s;
-            //     }
+            &::after {
+                content: "";
+                position: absolute;
+                display: none;
+                left: 7px;
+                top: 3px;
+                width: 6px;
+                height: 11px;
+                border: solid #000;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+        }
 
-            //     span {
-            //         position: relative;
-            //         z-index: 1;
-            //     }
+        &:hover .checkboxCustom {
+            border-color: #BD894E;
+        }
 
-            //     &:hover:not(:disabled) {
-            //         transform: translateY(-2px);
-            //         box-shadow: 0 8px 20px rgba(249, 244, 144, 0.4);
+        .checkboxLabel {
+            color: #E1E1E1;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
 
-            //         &::after {
-            //             opacity: 1;
-            //         }
-            //     }
-
-            //     &:active:not(:disabled) {
-            //         transform: translateY(0);
-            //     }
-            // }
+            .walletAmount {
+                color: #999;
+                font-size: 16px;
+                font-weight: 400;
+            }
         }
     }
 }

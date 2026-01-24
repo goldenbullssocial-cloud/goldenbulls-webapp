@@ -66,6 +66,10 @@
     }
 }
 
+@mixin border-hover {
+    background: linear-gradient(280deg, #666666 0%, #000000 100%);
+}
+
 @mixin gold-border {
     content: "";
     position: absolute;
