@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './algobots.module.scss';
 import Button from '@/components/button';
 import toast from 'react-hot-toast';
-import { getBots, getCouponByName, getPaymentUrl, getProfile } from '@/services/dashboard';
+import { getAlgobot, getCouponByName, getPaymentUrl, getProfile } from '@/services/dashboard';
 import { getCookie } from '../../../../cookie';
 
 const CloseIcon = () => (
@@ -25,9 +25,11 @@ export default function Algobots() {
     useEffect(() => {
         const fetchBots = async () => {
             try {
-                const res = await getBots();
+                const res = await getAlgobot();
+                console.log(res?.payload,"=====res");
+                
                 if (res?.payload) {
-                    setBots(res?.payload?.data);
+                    setBots(res?.payload?.result);
                 } else if (Array.isArray(res)) {
                     setBots(res);
                 }
@@ -47,8 +49,10 @@ export default function Algobots() {
                 </h2>
             </div>
             <div className={styles.grid}>
+                {console.log(bots,"wwwwwwwwwbots")}
                 {
                     bots?.map((bot, index) => {
+                        console.log(bot,"====bot");
                         return (
                             <BotCard bot={bot} key={index} />
                         )
