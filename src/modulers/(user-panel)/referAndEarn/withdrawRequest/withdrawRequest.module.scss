@@ -60,4 +60,258 @@
             width: 100%;
         }
     }
+
+    .modalOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    .modalContent {
+        background: #0C0C0C;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 650px;
+        padding: 40px;
+        position: relative;
+        border: 1px solid #333;
+
+        &::before {
+            @include border;
+        }
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    }
+
+    @keyframes modalScale {
+        from {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .modalHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+
+        h2 {
+            font-size: 24px;
+            @include heading-font;
+            @include gradient-text;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .closeBtn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+
+            &:hover {
+                transform: rotate(90deg);
+            }
+        }
+    }
+
+    .modalBody {
+        .subTitle {
+            color: #B6B6B6;
+            font-size: 22px;
+            @include font-medium;
+            margin-bottom: 24px;
+        }
+
+        .methodCard {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            &::before {
+                @include border;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.05);
+                transform: translateY(-2px);
+
+                &::before {
+                    @include gold-border;
+                }
+
+                .methodDetails h3 {
+                    @include gradient-text;
+                }
+            }
+
+            .iconBox {
+                width: 56px;
+                height: 56px;
+                background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #000;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(228, 171, 64, 0.3);
+            }
+
+            .methodDetails {
+                h3 {
+                    color: #fff;
+                    font-size: 18px;
+                    @include font-bold;
+                    margin: 0 0 4px 0;
+                    transition: all 0.3s ease;
+                }
+
+                p {
+                    color: #B6B6B6;
+                    font-size: 14px;
+                    margin: 0;
+                    @include font-normal;
+                }
+            }
+        }
+
+        .detailsForm {
+            .modalInputGroup {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 16px;
+
+                label {
+                    color: #fff;
+                    font-size: 16px;
+                    @include font-medium;
+                }
+
+                input,
+                select {
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    padding: 12px 16px;
+                    color: #fff;
+                    font-size: 14px;
+                    outline: none;
+                    width: 100%;
+
+                    &:focus {
+                        border-color: #E4AB40;
+                    }
+
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.3);
+                    }
+                }
+
+                select {
+                    appearance: none;
+                    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+                    background-repeat: no-repeat;
+                    background-position: right 16px center;
+                }
+
+                option {
+                    background: #0C0C0C;
+                    color: #fff;
+                }
+            }
+
+            .modalFooter {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 16px;
+                margin-top: 32px;
+
+                .backBtn {
+                    background-color: transparent;
+                    border-radius: 50px;
+                    border: 1px solid var(--GOLD, #F9F490);
+                    padding: 12px 26px;
+                    @include font-bold;
+                    @include gradient-text;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                }
+
+                :global(.button_primaryBtn__vIDyO) {
+                    flex: 1;
+                }
+            }
+        }
+    }
+}
+
+.loadMore {
+    padding: 56px 0 0 0;
+
+    @include respond-to("sm") {
+        padding: 32px 0 0 0;
+    }
+
+    button {
+        width: 100%;
+        background-color: transparent;
+        border-radius: 50px;
+        border: 1px solid var(--GOLD, #F9F490);
+        padding: 14px;
+        cursor: pointer;
+
+        span {
+            @include font-bold;
+            @include gradient-text;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+    }
 }

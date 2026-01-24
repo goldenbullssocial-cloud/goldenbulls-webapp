@@ -1,6 +1,29 @@
-import React from 'react'
+"use client";
+import React, { useEffect, useState } from 'react'
 import styles from './myAlgobots.module.scss';
+import { purchasedAllCourses } from '@/services/dashboard';
+
 export default function MyAlgobots() {
+    const [courses, setCourses] = useState([]);
+      const [loading, setLoading] = useState(true);
+    
+      useEffect(() => {
+        const fetchCourses = async () => {
+          try {
+            setLoading(true);
+            const res = await purchasedAllCourses({ type: 'BOTS', page: 1, limit: 10 });
+            if (res && res.payload) {
+              setCourses(res.payload.BOTS || []);
+            }
+          } catch (error) {
+            console.error("Error fetching my courses:", error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchCourses();
+      }, []);
+    
     return (
         <div className={styles.myAlgobots}>
             <div className={styles.title}>

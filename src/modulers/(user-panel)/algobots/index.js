@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import styles from './algobots.module.scss';
 import Button from '@/components/button';
 import toast from 'react-hot-toast';
-import { getBots, getCouponByName, getPaymentUrl } from '@/services/dashboard';
+import { getBots, getCouponByName, getPaymentUrl, getProfile } from '@/services/dashboard';
+import { getCookie } from '../../../../cookie';
 
 const CloseIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,6 +68,31 @@ const BotCard = ({ bot }) => {
     const [loading, setLoading] = useState(false);
     const [useWalletBalance, setUseWalletBalance] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const userData = getCookie("user");
+                if (userData) {
+                    const parsedUser = JSON.parse(userData)._id;
+                    const response = await getProfile(parsedUser);
+                    const user = response?.payload?.data?.[0] || response?.payload?.data;
+                    setUser(user);
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
+    useEffect(() => {
+        if (user && selectedPlan && user.earningBalance <= selectedPlan.initialPrice) {
+            setUseWalletBalance(false);
+        }
+    }, [selectedPlan, user?.earningBalance]);
 
     const handleApplyCoupon = async () => {
         if (couponCode) {
@@ -96,11 +122,9 @@ const BotCard = ({ bot }) => {
     };
 
     const handleSubscribeClick = () => {
-        // If wallet balance is checked, show confirmation modal
         if (useWalletBalance) {
             setShowConfirmModal(true);
         } else {
-            // Otherwise, proceed directly to payment
             processPayment();
         }
     };
@@ -109,13 +133,15 @@ const BotCard = ({ bot }) => {
         setLoading(true);
         setShowConfirmModal(false); // Close confirmation modal if open
         try {
-            // Prepare payment data
             const paymentData = {
-                strategyId: bot?._id,
-                planId: selectedPlan?._id,
-                amount: selectedPlan?.initialPrice,
-                planType: selectedPlan?.planType,
-                useWalletBalance: useWalletBalance,
+                strategyPlanId: selectedPlan._id,
+                botId: bot?._id,
+                success_url: window.location.href,
+                cancel_url: window.location.href,
+                isWalletUse: useWalletBalance,
+                walletAmount: useWalletBalance ? Math.min(user?.earningBalance || 0, selectedPlan?.initialPrice || 0) : 0,
+                actualAmount: useWalletBalance ? Math.max(0, (selectedPlan?.initialPrice || 0) - (user?.earningBalance || 0)) : selectedPlan?.initialPrice || 0,
+                price: selectedPlan?.initialPrice || 0,
             };
 
             // Add coupon if applied
@@ -124,15 +150,12 @@ const BotCard = ({ bot }) => {
                 paymentData.couponCode = couponCode;
             }
 
-            console.log("Payment Data:", paymentData);
-
             // Call payment API
             const response = await getPaymentUrl(paymentData);
 
-            if (response?.success && response?.payload?.url) {
+            if (response?.success && response?.payload?.data?.checkout_url) {
                 toast.success("Redirecting to payment...");
-                // Redirect to payment URL
-                window.location.href = response.payload.url;
+                window.location.href = response.payload.data.checkout_url;
             } else {
                 toast.error(response?.message || "Failed to create payment");
             }
@@ -234,21 +257,23 @@ const BotCard = ({ bot }) => {
                                 </div>
                             </div>
 
-                            <div className={styles.walletBalanceSection}>
-                                <label className={styles.checkboxContainer}>
-                                    <input
-                                        type="checkbox"
-                                        checked={useWalletBalance}
-                                        onChange={(e) => setUseWalletBalance(e.target.checked)}
-                                        className={styles.checkboxInput}
-                                    />
-                                    <span className={styles.checkboxCustom}></span>
-                                    <span className={styles.checkboxLabel}>
-                                        Use Wallet Balance
-                                        <span className={styles.walletAmount}>(Available: $100.00)</span>
-                                    </span>
-                                </label>
-                            </div>
+                            {user?.earningBalance > 0 && (
+                                <div className={styles.walletBalanceSection}>
+                                    <label className={styles.checkboxContainer}>
+                                        <input
+                                            type="checkbox"
+                                            checked={useWalletBalance}
+                                            onChange={(e) => setUseWalletBalance(e.target.checked)}
+                                            className={styles.checkboxInput}
+                                        />
+                                        <span className={styles.checkboxCustom}></span>
+                                        <span className={styles.checkboxLabel}>
+                                            Use Wallet Balance
+                                            <span className={styles.walletAmount}>(Available: ${user?.earningBalance || '0.00'})</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            )}
 
                             <div className={styles.actionRow}>
                                 <div className={styles.inputWrapper}>
@@ -305,13 +330,20 @@ const BotCard = ({ bot }) => {
                         <div className={styles.confirmBody}>
                             <ul className={styles.confirmList}>
                                 <li>
-                                    Are you sure you want to use your wallet balance of <strong>$100.00</strong>?
+                                    Are you sure you want to use your wallet balance of <strong>${(user?.earningBalance || 0).toFixed(2)}</strong>?
                                 </li>
-                                <li>
-                                    This amount will be deducted from your wallet and the remaining{" "}
-                                    <strong>${selectedPlan?.initialPrice > 100 ? (selectedPlan?.initialPrice - 100).toFixed(2) : '0.00'}</strong>{" "}
-                                    will be charged to your payment method.
-                                </li>
+                                {user?.earningBalance >= (selectedPlan?.initialPrice || 0) ? (
+                                    <li>
+                                        Your wallet balance covers the full purchase.
+                                        <strong> ${(selectedPlan?.initialPrice || 0).toFixed(2)}</strong> will be deducted from your wallet and
+                                        <strong> ${(user?.earningBalance - (selectedPlan?.initialPrice || 0)).toFixed(2)}</strong> will remain in your wallet.
+                                    </li>
+                                ) : (
+                                    <li>
+                                        This amount <strong>(${(user?.earningBalance || 0).toFixed(2)})</strong> will be deducted from your wallet and the remaining
+                                        <strong> ${(selectedPlan?.initialPrice - (user?.earningBalance || 0)).toFixed(2)}</strong> will be charged to your payment method.
+                                    </li>
+                                )}
                             </ul>
 
                             <div className={styles.confirmActions}>

@@ -88,6 +88,29 @@ export const getBots = async (page = 1, limit = 10) => {
   }
 };
 
+export const getAlgobot = async (id = '', searchQuery = '', page = 1, limit = 10) => {
+    try {
+      const params = new URLSearchParams({
+        page,
+        limit,
+      });
+  
+      if (id) {
+        params.append("categoryId", id);
+      }
+  
+      if (searchQuery) {
+        params.append("search", searchQuery);
+      }
+  
+      const response = await api.get(`/strategyPlan/getStrategiesByCategory?${params.toString()}`);
+      return response.data;
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+  };
+
 export const createNewsLetter = async (formData) => {
   try {
     const response = await api.post(`/newsletter/createNewsLetter`, formData);

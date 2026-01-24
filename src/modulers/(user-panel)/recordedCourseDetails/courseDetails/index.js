@@ -153,10 +153,11 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
             };
             const response = await getPaymentUrl(paymentData);
 
-            if (response?.payload?.code !== "00000") {
-                router.replace(response?.payload?.data?.checkout_url);
+            if (response?.success && response?.payload?.data?.checkout_url) {
+                toast.success("Redirecting to payment...");
+                window.location.href = response.payload.data.checkout_url;
             } else {
-                router.replace(response?.payload?.data?.checkout_url);
+                toast.error(response?.message || "Failed to create payment");
             }
         } catch (error) {
             console.error("Payment error:", error);

@@ -10,38 +10,29 @@
     label {
         color: #fff;
         font-size: 16px;
-        font-weight: 400;
         @include font-normal;
+        display: block;
+        padding: 0 0 8px 0;
     }
 
     .dropdownContainer {
         position: relative;
 
         .dropdownButton {
-            height: 56px;
-            border-radius: 12px;
-            background: #272727;
-            padding: 16px 20px;
+            height: 52px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 1px solid transparent;
+            border: 1px solid #66666693;
 
-            // &:hover {
-            //     &::before {
-            //         content: '';
-            //         position: absolute;
-            //         top: 0;
-            //         left: 0;
-            //         right: 0;
-            //         bottom: 0;
-            //         border-radius: 12px;
-            //         @include gold-border;
-            //         pointer-events: none;
-            //     }
-            // }
+            &:hover {
+                border-color: rgba(249, 244, 144, 0.5);
+            }
 
             span {
                 display: block;
@@ -51,14 +42,15 @@
                 @include font-normal;
                 color: #fff;
                 line-height: normal;
+                // opacity: 0.6;
             }
 
             svg {
-                width: 24px;
-                height: 24px;
+                width: 18px;
+                height: 18px;
                 transition: transform 0.3s ease;
                 flex-shrink: 0;
-                color: #fff;
+                color: rgba(255, 255, 255, 0.5);
 
                 &.open {
                     transform: rotate(180deg);
@@ -71,44 +63,50 @@
             top: calc(100% + 8px);
             left: 0;
             right: 0;
-            background: #272727;
-            border-radius: 12px;
+            background: #111111;
+            border-radius: 16px;
             z-index: 1000;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            animation: slideDown 0.3s ease-out;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #222;
 
             @keyframes slideDown {
                 from {
                     opacity: 0;
-                    transform: translateY(-10px);
+                    transform: translateY(-10px) scale(0.98);
                 }
 
                 to {
                     opacity: 1;
-                    transform: translateY(0);
+                    transform: translateY(0) scale(1);
                 }
             }
 
             .dropdownItem {
-                height: 48px;
-                display: flex;
-                align-items: center;
-                padding: 12px 20px;
+                padding: 16px 20px;
                 cursor: pointer;
                 transition: all 0.2s ease;
+                border-bottom: 1px solid #222;
+                display: flex;
+                align-items: center;
+
+                &:last-child {
+                    border-bottom: none;
+                }
 
                 span {
                     color: #fff;
-                    font-size: 18px;
-                    font-weight: 400;
-                    @include font-normal;
+                    font-size: 20px;
+                    @include font-bold;
                     transition: all 0.2s ease;
                 }
 
                 &:hover {
+                    background: rgba(255, 255, 255, 0.03);
+
                     span {
                         @include gradient-text;
                     }

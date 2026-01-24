@@ -15,9 +15,14 @@ export default function MyCourses() {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const res = await purchasedAllCourses({ type: 'course', page: 1, limit: 10 });
+        const res = await purchasedAllCourses({ type: 'ALL', page: 1, limit: 10 });
         if (res && res.payload) {
-          setCourses(res.payload.RECORDED || []);
+          const allCourses = [
+            ...(res.payload.RECORDED || []),
+            ...(res.payload.LIVE || []),
+            ...(res.payload.PHYSICAL || [])
+          ];
+          setCourses(allCourses);
         }
       } catch (error) {
         console.error("Error fetching my courses:", error);
@@ -41,6 +46,10 @@ export default function MyCourses() {
         ) : courses.length > 0 ? (
           courses.map((item, i) => {
             const course = item.courseId;
+            const tracking = course?.tracking || [];
+            const totalPercentage = tracking.reduce((sum, track) => sum + parseFloat(track.percentage || 0), 0);
+            const averagePercentage = tracking.length > 0 ? Math.round(totalPercentage / tracking.length) : 0;
+
             return (
               <div className={styles.griditems} key={item._id || i}>
                 <div className={styles.cardImage}>
@@ -67,15 +76,15 @@ export default function MyCourses() {
                       <div className={styles.dot}></div>
                       <div className={styles.rating}>
                         <StarIcon />
-                        <span>{course?.rating || '0.0'}</span>
+                        <span>{course?.rating?.average || '0.0'}</span>
                       </div>
                     </div>
                   </div>
                   <div className={styles.progress}>
-                    <div className={styles.active} style={{ width: `${item.percentageCompleted || 0}%` }}></div>
+                    <div className={styles.active} style={{ width: `${averagePercentage}%` }}></div>
                   </div>
                   <div className={styles.bottomText}>
-                    <span>{item.percentageCompleted || 0}% Completed</span>
+                    <span>{averagePercentage}% Completed</span>
                   </div>
                 </div>
               </div>

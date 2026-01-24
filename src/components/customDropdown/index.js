@@ -16,7 +16,7 @@ export default function CustomDropdown({ label, value, onChange, options, placeh
     }, []);
 
     const handleSelect = (optionValue) => {
-        onChange({ target: { name: 'gender', value: optionValue } });
+        onChange({ target: { name: label?.toLowerCase() || 'selection', value: optionValue } });
         setIsOpen(false);
     };
 
@@ -41,7 +41,9 @@ export default function CustomDropdown({ label, value, onChange, options, placeh
                     className={styles.dropdownButton}
                     onClick={() => setIsOpen(!isOpen)}
                 >
-                    <span>{value || placeholder}</span>
+                    <span>
+                        {options.find(opt => opt.value === value)?.label || placeholder}
+                    </span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
@@ -52,7 +54,7 @@ export default function CustomDropdown({ label, value, onChange, options, placeh
                     >
                         <path
                             d="M5 7.5L10 12.5L15 7.5"
-                            stroke="#999999"
+                            stroke="currentColor"
                             strokeWidth="1.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"
