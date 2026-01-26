@@ -14,6 +14,7 @@ const EmailIcon = '/assets/icons/email.svg';
 const LockIcon = '/assets/icons/lock.svg';
 const UserIcon = '/assets/icons/user.svg';
 const GoogleIcon = '/assets/icons/google-icon.svg';
+const Logo = '/assets/logo/logo.svg';
 
 const errorMessages = {
     "EMAIL_ALREADY_EXISTS": "This email is already registered.",
@@ -157,6 +158,9 @@ export default function Register() {
 
     return (
         <div className={styles.registerWrapper}>
+            <div className={styles.mobileHeader}>
+                <img src={Logo} alt='Logo' />
+            </div>
             <Toaster position="top-right" />
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>

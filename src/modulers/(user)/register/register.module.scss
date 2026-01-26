@@ -12,11 +12,51 @@
     overflow: auto;
     background-attachment: fixed;
 
+    @include respond-to("md") {
+        overflow-x: hidden;
+        height: auto;
+        background: #000;
+        background-image: inherit;
+        padding: 0 0;
+    }
+
     .leftAlignment {
         padding-left: 11%;
 
         @include respond-to("xl") {
             padding: 0 5%;
+        }
+
+        @include respond-to("md") {
+            padding: 0 32px;
+        }
+    }
+
+    .mobileHeader {
+        display: none;
+        border-radius: 460px;
+        position: relative;
+        padding-bottom: 160px;
+
+        @include respond-to("sm") {
+            padding: 0 0 160px 0;
+        }
+
+        &::before {
+            position: absolute;
+            top: -52%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--GOLD, #F9F490);
+            content: '';
+            border-radius: 50%;
+        }
+
+        @include respond-to("md") {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 
@@ -29,12 +69,25 @@
         justify-content: space-between;
         min-height: 100dvh;
 
+        @include respond-to("md") {
+            min-height: auto;
+            grid-template-columns: 1fr;
+
+            gap: 0px;
+        }
+
         .box {
             border-radius: 32px;
             border: 1px solid #000;
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%);
             backdrop-filter: blur(5px);
             padding: 32px;
+
+            @include respond-to("sm") {
+                padding: 0px 0 40px 0;
+                background: transparent;
+                margin-top: -80px;
+            }
 
             .bottomSpacing {
                 padding: 0 0 16px 0;
@@ -45,6 +98,10 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
                 padding: 0 0 16px 0;
+
+                @include respond-to("sm") {
+                    grid-template-columns: 1fr;
+                }
             }
 
             .submitError {
@@ -146,6 +203,10 @@
             .contnet {
                 padding: 0 0 50px 0;
 
+                @include respond-to("sm") {
+                    padding: 0 0 32px 0;
+                }
+
                 h1 {
                     font-size: 30px;
                     font-style: normal;
@@ -155,6 +216,10 @@
                     @include heading-font;
                     @include gradient-text;
                     margin: 0 0 16px 0;
+
+                    @include respond-to("sm") {
+                        text-align: center;
+                    }
                 }
 
                 h3 {
@@ -165,6 +230,11 @@
                     margin: 0 0 11px 0;
                     line-height: normal;
                     @include font-normal;
+
+                    @include respond-to("sm") {
+                        text-align: center;
+                        margin: 0 0 4px 0;
+                    }
                 }
 
                 p {
@@ -174,6 +244,10 @@
                     font-style: normal;
                     font-weight: 400;
                     line-height: normal;
+
+                    @include respond-to("sm") {
+                        text-align: center;
+                    }
 
                     span {
                         cursor: pointer;
@@ -188,6 +262,10 @@
             position: relative;
             height: 100%;
             width: 100%;
+
+            @include respond-to("md") {
+                display: none;
+            }
         }
 
         .image {

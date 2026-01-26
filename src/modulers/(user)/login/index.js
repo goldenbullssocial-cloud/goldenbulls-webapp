@@ -13,6 +13,7 @@ import { setCookie } from '../../../../cookie';
 const LoginBullImage = '/assets/images/login-bull.png';
 const EmailIcon = '/assets/icons/email.svg';
 const LockIcon = '/assets/icons/lock.svg';
+const Logo = '/assets/logo/logo.svg';
 
 export default function Login() {
     const router = useRouter();
@@ -120,6 +121,9 @@ export default function Login() {
 
     return (
         <div className={styles.loginpageWrapper}>
+            <div className={styles.mobileHeader}>
+                <img src={Logo} alt='Logo' />
+            </div>
             <Toaster position="top-right" />
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>

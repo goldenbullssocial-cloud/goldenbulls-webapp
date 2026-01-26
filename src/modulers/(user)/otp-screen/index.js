@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 import { verifyOtp, forgetPassword } from '@/services/authService';
 import { errorMessages } from '@/utils/constant';
+const Logo = '/assets/logo/logo.svg';
 
 const LoginBullImage = '/assets/images/login-bull.png';
 
@@ -134,6 +135,9 @@ function OtpScreenContent() {
 
     return (
         <div className={styles.resetpasswordWrapper}>
+            <div className={styles.mobileHeader}>
+                <img src={Logo} alt='Logo' />
+            </div>
             <Toaster position="top-right" />
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>

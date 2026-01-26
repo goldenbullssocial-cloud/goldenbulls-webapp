@@ -10,6 +10,8 @@ import { errorMessages } from '@/utils/constant';
 
 const LoginBullImage = '/assets/images/login-bull.png';
 const EmailIcon = '/assets/icons/email.svg';
+const Logo = '/assets/logo/logo.svg';
+
 
 export default function ResetPassword() {
     const router = useRouter();
@@ -94,6 +96,9 @@ export default function ResetPassword() {
 
     return (
         <div className={styles.resetpasswordWrapper}>
+            <div className={styles.mobileHeader}>
+                <img src={Logo} alt='Logo' />
+            </div>
             <Toaster position="top-right" />
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>
