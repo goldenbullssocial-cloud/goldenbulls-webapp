@@ -11,6 +11,7 @@ import { topCoursesData } from "@/constants";
 import { getCourseByType } from "@/services/dashboard";
 export default function CoursesDetails() {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
   const params = useParams();
   const searchParams = useSearchParams();
   const courseId = params?.id;
@@ -19,10 +20,12 @@ export default function CoursesDetails() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await getCourseByType();        
+        const response = await getCourseByType();
         setCourses(response.payload.courses);
       } catch (error) {
         console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCourses();
@@ -36,7 +39,7 @@ export default function CoursesDetails() {
     <div>
       <CoursesDetailsBanner />
       <CourseContent />
-      <OnDemandCourses title="similar courses" data={similarCourses} activeType={courseType} />
+      <OnDemandCourses title="similar courses" data={similarCourses} activeType={courseType} loading={loading} />
       <ClassroominYourPocket />
       <FaqSection />
     </div>

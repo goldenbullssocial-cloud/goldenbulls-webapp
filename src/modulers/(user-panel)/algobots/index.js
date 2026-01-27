@@ -4,6 +4,8 @@ import styles from './algobots.module.scss';
 import Button from '@/components/button';
 import toast from 'react-hot-toast';
 import { getAlgobot, getCouponByName, getPaymentUrl, getProfile } from '@/services/dashboard';
+import NoData from '@/components/noData';
+import AlgobotsIcon from '@/icons/algobotsIcon';
 import { getCookie } from '../../../../cookie';
 import Input from '@/components/input';
 const BlackChartImage = '/assets/images/black-chart.png';
@@ -22,10 +24,12 @@ const getYouTubeEmbedUrl = (url) => {
 
 export default function Algobots() {
     const [bots, setBots] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchBots = async () => {
             try {
+                setLoading(true);
                 const res = await getAlgobot();
 
                 if (res?.payload) {
@@ -35,6 +39,8 @@ export default function Algobots() {
                 }
             } catch (error) {
                 console.error("Error fetching bots:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -49,13 +55,44 @@ export default function Algobots() {
                 </h2>
             </div>
             <div className={styles.grid}>
-                {
+                {console.log(bots,"---bots")
+                }
+                {loading ? (
+                    Array.from({ length: 5 }).map((_, index) => (
+                        <div className={`${styles.box} ${styles.skeletonBox}`} key={index}>
+                            <div className={styles.skeletonDetailsBox}>
+                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '120px', height: '16px', marginBottom: '8px' }} />
+                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '80px', height: '16px' }} />
+                            </div>
+
+                            <div className={styles.contentBody}>
+                                <div className={styles.titleSection}>
+                                    <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
+                                </div>
+
+                                <div className={styles.planSection}>
+                                    <div className={`${styles.skeletonPlan} ${styles.skeleton}`} />
+                                </div>
+
+                                <div className={styles.actionBtn}>
+                                    <div className={`${styles.skeletonButton} ${styles.skeleton}`} />
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : bots?.length > 0 ? (
                     bots?.map((bot, index) => {
                         return (
                             <BotCard bot={bot} key={index} />
                         )
                     })
-                }
+                ) : (
+                    <NoData
+                        icon={<AlgobotsIcon />}
+                        title="No algobots found"
+                        description="You haven't activated any algobots yet. Check out our available strategies to automate your trades."
+                    />
+                )}
             </div>
         </div>
     )
@@ -234,7 +271,7 @@ const BotCard = ({ bot }) => {
                             <div className={styles.textstyle}>
                                 <h2>{bot?.title}</h2>
                                 <p>
-                                   {bot?.shortDescription}
+                                    {bot?.shortDescription}
                                 </p>
                             </div>
                             <div className={styles.selectionRow}>

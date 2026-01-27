@@ -10,6 +10,7 @@ import { getCourseByType } from '@/services/dashboard';
 
 export default function Courses() {
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -18,6 +19,8 @@ export default function Courses() {
         setCourses(response.payload.courses);
       } catch (error) {
         console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCourses();
@@ -26,9 +29,9 @@ export default function Courses() {
   return (
     <div>
       <CoursesBanner />
-      <OnDemandCourses title='Recorded courses' data={courses?.recorded} activeType={"recorded"} bgColor='#0C0C0C' />
-      <OnDemandCourses title="Live online courses" data={courses?.live} activeType={"live"} bgColor='#000' />
-      <OnDemandCourses title='In person courses' data={courses?.physical} activeType={"physical"} bgColor='#0C0C0C' />
+      <OnDemandCourses title='Recorded courses' data={courses?.recorded} activeType={"recorded"} bgColor='#0C0C0C' loading={loading} />
+      <OnDemandCourses title="Live online courses" data={courses?.live} activeType={"live"} bgColor='#000' loading={loading} />
+      <OnDemandCourses title='In person courses' data={courses?.physical} activeType={"physical"} bgColor='#0C0C0C' loading={loading} />
       <TrustedSection />
       <ClassroominYourPocket spacingRemove />
       <FaqSection />

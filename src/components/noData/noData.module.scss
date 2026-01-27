@@ -1,0 +1,79 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.noData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 24px;
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    grid-column: 1 / -1;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        padding: 1.5px;
+        background: linear-gradient(180deg, #666666 0%, rgba(102, 102, 102, 0.2) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    .iconWrapper {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(249, 244, 144, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        border: 1px solid rgba(249, 244, 144, 0.1);
+
+        img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        svg {
+            width: 32px;
+            height: 32px;
+            opacity: 0.9;
+
+            path {
+                stroke: #E0A840;
+            }
+        }
+    }
+
+    p {
+        color: #fff;
+        font-size: 24px;
+        font-weight: 500;
+        @include font-medium;
+        margin: 0;
+        opacity: 0.9;
+    }
+
+    span {
+        color: #b6b6b6;
+        font-size: 18px;
+        margin-top: 12px;
+        @include font-normal;
+        max-width: 450px;
+        line-height: 1.6;
+    }
+}

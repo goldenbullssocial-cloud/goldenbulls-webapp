@@ -10,6 +10,8 @@ import Button from '@/components/button';
 import LeftIcon from '@/icons/leftIcon';
 import { getBots } from '@/services/dashboard';
 
+import AlgobotsIcon from '@/icons/algobotsIcon';
+
 export default function AutomateTrades() {
     const [prevEl, setPrevEl] = useState(null);
     const [nextEl, setNextEl] = useState(null);
@@ -41,101 +43,113 @@ export default function AutomateTrades() {
                 </div>
 
                 <div className={styles.relative}>
-                    <div className={styles.paginationWrapper}>
-                        <Swiper
-                            effect={"coverflow"}
-                            grabCursor={true}
-                            loop={true}
-                            slidesPerView={"4"}
+                    {bots?.length > 0 ? (
+                        <>
+                            <div className={styles.paginationWrapper}>
+                                <Swiper
+                                    effect={"coverflow"}
+                                    grabCursor={true}
+                                    loop={true}
+                                    slidesPerView={"4"}
 
-                            onBeforeInit={(swiper) => {
-                                swiper.params.navigation = swiper.params.navigation || {};
-                            }}
-                            onInit={(swiper) => {
-                                if (swiper.navigation) {
-                                    swiper.navigation.init();
-                                    swiper.navigation.update();
-                                }
-                            }}
-                            navigation={{ prevEl, nextEl }}
-                            spaceBetween={24}
-                            speed={800}
+                                    onBeforeInit={(swiper) => {
+                                        swiper.params.navigation = swiper.params.navigation || {};
+                                    }}
+                                    onInit={(swiper) => {
+                                        if (swiper.navigation) {
+                                            swiper.navigation.init();
+                                            swiper.navigation.update();
+                                        }
+                                    }}
+                                    navigation={{ prevEl, nextEl }}
+                                    spaceBetween={24}
+                                    speed={800}
 
-                            pagination={{
-                                clickable: true,
-                            }}
-                            modules={[Pagination, Navigation]}
-                            breakpoints={{
-                                1800: {
-                                    slidesPerView: 4,
-                                },
+                                    pagination={{
+                                        clickable: true,
+                                    }}
+                                    modules={[Pagination, Navigation]}
+                                    breakpoints={{
+                                        1800: {
+                                            slidesPerView: 4,
+                                        },
 
-                                1200: {
-                                    slidesPerView: 4,
-                                },
-                                1024: {
-                                    slidesPerView: 2,
-                                },
-                                576: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 30,
-                                },
-                                480: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 12,
-                                },
-                                360: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 10,
-                                },
-                            }}
-                        >
-                            {
-                                bots?.length > 0 ? bots.map((item, index) => {
-                                    return (
-                                        <SwiperSlide key={index}>
-                                            <div className={styles.box}>
-                                                <div className={styles.detailsBox}>
-                                                    <h3>
-                                                        Returns: <span className={styles.green}>110%</span> <small>(28 Days)</small>
-                                                    </h3>
-                                                    <h4>
-                                                        Risk: <span>High</span>
-                                                    </h4>
-                                                </div>
-                                                <div className={styles.leftRightAlignment}>
-                                                    <p>
-                                                        {item?.title}
-                                                    </p>
-                                                    <div className={styles.line}></div>
-                                                    <h5>
-                                                        {item?.strategyPlan[1]?.price} <span>/ {item?.strategyPlan[1]?.planType}</span>
-                                                    </h5>
-                                                    <Button text="Subscribe Now" className={styles.btn} />
-                                                </div>
-                                            </div>
-                                        </SwiperSlide>
-                                    )
-                                }) : null
-                            }
+                                        1200: {
+                                            slidesPerView: 4,
+                                        },
+                                        1024: {
+                                            slidesPerView: 2,
+                                        },
+                                        576: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 30,
+                                        },
+                                        480: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 12,
+                                        },
+                                        360: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 10,
+                                        },
+                                    }}
+                                >
+                                    {
+                                        bots.map((item, index) => {
+                                            return (
+                                                <SwiperSlide key={index}>
+                                                    <div className={styles.box}>
+                                                        <div className={styles.detailsBox}>
+                                                            <h3>
+                                                                Returns: <span className={styles.green}>110%</span> <small>(28 Days)</small>
+                                                            </h3>
+                                                            <h4>
+                                                                Risk: <span>High</span>
+                                                            </h4>
+                                                        </div>
+                                                        <div className={styles.leftRightAlignment}>
+                                                            <p>
+                                                                {item?.title}
+                                                            </p>
+                                                            <div className={styles.line}></div>
+                                                            <h5>
+                                                                {item?.strategyPlan[1]?.price} <span>/ {item?.strategyPlan[1]?.planType}</span>
+                                                            </h5>
+                                                            <Button text="Subscribe Now" className={styles.btn} />
+                                                        </div>
+                                                    </div>
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                    }
 
-                        </Swiper>
-                    </div>
-                    <div className={styles.twoButtonAlignment}>
-                        <button
-                            ref={setPrevEl}
-                            className={`${styles.navBtn}`}
-                        >
-                            <LeftIcon />
-                        </button>
-                        <button
-                            ref={setNextEl}
-                            className={`${styles.rightButton}`}
-                        >
-                            <LeftIcon />
+                                </Swiper>
+                            </div>
+                            <div className={styles.twoButtonAlignment}>
+                                <button
+                                    ref={setPrevEl}
+                                    className={`${styles.navBtn}`}
+                                >
+                                    <LeftIcon />
+                                </button>
+                                <button
+                                    ref={setNextEl}
+                                    className={`${styles.rightButton}`}
+                                >
+                                    <LeftIcon />
 
-                        </button>
-                    </div>
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <div className={styles.noData}>
+                            <div className={styles.iconWrapper}>
+                                <AlgobotsIcon />
+                            </div>
+                            <h3>No algobots available</h3>
+                            <p>We are currently updating our algobot list. Please check back later for new strategies.</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -105,7 +105,7 @@ export default function TopCourses() {
                   author={item?.instructor?.name}
                   duration={item?.hours}
                   level={item?.courseLevel}
-                  rating={4.5}
+                  rating={item?.averageRating ? Number(item.averageRating).toFixed(1) : "0.0"}
                   image={item?.courseVideo}
                   location={item?.location || ""}
                   btnLink={`/courses/${item._id}?courseType=${activeTab}`}
@@ -122,6 +122,7 @@ export default function TopCourses() {
             )}
           </motion.div>
         </AnimatePresence>
+        {courses[activeTab]?.length > 0 && (
         <motion.div
           className={styles.buttonCenter}
           initial={{ opacity: 0, y: 30 }}
@@ -135,6 +136,7 @@ export default function TopCourses() {
             </button>
           </Link>
         </motion.div>
+        )}
       </div>
     </div>
   );

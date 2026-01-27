@@ -12,6 +12,8 @@ import Link from 'next/link';
 import { useQuery } from "@apollo/client/react";
 import { GET_ALL_BLOG_DATA } from '@/graphql/getBlogData';
 const BlogImage = '/assets/images/blog-image.png';
+import LibraryIcon from '@/icons/libraryIcon';
+
 export default function BlogSection() {
     const [prevEl, setPrevEl] = useState(null);
     const [nextEl, setNextEl] = useState(null);
@@ -36,124 +38,138 @@ export default function BlogSection() {
                     </h2>
                 </div>
                 <div className={styles.relative}>
-                    <div className={styles.paginationWrapper}>
-                        <Swiper
-                            effect={"coverflow"}
-                            grabCursor={true}
-                            loop={true}
-                            slidesPerView={"3"}
+                    {blogs?.length > 0 ? (
+                        <>
+                            <div className={styles.paginationWrapper}>
+                                <Swiper
+                                    effect={"coverflow"}
+                                    grabCursor={true}
+                                    loop={true}
+                                    slidesPerView={"3"}
 
-                            onBeforeInit={(swiper) => {
-                                swiper.params.navigation = swiper.params.navigation || {};
-                            }}
-                            onInit={(swiper) => {
-                                if (swiper.navigation) {
-                                    swiper.navigation.init();
-                                    swiper.navigation.update();
-                                }
-                            }}
-                            navigation={{ prevEl, nextEl }}
-                            spaceBetween={28}
-                            speed={800}
+                                    onBeforeInit={(swiper) => {
+                                        swiper.params.navigation = swiper.params.navigation || {};
+                                    }}
+                                    onInit={(swiper) => {
+                                        if (swiper.navigation) {
+                                            swiper.navigation.init();
+                                            swiper.navigation.update();
+                                        }
+                                    }}
+                                    navigation={{ prevEl, nextEl }}
+                                    spaceBetween={28}
+                                    speed={800}
 
-                            pagination={{
-                                clickable: true
-                            }}
-                            modules={[Pagination, Navigation]}
-                            breakpoints={{
-                                1800: {
-                                    slidesPerView: 3,
-                                },
+                                    pagination={{
+                                        clickable: true
+                                    }}
+                                    modules={[Pagination, Navigation]}
+                                    breakpoints={{
+                                        1800: {
+                                            slidesPerView: 3,
+                                        },
 
-                                1200: {
-                                    slidesPerView: 3,
-                                },
-                                1024: {
-                                    slidesPerView: 2,
-                                },
-                                576: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 30,
-                                },
-                                480: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 12,
-                                },
-                                360: {
-                                    slidesPerView: 1,
-                                    spaceBetween: 10,
-                                },
-                            }}
-                        >
-                            {
-                                blogs?.map((item, index) => {
-                                    return (
-                                        <SwiperSlide key={index}>
-                                            <div className={styles.card}>
-                                                <div className={styles.cardImage}>
-                                                    <img src={
-                                                        process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL +
-                                                        item?.coverImage?.url
-                                                    } alt='BlogImage' />
-                                                </div>
-                                                <div className={styles.details}>
-                                                    <h3>
-                                                        {item?.title}
-                                                    </h3>
-                                                    <div className={styles.twoContent}>
-                                                        <span>
-                                                            {item?.author?.name}
-                                                        </span>
-                                                        <ul>
-                                                            <li>
-                                                                {item?.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', {
-                                                                    day: 'numeric',
-                                                                    month: 'long',
-                                                                    year: 'numeric'
-                                                                }) : " "}
-                                                            </li>
-                                                        </ul>
+                                        1200: {
+                                            slidesPerView: 3,
+                                        },
+                                        1024: {
+                                            slidesPerView: 2,
+                                        },
+                                        576: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 30,
+                                        },
+                                        480: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 12,
+                                        },
+                                        360: {
+                                            slidesPerView: 1,
+                                            spaceBetween: 10,
+                                        },
+                                    }}
+                                >
+                                    {
+                                        blogs?.map((item, index) => {
+                                            return (
+                                                <SwiperSlide key={index}>
+                                                    <div className={styles.card}>
+                                                        <div className={styles.cardImage}>
+                                                            <img src={
+                                                                process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL +
+                                                                item?.coverImage?.url
+                                                            } alt='BlogImage' />
+                                                        </div>
+                                                        <div className={styles.details}>
+                                                            <h3>
+                                                                {item?.title}
+                                                            </h3>
+                                                            <div className={styles.twoContent}>
+                                                                <span>
+                                                                    {item?.author?.name}
+                                                                </span>
+                                                                <ul>
+                                                                    <li>
+                                                                        {item?.createdAt ? new Date(item.createdAt).toLocaleDateString('en-GB', {
+                                                                            day: 'numeric',
+                                                                            month: 'long',
+                                                                            year: 'numeric'
+                                                                        }) : " "}
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </SwiperSlide>
-                                    )
-                                })
-                            }
+                                                </SwiperSlide>
+                                            )
+                                        })
+                                    }
 
-                        </Swiper>
-                    </div>
-                    <div className={styles.twoButtonAlignment}>
-                        <button
-                            ref={setPrevEl}
-                            className={`${styles.navBtn}`}
-                        >
-                            <LeftIcon />
-                        </button>
-                        <button
-                            ref={setNextEl}
-                            className={`${styles.rightButton}`}
-                        >
-                            <LeftIcon />
+                                </Swiper>
+                            </div>
+                            <div className={styles.twoButtonAlignment}>
+                                <button
+                                    ref={setPrevEl}
+                                    className={`${styles.navBtn}`}
+                                >
+                                    <LeftIcon />
+                                </button>
+                                <button
+                                    ref={setNextEl}
+                                    className={`${styles.rightButton}`}
+                                >
+                                    <LeftIcon />
 
-                        </button>
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <div className={styles.noData}>
+                            <div className={styles.iconWrapper}>
+                                <LibraryIcon />
+                            </div>
+                            <h3>No blogs available</h3>
+                            <p>We are currently writing new articles. Please check back later for fresh financial insights.</p>
+                        </div>
+                    )}
+                </div>
+                {blogs?.length > 0 && (
+                    <div>
+                        <motion.div
+                            className={styles.buttonCenter}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                        >
+                            <Link href="/blog">
+                                <button>
+                                    <span>See All Blogs</span>
+                                </button>
+                            </Link>
+                        </motion.div>
                     </div>
-                </div>
-                <div>
-                    <motion.div
-                        className={styles.buttonCenter}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                    >
-                        <Link href="/blog">
-                            <button>
-                                <span>See All Blogs</span>
-                            </button>
-                        </Link>
-                    </motion.div>
-                </div>
+                )}
             </div>
         </div>
     )

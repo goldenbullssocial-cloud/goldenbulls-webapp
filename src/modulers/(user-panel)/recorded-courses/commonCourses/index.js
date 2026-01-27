@@ -3,8 +3,10 @@ import React from 'react'
 import styles from './commonCourses.module.scss';
 import StarIcon from '@/icons/starIcon';
 import ClockInIcon from '@/icons/clockInIcon';
+import CoursesIcon from '@/icons/coursesIcon';
 import Button from '@/components/button';
 import { useRouter } from 'next/navigation';
+import NoData from '@/components/noData';
 const CardImage = '/assets/images/course-user.png';
 const ClockIcon = "/assets/icons/calender-icon.png";
 export default function CommonCourses({ title, courses, loading }) {
@@ -48,7 +50,7 @@ export default function CommonCourses({ title, courses, loading }) {
                             </div>
                         </div>
                     ))
-                ) : (
+                ) : courses && courses.length > 0 ? (
                     courses?.map((course, i) => {
                         return (
                             <div className={styles.griditems} key={i}>
@@ -95,6 +97,12 @@ export default function CommonCourses({ title, courses, loading }) {
                             </div>
                         )
                     })
+                ) : (
+                    <NoData
+                        icon={<CoursesIcon />}
+                        title="No courses found"
+                        description="There are no courses currently available in this category."
+                    />
                 )}
             </div>
         </div>

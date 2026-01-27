@@ -98,3 +98,68 @@
         }
     }
 }
+
+.skeleton {
+    background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeletonBox {
+    border-radius: 24px;
+    padding: 24px;
+    background: #000;
+    margin: 0 0 16px 0;
+    position: relative;
+
+    &::before {
+        @include border;
+        opacity: 0.3;
+    }
+
+    .skeletonHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .skeletonLeft {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+
+            .skeletonIcon {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            .skeletonTitle {
+                width: 200px;
+                height: 24px;
+            }
+        }
+
+        .skeletonTime {
+            width: 100px;
+            height: 18px;
+        }
+    }
+
+    .skeletonDesc {
+        width: 100%;
+        height: 20px;
+        margin-top: 8px;
+    }
+}

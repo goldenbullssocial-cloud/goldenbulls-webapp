@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 import styles from './earningHistory.module.scss';
 import PagePagination from '@/components/pagePagination';
 import { getWithdrawalHistory } from '@/services/referAndEarn';
+import NoData from '@/components/noData';
+const EarningIcon = '/assets/icons/Earning.png';
+
 
 export default function EarningHistory({ activeTab }) {
     const [historyData, setHistoryData] = useState([]);
@@ -73,13 +76,19 @@ export default function EarningHistory({ activeTab }) {
                     </thead>
                     <tbody>
                         {loading ? (
-                            <tr>
-                                <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>Loading...</td>
-                            </tr>
+                            Array.from({ length: limit }).map((_, index) => (
+                                <tr key={`skeleton-${index}`} className={styles.skeletonRow}>
+                                    {Array.from({ length: isEarning ? 6 : 6 }).map((_, i) => (
+                                        <td key={`cell-${i}`}>
+                                            <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
                         ) : historyData.length > 0 ? (
                             historyData.map((item, index) => (
-                                console.log(item,"-----item"),
-                                
+                                console.log(item, "-----item"),
+
                                 <tr key={item._id || index}>
                                     <td>{index + 1}</td>
                                     {isEarning ? (
@@ -106,7 +115,13 @@ export default function EarningHistory({ activeTab }) {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>No {activeTab.toLowerCase()} found</td>
+                                <td colSpan="6">
+                                    <NoData
+                                        icon={EarningIcon}
+                                        title={`No ${activeTab.toLowerCase()} found`}
+                                        description={`You don't have any ${activeTab.toLowerCase()} at the moment. Start referring friends to earn commissions!`}
+                                    />
+                                </td>
                             </tr>
                         )}
                     </tbody>

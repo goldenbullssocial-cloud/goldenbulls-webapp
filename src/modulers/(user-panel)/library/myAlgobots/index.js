@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from 'react'
 import styles from './myAlgobots.module.scss';
 import { purchasedAllCourses } from '@/services/dashboard';
+import AlgobotsIcon from '@/icons/algobotsIcon';
+import classNames from 'classnames';
+import NoData from '@/components/noData';
 
 export default function MyAlgobots() {
     const [bots, setBots] = useState([]);
@@ -23,9 +26,6 @@ export default function MyAlgobots() {
         };
         fetchCourses();
     }, []);
-
-    console.log(bots, "----bots");
-
 
     const calculateSubscriptionData = (purchaseDate, planType) => {
         if (!purchaseDate || !planType) return { percentage: 0, daysLeft: 0 };
@@ -71,7 +71,30 @@ export default function MyAlgobots() {
                 </h2>
             </div>
             <div className={styles.grid}>
-                {
+                {loading ? (
+                    Array.from({ length: 5 }).map((_, index) => (
+                        <div className={`${styles.box} ${styles.skeletonBox}`} key={index}>
+                            <div className={styles.skeletonDetailsBox}>
+                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '120px', height: '16px', marginBottom: '8px' }} />
+                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '80px', height: '16px' }} />
+                            </div>
+
+                            <div className={styles.contentBody}>
+                                <div className={styles.titleSection}>
+                                    <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
+                                </div>
+
+                                <div className={styles.planSection}>
+                                    <div className={`${styles.skeletonPlan} ${styles.skeleton}`} />
+                                </div>
+
+                                <div className={styles.actionBtn}>
+                                    <div className={`${styles.skeletonButton} ${styles.skeleton}`} />
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                ) : bots.length > 0 ? (
                     bots?.map((item, index) => {
                         const { percentage, daysLeft } = calculateSubscriptionData(
                             item?.createdAt,
@@ -82,15 +105,15 @@ export default function MyAlgobots() {
                             <div className={styles.box} key={item?._id || index}>
                                 <div className={styles.detailsBox}>
                                     <h3>
-                                        Returns: <span className={styles.green}>110%</span> <small>(28 Days)</small>
+                                        Returns: <span className={styles.green}>{item?.botId?.strategyId?.return}%</span> <small>({item?.botId?.strategyId?.duration} Days)</small>
                                     </h3>
                                     <h4>
-                                        Risk: <span>High</span>
+                                        Risk: <span>{item?.botId?.strategyId?.risk}</span>
                                     </h4>
                                 </div>
                                 <div className={styles.leftRightAlignment}>
                                     <p>
-                                        {item?.botId?.strategy?.title}
+                                        {item?.botId?.strategyId?.title}
                                     </p>
                                     <div className={styles.line}></div>
                                     <div className={styles.progress}>
@@ -106,7 +129,13 @@ export default function MyAlgobots() {
                             </div>
                         )
                     })
-                }
+                ) : (
+                    <NoData
+                        icon={<AlgobotsIcon />}
+                        title="No algobots found"
+                        description="You haven't activated any algobots yet. Check out our available strategies to automate your trades."
+                    />
+                )}
             </div>
         </div>
     )

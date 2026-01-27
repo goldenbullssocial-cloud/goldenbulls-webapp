@@ -6,6 +6,8 @@ import { getNotification, updateNotification } from '@/services/notification';
 import { getSocket } from '@/utils/webSocket';
 import { formatDistanceToNow } from 'date-fns';
 import classNames from 'classnames';
+import NoData from '@/components/noData';
+
 const CheckIcon = '/assets/icons/check.svg';
 const NotificationIcon = '/assets/icons/notification.svg';
 
@@ -76,11 +78,11 @@ export default function Notifications() {
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            markAllAsRead(); 
+            markAllAsRead();
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, []); 
+    }, []);
 
     useEffect(() => {
         fetchNotifications();
@@ -94,7 +96,20 @@ export default function Notifications() {
                 </h2>
             </div>
             <div className={styles.allBoxAlignment}>
-                {
+                {isLoading ? (
+                    Array.from({ length: 8 }).map((_, index) => (
+                        <div className={styles.skeletonBox} key={index}>
+                            <div className={styles.skeletonHeader}>
+                                <div className={styles.skeletonLeft}>
+                                    <div className={`${styles.skeletonIcon} ${styles.skeleton}`} />
+                                    <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
+                                </div>
+                                <div className={`${styles.skeletonTime} ${styles.skeleton}`} />
+                            </div>
+                            <div className={`${styles.skeletonDesc} ${styles.skeleton}`} />
+                        </div>
+                    ))
+                ) : notifications?.length > 0 ? (
                     notifications?.map((notification) => {
                         return (
                             <div
@@ -122,7 +137,13 @@ export default function Notifications() {
                             </div>
                         )
                     })
-                }
+                ) : (
+                    <NoData
+                        icon={NotificationIcon}
+                        title="No notifications found"
+                        description="You're all caught up! There are no new notifications to show at this time."
+                    />
+                )}
             </div>
         </div>
     )

@@ -10,6 +10,9 @@ import DownPrimaryIcon from '@/icons/downPrimaryIcon'
 import classNames from 'classnames'
 import { useQuery } from "@apollo/client/react";
 import { GET_ALL_BLOG_DATA, GET_BLOG_CATEGORIES } from "@/graphql/getBlogData";
+import NoData from "@/components/noData";
+import LibraryIcon from "@/icons/libraryIcon";
+
 const ITEMS_PER_PAGE = 12;
 
 /* Container animation */
@@ -47,6 +50,7 @@ export default function LatestBlog() {
 
   const {
     data: blogData,
+    loading: blogsLoading
   } = useQuery(GET_ALL_BLOG_DATA);
 
   useEffect(() => {
@@ -166,29 +170,51 @@ export default function LatestBlog() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {currentBlogs?.map((blog, index) => (
-            <Link key={index} href={`/blog/${blog.slug}`}>
-              <motion.div className={styles.griditems} variants={cardVariants}>
-                <div className={styles.cardImage}>
-                  <img src={process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL + blog?.coverImage?.url} alt={blog.title} />
-                </div>
-
+          {blogsLoading ? (
+            Array.from({ length: 8 }).map((_, index) => (
+              <div className={styles.griditems} key={index}>
+                <div className={`${styles.cardImage} ${styles.skeleton} ${styles.skeletonImage}`} />
                 <div className={styles.details}>
-                  <h3>{blog.title}</h3>
+                  <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+                  <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
                   <div className={styles.twoContentAlignment}>
-                    <span>{blog?.author?.name}</span>
-                    <ul>
-                      <li>{blog?.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                      }) : " "}</li>
-                    </ul>
+                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "50%" }} />
+                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
                   </div>
                 </div>
-              </motion.div>
-            </Link>
-          ))}
+              </div>
+            ))
+          ) : currentBlogs?.length > 0 ? (
+            currentBlogs.map((blog, index) => (
+              <Link key={index} href={`/blog/${blog.slug}`}>
+                <motion.div className={styles.griditems} variants={cardVariants}>
+                  <div className={styles.cardImage}>
+                    <img src={process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL + blog?.coverImage?.url} alt={blog.title} />
+                  </div>
+
+                  <div className={styles.details}>
+                    <h3>{blog.title}</h3>
+                    <div className={styles.twoContentAlignment}>
+                      <span>{blog?.author?.name}</span>
+                      <ul>
+                        <li>{blog?.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-GB', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric'
+                        }) : " "}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))
+          ) : (
+            <NoData
+              icon={<LibraryIcon />}
+              title="No blogs found"
+              description="There are no blogs currently available in this category."
+            />
+          )}
         </motion.div>
 
         {totalPages > 1 && (

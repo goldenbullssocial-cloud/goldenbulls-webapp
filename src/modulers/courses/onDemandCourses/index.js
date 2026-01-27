@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 import styles from "./onDemandCourses.module.scss";
 import CoursesCard from "@/components/coursesCard";
 
+import CoursesIcon from "@/icons/coursesIcon";
+import NoData from "@/components/noData";
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -18,7 +21,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: {
-    opacity: 0,
+    opacity: 1,
     y: 40,
   },
   visible: {
@@ -31,7 +34,7 @@ const itemVariants = {
   },
 };
 
-export default function OnDemandCourses({ title, data, activeType, bgColor = "#0C0C0C" }) {
+export default function OnDemandCourses({ title, data, activeType, bgColor = "#0C0C0C", loading }) {
   return (
     <motion.section
       className={styles.onDemandCourses}
@@ -66,26 +69,67 @@ export default function OnDemandCourses({ title, data, activeType, bgColor = "#0
           />
         </motion.div>
 
-        {/* Cards Grid */}
-        <motion.div className={styles.grid} variants={containerVariants}>
-          {data?.map((item) => (
-            <motion.div key={item.id} variants={itemVariants}>
-              <Link href={`/courses/${item._id}`}>
-                <CoursesCard
-                  title={item.CourseName}
-                  price={item.price}
-                  author={item.instructor?.name}
-                  duration={item.hours}
-                  level={item.courseLevel}
-                  rating={3.5}
-                  image={item.courseVideo}
-                  location={item?.location || ""}
-                  btnLink={`/courses/${item._id}?courseType=${activeType}`}
-                />
-              </Link>
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Cards Grid or No Data */}
+        <div className={styles.grid}>
+          {loading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <div className={styles.griditems} key={index}>
+                <div className={`${styles.cardImage} ${styles.skeleton} ${styles.skeletonImage}`} />
+
+                <div className={styles.details}>
+                  <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+
+                  <div className={styles.secContent}>
+                    <div
+                      className={`${styles.skeleton} ${styles.skeletonText}`}
+                      style={{ width: "40%" }}
+                    />
+                    <div
+                      className={`${styles.skeleton} ${styles.skeletonText}`}
+                      style={{ width: "50%" }}
+                    />
+                  </div>
+
+                  <div className={styles.listAlignment}>
+                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                  </div>
+
+                  <div className={styles.buttonDesign}>
+                    <div className={`${styles.skeleton} ${styles.skeletonButton}`} />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : data?.length > 0 ? (
+            data?.map((item) => (
+              console.log(item, "item"),
+
+              <motion.div key={item._id} variants={itemVariants}>
+                <Link href={`/courses/${item._id}`}>
+                  <CoursesCard
+                    title={item?.CourseName}
+                    price={item?.price}
+                    author={item.instructor?.name}
+                    duration={item?.hours}
+                    level={item?.courseLevel}
+                    rating={item?.averageRating ? Number(item.averageRating).toFixed(1) : "0.0"}
+                    image={item.courseVideo}
+                    location={item?.location || ""}
+                    btnLink={`/courses/${item._id}?courseType=${activeType}`}
+                  />
+                </Link>
+              </motion.div>
+            ))
+          ) : (
+            <NoData
+              icon={<CoursesIcon />}
+              title="No courses found"
+              description="There are no courses currently available in this category."
+            />
+          )}
+        </div>
       </div>
     </motion.section>
   );

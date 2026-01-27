@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 import styles from './paymentHistory.module.scss';
 import PagePagination from '@/components/pagePagination';
 import { getpaymentHistory } from '@/services/paymentHistory';
+import NoData from '@/components/noData';
+import PaymentIcon from '@/icons/paymentIcon';
+
 
 export default function PaymentHistory() {
     const [paymentData, setPaymentData] = useState([]);
@@ -53,9 +56,15 @@ export default function PaymentHistory() {
                     </thead>
                     <tbody>
                         {loading ? (
-                            <tr>
-                                <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>Loading...</td>
-                            </tr>
+                            Array.from({ length: limit }).map((_, index) => (
+                                <tr key={`skeleton-${index}`} className={styles.skeletonRow}>
+                                    {Array.from({ length: 8 }).map((_, i) => (
+                                        <td key={`cell-${i}`}>
+                                            <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
                         ) : paymentData.length > 0 ? (
                             paymentData.map((item, index) => (
                                 <tr key={item._id || index}>
@@ -77,7 +86,13 @@ export default function PaymentHistory() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>No payment history found</td>
+                                <td colSpan="8">
+                                    <NoData
+                                        icon={<PaymentIcon />}
+                                        title="No payment history found"
+                                        description="You haven't made any payments yet. Your transaction history will appear here once you subscribe to a course or algobot."
+                                    />
+                                </td>
                             </tr>
                         )}
                     </tbody>

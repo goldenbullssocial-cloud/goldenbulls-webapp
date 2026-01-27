@@ -4,6 +4,9 @@ import styles from './myCourses.module.scss';
 import StarIcon from '@/icons/starIcon';
 import ClockInIcon from '@/icons/clockInIcon';
 import { purchasedAllCourses } from '@/services/dashboard';
+import CoursesIcon from '@/icons/coursesIcon';
+import classNames from 'classnames';
+import NoData from '@/components/noData';
 
 const CardImage = '/assets/images/course-user.png';
 
@@ -15,7 +18,7 @@ export default function MyCourses() {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const res = await purchasedAllCourses({ type: 'ALL', page: 1, limit: 10 });
+        const res = await purchasedAllCourses({ page: 1, limit: 10 });
         if (res && res.payload) {
           const allCourses = [
             ...(res.payload.RECORDED || []),
@@ -42,7 +45,36 @@ export default function MyCourses() {
       </div>
       <div className={styles.grid}>
         {loading ? (
-          <p style={{ color: '#fff' }}>Loading courses...</p>
+          Array.from({ length: 4 }).map((_, index) => (
+            <div className={styles.griditems} key={index}>
+              <div className={`${styles.cardImage} ${styles.skeleton} ${styles.skeletonImage}`} />
+
+              <div className={styles.details}>
+                <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+
+                <div className={styles.secContent}>
+                  <div
+                    className={`${styles.skeleton} ${styles.skeletonText}`}
+                    style={{ width: "40%" }}
+                  />
+                  <div
+                    className={`${styles.skeleton} ${styles.skeletonText}`}
+                    style={{ width: "50%" }}
+                  />
+                </div>
+
+                <div className={styles.listAlignment}>
+                  <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                  <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                  <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "30%" }} />
+                </div>
+
+                <div className={styles.buttonDesign}>
+                  <div className={`${styles.skeleton} ${styles.skeletonButton}`} />
+                </div>
+              </div>
+            </div>
+          ))
         ) : courses.length > 0 ? (
           courses.map((item, i) => {
             const course = item.courseId;
@@ -91,7 +123,11 @@ export default function MyCourses() {
             )
           })
         ) : (
-          <p style={{ color: '#fff' }}>No courses found.</p>
+          <NoData
+            icon={<CoursesIcon />}
+            title="No courses found"
+            description="There are no courses currently available in this category."
+          />
         )}
       </div>
     </div>

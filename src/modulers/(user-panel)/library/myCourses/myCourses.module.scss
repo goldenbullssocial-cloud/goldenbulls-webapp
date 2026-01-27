@@ -208,4 +208,110 @@
             }
         }
     }
+
+    .noCourses {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 21px;
+        position: relative;
+        text-align: center;
+
+        &::before {
+            @include border;
+            opacity: 0.3;
+        }
+
+        .iconWrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(249, 244, 144, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(249, 244, 144, 0.1);
+
+            svg {
+                width: 32px;
+                height: 32px;
+                opacity: 0.9;
+
+                path {
+                    stroke: #E0A840;
+                }
+            }
+        }
+
+        p {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 500;
+            @include font-medium;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        span {
+            color: #b6b6b6;
+            font-size: 16px;
+            margin-top: 8px;
+            @include font-normal;
+            max-width: 300px;
+        }
+    }
+}
+
+// Skeleton Loading Styles
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
+
+.skeleton {
+    background: #1a1a1a;
+    background: linear-gradient(110deg, #1a1a1a 8%, #2a2a2a 18%, #1a1a1a 33%);
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
+}
+
+.skeletonImage {
+    width: 100%;
+    height: 192px;
+    border-radius: 12px !important;
+    display: block;
+}
+
+.skeletonTitle {
+    height: 24px;
+    width: 70%;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.secContent {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.skeletonText {
+    height: 16px;
+    border-radius: 4px;
+}
+
+.buttonDesign {
+    margin-top: 20px;
+
+    .skeletonButton {
+        height: 10px;
+        width: 100%;
+        border-radius: 50px;
+    }
 }

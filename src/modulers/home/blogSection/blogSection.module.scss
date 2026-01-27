@@ -269,4 +269,55 @@
             }
         }
     }
+
+    .noData {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+        width: 100%;
+        gap: 24px;
+
+        .iconWrapper {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(180deg, rgba(249, 244, 144, 0.1) 0%, rgba(249, 244, 144, 0.02) 100%);
+            border: 1px solid rgba(249, 244, 144, 0.3);
+            box-shadow: 0 0 30px rgba(249, 244, 144, 0.1);
+
+            svg {
+                width: 36px;
+                height: 36px;
+
+                path {
+                    stroke: #F9F490;
+                }
+            }
+        }
+
+        h3 {
+            @include gradient-text;
+            font-size: 28px;
+            @include font-bold;
+            text-transform: uppercase;
+            margin: 0;
+            text-align: center;
+        }
+
+        p {
+            color: #FFF;
+            font-size: 16px;
+            @include font-medium;
+            opacity: 0.6;
+            text-align: center;
+            max-width: 400px;
+            margin: 0;
+            line-height: 1.6;
+        }
+    }
 }

@@ -33,7 +33,7 @@ export const getCourseById = async (data) => {
 export const getChapters = async (id) => {
   try {
     const res = await api.get(
-      `/chapter/getChapterByCourse?courseId=${id}&sortBy=chapterNo&sortOrder=1`
+      `/chapter/getChapterByCourse?courseId=${id}`
     );
     const data = await res.data;
     return data;
@@ -67,8 +67,17 @@ export const getPaymentUrl = async (data) => {
 
 export const purchasedAllCourses = async ({ type, page, limit }) => {
   try {
+    const params = new URLSearchParams({
+      page,
+      limit,
+    });
+
+    if (type) {
+      params.append("type", type);
+    }
+
     const response = await api.get(
-      `/payment/getMyCourseHistory?page=${page}&limit=${limit}&type=${type}`
+      `/payment/getMyCourseHistory?${params.toString()}`
     );
     return response.data;
   } catch (error) {
@@ -89,27 +98,27 @@ export const getBots = async (page = 1, limit = 10) => {
 };
 
 export const getAlgobot = async (id = '', searchQuery = '', page = 1, limit = 10) => {
-    try {
-      const params = new URLSearchParams({
-        page,
-        limit,
-      });
-  
-      if (id) {
-        params.append("categoryId", id);
-      }
-  
-      if (searchQuery) {
-        params.append("search", searchQuery);
-      }
-  
-      const response = await api.get(`/strategyPlan/getStrategiesByCategory?${params.toString()}`);
-      return response.data;
-    } catch (error) {
-      console.log("error", error);
-      throw error;
+  try {
+    const params = new URLSearchParams({
+      page,
+      limit,
+    });
+
+    if (id) {
+      params.append("categoryId", id);
     }
-  };
+
+    if (searchQuery) {
+      params.append("search", searchQuery);
+    }
+
+    const response = await api.get(`/strategyPlan/getStrategiesByCategory?${params.toString()}`);
+    return response.data;
+  } catch (error) {
+    console.log("error", error);
+    throw error;
+  }
+};
 
 export const createNewsLetter = async (formData) => {
   try {
