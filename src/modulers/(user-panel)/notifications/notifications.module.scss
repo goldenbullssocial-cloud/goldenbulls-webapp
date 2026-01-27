@@ -13,8 +13,18 @@
         padding: 22px;
     }
 
+    @include respond-to("md") {
+        background-color: transparent;
+        border: none;
+        padding: 24px 20px 24px 20px;
+    }
+
     .title {
         padding: 0 0 23px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 16px 0;
+        }
 
         h2 {
             font-size: 24px;
@@ -40,6 +50,10 @@
             position: relative;
             transition: all 0.3s ease;
 
+            @include respond-to("sm") {
+                padding: 16px;
+            }
+
             &.read {
                 opacity: 0.5;
                 filter: grayscale(0.2);
@@ -56,6 +70,11 @@
                 font-weight: 400;
                 line-height: normal;
                 @include font-normal;
+
+                @include respond-to("sm") {
+                    font-size: 14px;
+                    line-height: 22px;
+                }
             }
 
             .boxHeader {
@@ -65,10 +84,18 @@
                 padding: 0 0 12px 0;
                 align-items: center;
 
+                @include respond-to("sm") {
+                    grid-template-columns: 1fr;
+                }
+
                 .leftAlignment {
                     display: flex;
                     align-items: center;
                     gap: 24px;
+
+                    @include respond-to("sm") {
+                        gap: 16px;
+                    }
 
                     img {
                         display: block;
@@ -81,6 +108,10 @@
                         @include font-medium;
                         color: #fff;
                         line-height: normal;
+
+                        @include respond-to("sm") {
+                            font-size: 20px;
+                        }
                     }
                 }
 
@@ -93,6 +124,11 @@
                     font-style: normal;
                     font-weight: 500;
                     line-height: normal;
+
+                    @include respond-to("sm") {
+                        font-size: 16px;
+                        text-align: left;
+                    }
                 }
             }
         }
