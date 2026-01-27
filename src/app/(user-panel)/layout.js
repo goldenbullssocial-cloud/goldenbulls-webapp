@@ -3,6 +3,7 @@ import Sidebar from '@/components/sidebar'
 import UserHeader from '@/components/userHeader'
 import React, { useEffect, useState } from 'react'
 import { getSocket } from '@/utils/webSocket'
+import MobileHeader from '@/components/mobileHeader'
 
 export default function Layout({ children }) {
     const [toogle, setToogle] = useState(false);
@@ -17,7 +18,7 @@ export default function Layout({ children }) {
             setUnreadCount(count);
         };
 
-        console.log(socket,"socket");
+        console.log(socket, "socket");
 
         if (socket) {
             const handleConnect = () => {
@@ -46,6 +47,7 @@ export default function Layout({ children }) {
 
     return (
         <div className='user-panel-layout'>
+            <MobileHeader />
             <div className='sidebar-panel'>
                 <Sidebar toogle={toogle} setToogle={setToogle} unreadCount={unreadCount} />
             </div>

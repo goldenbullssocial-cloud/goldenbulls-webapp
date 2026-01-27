@@ -16,6 +16,13 @@
         padding: 20px 20px 20px 0;
     }
 
+    @include respond-to("md") {
+        padding: 20px;
+        border-radius: 0 0 24px 24px;
+        border-bottom: 1px solid var(--Linear, #666);
+        background: #0F0F0F;
+    }
+
     .rightContent {
         width: 100%;
         max-width: 700px;
@@ -25,6 +32,10 @@
 
         @include respond-to("xl") {
             max-width: 600px;
+        }
+
+        @include respond-to("md") {
+            display: none;
         }
 
         button {
@@ -67,7 +78,11 @@
         gap: 32px;
 
         @include respond-to("xl") {
-            gap: 24x;
+            gap: 24px;
+        }
+
+        @include respond-to("md") {
+            gap: 16px;
         }
 
         .line {
@@ -77,6 +92,10 @@
 
             @include respond-to("xl") {
                 height: 40px;
+            }
+
+            @include respond-to("sm") {
+                height: 55px;
             }
         }
 
@@ -91,6 +110,13 @@
             @include respond-to("xl") {
                 font-size: 16px;
             }
+
+            @include respond-to("sm") {
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+            }
         }
 
         h2 {
@@ -104,6 +130,14 @@
 
             @include respond-to("xl") {
                 font-size: 20px;
+            }
+
+            @include respond-to("md") {
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                text-transform: uppercase;
             }
 
             span {

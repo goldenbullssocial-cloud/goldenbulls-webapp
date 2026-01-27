@@ -18,6 +18,10 @@
         padding-left: 140px;
     }
 
+    @include respond-to("md") {
+        display: none;
+    }
+
     .bullImage {
         max-width: 650px;
         position: absolute;

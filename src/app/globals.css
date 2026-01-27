@@ -143,3 +143,16 @@ img {
 .stdropdown-item.selected {
   background: rgba(255, 255, 255, 0.05) !important;
 }
+
+@media (max-width: 1024px) {
+  .sidebar-panel,
+  .children-layout {
+    width: 100%;
+  }
+  .user-panel-layout {
+    display: block;
+  }
+  .sidebar-panel {
+    display: none;
+  }
+}

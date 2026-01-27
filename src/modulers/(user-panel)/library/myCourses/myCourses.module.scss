@@ -5,8 +5,16 @@
 .myCoursesAlignment {
     padding: 32px 0;
 
+    @include respond-to("sm") {
+        padding: 24px 0;
+    }
+
     .title {
         padding: 0 0 24px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 16px 0;
+        }
 
         h2 {
             display: inline;
@@ -25,11 +33,24 @@
         grid-template-columns: repeat(4, 1fr);
         gap: 20px;
 
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+            gap: 16px;
+        }
+
         .griditems {
             border-radius: 21.348px;
             position: relative;
             background: #000;
             padding: 20px;
+
+            @include respond-to("sm") {
+                padding: 16px;
+            }
 
             &::before {
                 @include border;
@@ -42,6 +63,10 @@
                     object-fit: cover;
                     display: block;
                     border-radius: 12px;
+
+                    @include respond-to("sm") {
+                        height: 206px;
+                    }
                 }
             }
 

@@ -12,4 +12,10 @@
     @include respond-to("xl") {
         padding: 22px;
     }
+
+    @include respond-to("md") {
+        background-color: transparent;
+        border: none;
+        padding: 0 20px;
+    }
 }

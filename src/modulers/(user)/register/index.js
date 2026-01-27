@@ -161,7 +161,7 @@ export default function Register() {
             <div className={styles.mobileHeader}>
                 <img src={Logo} alt='Logo' />
             </div>
-            <Toaster position="top-right" />
+            {/* <Toaster position="top-right" /> */}
 
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>

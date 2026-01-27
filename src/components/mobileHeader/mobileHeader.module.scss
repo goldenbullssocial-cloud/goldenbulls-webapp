@@ -1,0 +1,44 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.mobileHeader {
+    padding: 8px 20px;
+    border-bottom: 1px solid var(--GOLD, #F9F490);
+    background: #0F0F0F;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+
+    @include respond-to("md") {
+        display: flex;
+    }
+
+    .leftAlignment {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        .logo {
+            img {
+                max-width: 72px;
+                display: block;
+                cursor: pointer;
+            }
+        }
+
+        .mobileMenu {
+            img {
+                display: block;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .searchIcon {
+        img {
+            display: block;
+            cursor: pointer;
+        }
+    }
+}
