@@ -589,82 +589,6 @@
             @include font-normal;
         }
 
-
-
-        .walletBalanceSection {
-            margin-bottom: 24px;
-
-            .checkboxContainer {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                cursor: pointer;
-                user-select: none;
-                position: relative;
-
-                .checkboxInput {
-                    position: absolute;
-                    opacity: 0;
-                    cursor: pointer;
-                    height: 0;
-                    width: 0;
-
-                    &:checked~.checkboxCustom {
-                        background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
-                        border-color: transparent;
-
-                        &::after {
-                            display: block;
-                        }
-                    }
-                }
-
-                .checkboxCustom {
-                    position: relative;
-                    height: 24px;
-                    width: 24px;
-                    background: transparent;
-                    border: 2px solid #666;
-                    border-radius: 6px;
-                    transition: all 0.3s ease;
-                    flex-shrink: 0;
-
-                    &::after {
-                        content: "";
-                        position: absolute;
-                        display: none;
-                        left: 7px;
-                        top: 3px;
-                        width: 6px;
-                        height: 11px;
-                        border: solid #000;
-                        border-width: 0 2px 2px 0;
-                        transform: rotate(45deg);
-                    }
-                }
-
-                &:hover .checkboxCustom {
-                    border-color: #BD894E;
-                }
-
-                .checkboxLabel {
-                    color: #E1E1E1;
-                    font-size: 18px;
-                    font-weight: 500;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    flex-wrap: wrap;
-
-                    .walletAmount {
-                        color: #999;
-                        font-size: 16px;
-                        font-weight: 400;
-                    }
-                }
-            }
-        }
-
         .actionRow {
             display: flex;
             gap: 16px;
@@ -891,49 +815,81 @@
                     opacity: 0;
                     transition: opacity 0.3s;
                 }
+            }
+        }
+    }
+}
 
-                &:hover:not(:disabled) {
-                    background: rgba(255, 255, 255, 0.05);
+.walletBalanceSection {
+    margin-top: 24px;
 
-                    &::before {
-                        opacity: 1;
-                    }
+    .checkboxContainer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
+
+        .checkboxInput {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+
+            &:checked~.checkboxCustom {
+                background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
+                border-color: transparent;
+
+                &::after {
+                    display: block;
                 }
             }
+        }
 
-            // .confirmBtn {
-            //     background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
-            //     color: #000;
-            //     position: relative;
-            //     overflow: hidden;
+        .checkboxCustom {
+            position: relative;
+            height: 24px;
+            width: 24px;
+            background: transparent;
+            border: 2px solid #666;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
 
-            //     &::after {
-            //         content: "";
-            //         position: absolute;
-            //         inset: 0;
-            //         background: linear-gradient(90deg, #FEFBA5, #F9F490, #E4AB40);
-            //         opacity: 0;
-            //         transition: opacity 0.3s;
-            //     }
+            &::after {
+                content: "";
+                position: absolute;
+                display: none;
+                left: 7px;
+                top: 3px;
+                width: 6px;
+                height: 11px;
+                border: solid #000;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+        }
 
-            //     span {
-            //         position: relative;
-            //         z-index: 1;
-            //     }
+        &:hover .checkboxCustom {
+            border-color: #BD894E;
+        }
 
-            //     &:hover:not(:disabled) {
-            //         transform: translateY(-2px);
-            //         box-shadow: 0 8px 20px rgba(249, 244, 144, 0.4);
+        .checkboxLabel {
+            color: #E1E1E1;
+            font-size: 18px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
 
-            //         &::after {
-            //             opacity: 1;
-            //         }
-            //     }
-
-            //     &:active:not(:disabled) {
-            //         transform: translateY(0);
-            //     }
-            // }
+            .walletAmount {
+                color: #999;
+                font-size: 16px;
+                font-weight: 400;
+            }
         }
     }
 }

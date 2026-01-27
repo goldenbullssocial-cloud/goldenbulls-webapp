@@ -5,7 +5,7 @@ import styles from './register.module.scss';
 import Input from '@/components/input';
 // import Button from '@/components/button';
 import { useRouter } from 'next/navigation';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { signUp } from '@/services/authService';
 import Authentication from '@/components/authentication';
 
@@ -162,6 +162,7 @@ export default function Register() {
                 <img src={Logo} alt='Logo' />
             </div>
             <Toaster position="top-right" />
+
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>
                     <div className={styles.mainrelative}>

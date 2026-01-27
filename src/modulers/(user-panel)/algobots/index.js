@@ -27,7 +27,6 @@ export default function Algobots() {
         const fetchBots = async () => {
             try {
                 const res = await getAlgobot();
-                console.log(res?.payload, "=====res");
 
                 if (res?.payload) {
                     setBots(res?.payload?.result);
@@ -50,10 +49,8 @@ export default function Algobots() {
                 </h2>
             </div>
             <div className={styles.grid}>
-                {console.log(bots, "wwwwwwwwwbots")}
                 {
                     bots?.map((bot, index) => {
-                        console.log(bot, "====bot");
                         return (
                             <BotCard bot={bot} key={index} />
                         )
@@ -107,7 +104,7 @@ const BotCard = ({ bot }) => {
 
                 if (res?.success) {
                     setAppliedCoupon(res?.payload);
-                    toast.success("Coupon Applied Successfully");
+                    toast.success(res?.message || "Coupon Applied Successfully");
                 } else {
                     toast.error(res?.message || "Invalid coupon code");
                     setAppliedCoupon(null);
@@ -176,10 +173,10 @@ const BotCard = ({ bot }) => {
         <div className={styles.box}>
             <div className={styles.detailsBox}>
                 <h3>
-                    Returns: <span className={styles.green}>110%</span> <small>(28 Days)</small>
+                    Returns: <span className={styles.green}>{bot?.return}%</span> <small>(28 Days)</small>
                 </h3>
                 <h4>
-                    Risk: <span>High</span>
+                    Risk: <span>{bot?.risk}</span>
                 </h4>
             </div>
             <div className={styles.leftRightAlignment}>
@@ -228,17 +225,16 @@ const BotCard = ({ bot }) => {
                             <div className={styles.statsRow}>
                                 <div className={styles.statBox}>
                                     <span className={styles.label}>Returns:</span>
-                                    <span className={styles.value}> <span className={styles.green}>110%</span> (28 Days)</span>
+                                    <span className={styles.value}> <span className={styles.green}>{bot?.return}%</span> (28 Days)</span>
                                     <span className={styles.divider}>|</span>
                                     <span className={styles.label}>Risk:</span>
-                                    <span className={styles.value}> <span className={styles.red}>High</span></span>
+                                    <span className={styles.value}> <span className={styles.red}>{bot?.risk}</span></span>
                                 </div>
                             </div>
                             <div className={styles.textstyle}>
                                 <h2>{bot?.title}</h2>
                                 <p>
-                                    Our Forex Trading Bot is a powerful automation tool designed to assist traders with disciplined, rule-based execution in the financial markets. Built on predefined strategies and market conditions, the bot helps reduce emotional decision-making and ensures consistency across trades. It continuously monitors the market,
-                                    identifies potential opportunities, and executes trades based on configured parameters.
+                                   {bot?.shortDescription}
                                 </p>
                             </div>
                             <div className={styles.selectionRow}>
@@ -264,30 +260,6 @@ const BotCard = ({ bot }) => {
                                     )}
                                 </div>
                             </div>
-                            <div className={styles.applyCoupon}>
-                                <Input placeholder='Apply Coupon' />
-                                <Button text="Subscribe Now" className={styles.widthfull} />
-                            </div>
-                        </div>
-                        <div className={styles.modalFrameDesign}>
-                            <div className={styles.box}>
-                                <iframe
-                                    width="100%"
-                                    height="100%"
-                                    src={getYouTubeEmbedUrl(bot?.link)}
-                                    title={`Tutorial Video - ${bot?.title || ""}`}
-                                    frameBorder="0"
-                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                    style={{ borderRadius: "16px" }}
-                                ></iframe>
-                            </div>
-                        </div>
-
-                        {/* <div className={styles.modalBody}>
-
-
-
                             {user?.earningBalance > 0 && (
                                 <div className={styles.walletBalanceSection}>
                                     <label className={styles.checkboxContainer}>
@@ -305,33 +277,51 @@ const BotCard = ({ bot }) => {
                                     </label>
                                 </div>
                             )}
-
-                            <div className={styles.actionRow}>
-                                <div className={styles.inputWrapper}>
-                                    <input
-                                        type="text"
-                                        placeholder="Apply Coupon"
-                                        className={styles.couponInput}
-                                        value={couponCode}
-                                        onChange={(e) => setCouponCode(e.target.value)}
-                                    />
-                                    <div className={styles.applyCouponBtn}>
-                                        <Button
-                                            text="Apply"
+                            <div className={styles.applyCoupon}>
+                                <Input
+                                    placeholder='Apply Coupon'
+                                    value={couponCode}
+                                    onChange={(e) => setCouponCode(e.target.value)}
+                                    actionButton={
+                                        <button
                                             onClick={handleApplyCoupon}
-                                        />
-                                    </div>
-                                </div>
+                                            style={{
+                                                background: 'linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E)',
+                                                border: 'none',
+                                                borderRadius: '8px',
+                                                padding: '6px 16px',
+                                                color: '#000',
+                                                fontWeight: '600',
+                                                cursor: 'pointer',
+                                                fontSize: '14px'
+                                            }}
+                                        >
+                                            Apply
+                                        </button>
+                                    }
+                                />
                                 <Button
                                     text={loading ? "Processing..." : "Subscribe Now"}
-                                    className={styles.modalSubscribeBtn}
+                                    className={styles.widthfull}
                                     onClick={handleSubscribeClick}
                                     disabled={loading}
                                 />
                             </div>
-
-                           
-                        </div> */}
+                        </div>
+                        <div className={styles.modalFrameDesign}>
+                            <div className={styles.box}>
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    src={getYouTubeEmbedUrl(bot?.link)}
+                                    title={`Tutorial Video - ${bot?.title || ""}`}
+                                    frameBorder="0"
+                                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    style={{ borderRadius: "16px" }}
+                                ></iframe>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

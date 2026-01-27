@@ -10,12 +10,12 @@ export const getNotification = async () => {
     }
 }
 
-export const updateNotification = async (notificationId = null) => {
+export const updateNotification = async (notificationId = null, isReadAll = false) => {
     try {
         let url = '/notification/updateNotification';
         if (notificationId) {
             url += `?id=${notificationId}`;
-        } else {
+        } else if (isReadAll) {
             url += '?isReadAll=true';
         }
         const response = await api.put(url);

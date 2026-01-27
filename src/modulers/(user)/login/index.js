@@ -5,7 +5,7 @@ import styles from './login.module.scss';
 import Input from '@/components/input';
 import Authentication from '@/components/authentication';
 import { useRouter } from 'next/navigation';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { signIn } from '@/services/authService';
 import { errorMessages } from '@/utils/constant';
 import { setCookie } from '../../../../cookie';
@@ -81,6 +81,7 @@ export default function Login() {
             const data = await signIn(email.trim().toLowerCase(), password);
 
             if (data.success) {
+                toast.dismiss();
                 toast.success("Login successfully.");
 
                 const cookieOptions = rememberMe
@@ -125,6 +126,7 @@ export default function Login() {
                 <img src={Logo} alt='Logo' />
             </div>
             <Toaster position="top-right" />
+
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>
                     <div className={styles.mainrelative}>

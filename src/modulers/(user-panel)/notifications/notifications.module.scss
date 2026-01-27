@@ -38,6 +38,12 @@
             background: #000;
             margin: 0 0 16px 0;
             position: relative;
+            transition: all 0.3s ease;
+
+            &.read {
+                opacity: 0.5;
+                filter: grayscale(0.2);
+            }
 
             &::before {
                 @include border;

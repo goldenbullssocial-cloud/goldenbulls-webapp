@@ -5,13 +5,19 @@ import { useRouter } from 'next/navigation';
 import { getNotification, updateNotification } from '@/services/notification';
 import { getSocket } from '@/utils/webSocket';
 import { formatDistanceToNow } from 'date-fns';
+import classNames from 'classnames';
 const CheckIcon = '/assets/icons/check.svg';
 const NotificationIcon = '/assets/icons/notification.svg';
 
 export default function Notifications() {
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const notificationsRef = React.useRef(notifications);
     const router = useRouter();
+
+    React.useEffect(() => {
+        notificationsRef.current = notifications;
+    }, [notifications]);
 
     const fetchNotifications = async () => {
         try {
@@ -27,31 +33,6 @@ export default function Notifications() {
         }
     };
 
-    const handleNotificationClick = async (notification) => {
-        try {
-            if (!notification.isRead) {
-                await updateNotification(notification._id, true);
-
-                // Update local state
-                setNotifications(prev => prev.map(n =>
-                    n._id === notification._id ? { ...n, isRead: true } : n
-                ));
-
-                // Emit socket event to update unread count in sidebar
-                const socket = getSocket();
-                if (socket) {
-                    socket.emit('check-notification', {});
-                }
-            }
-
-            if (notification.link) {
-                router.push(notification.link);
-            }
-        } catch (error) {
-            console.error('Error updating notification status:', error);
-        }
-    };
-
     const getTimeAgo = (dateString) => {
         if (!dateString) return '';
         try {
@@ -62,55 +43,48 @@ export default function Notifications() {
         }
     };
 
-    // const markAllAsRead = async () => {
-    //     try {
-    //         // Mark all notifications as read in a single API call
-    //         const result = await updateNotification();
+    const markAllAsRead = async () => {
+        try {
+            const hasUnread = notificationsRef.current.some(n => !n.isRead);
+            if (!hasUnread) return;
 
-    //         if (result?.error) {
-    //             console.error('Failed to mark notifications as read:', result.message);
-    //             return;
-    //         }
+            await updateNotification(null, true); // backend marks all read
 
-    //         // Just emit the socket event to update unread count in real-time
-    //         const socket = getSocket();
-    //         if (socket) {
-    //             socket.emit('check-notification', {});
-    //         }
-    //     } catch (error) {
-    //         console.error('Error marking all notifications as read:', error);
-    //         // Don't throw the error to prevent automatic logout
-    //     }
-    // };
+            setNotifications(prev =>
+                prev.map(n => ({ ...n, isRead: true }))
+            );
+
+            const socket = getSocket();
+            socket?.emit('check-notification', {});
+        } catch (error) {
+            console.error('Error marking notifications as read:', error);
+        }
+    };
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                markAllAsRead();
+            }
+        };
+
+        const handleBeforeUnload = () => {
+            markAllAsRead();
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            markAllAsRead(); 
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []); 
 
     useEffect(() => {
         fetchNotifications();
     }, []);
-
-    // Mark all notifications as read when component mounts
-    // useEffect(() => {
-    //     if (notifications.length > 0 && notifications.some(n => !n.isRead)) {
-    //         markAllAsRead();
-    //     }
-    // }, [notifications]); // This will run after the initial fetch
-
-    // const handleMarkAsRead = async (notificationId) => {
-    //     try {
-    //         await updateNotification(notificationId, true);
-    //         // Update local state to reflect read status
-    //         setNotifications(prev => prev.map(n =>
-    //             n._id === notificationId ? { ...n, isRead: true } : n
-    //         ));
-
-    //         // Emit check-notification event to update unread count
-    //         const socket = getSocket();
-    //         if (socket) {
-    //             socket.emit('check-notification', {});
-    //         }
-    //     } catch (error) {
-    //         console.error('Error updating notification status:', error);
-    //     }
-    // };
 
     return (
         <div className={styles.notifications}>
@@ -124,9 +98,8 @@ export default function Notifications() {
                     notifications?.map((notification) => {
                         return (
                             <div
-                                className={styles.box}
+                                className={classNames(styles.box, { [styles.read]: notification?.isRead })}
                                 key={notification?._id}
-                                onClick={() => handleNotificationClick(notification)}
                                 style={{ cursor: (!notification.isRead || notification.link) ? 'pointer' : 'default' }}
                             >
                                 <div className={styles.boxHeader}>
