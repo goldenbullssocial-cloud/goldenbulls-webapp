@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { getCourses, submitReview, updateVideoProgress } from '@/services/courses';
 import { getChapters } from '@/services/dashboard';
 import { useRef } from 'react';
+import CourseContent from '../courseContent';
 
 const PlayIcon = () => (
     <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +28,7 @@ const CloseIcon = () => (
     </svg>
 );
 
-export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
+export default function CourseDetails({ selectedVideo, onVideoSelect, onProgressUpdate }) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const id = searchParams.get('id');
@@ -247,6 +248,11 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                             </div>
                         </div>
                     </div>
+                    <CourseContent
+                        onVideoSelect={onVideoSelect}
+                        chapters={chapters}
+                        onChaptersLoaded={setChapters}
+                    />
                 </div>
                 <div className={styles.griditems}>
                     <div className={styles.card}>
