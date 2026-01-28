@@ -184,7 +184,7 @@ export default function CoursesDetailsBanner() {
                                     <div className={styles.contentAlignment}>
                                         <h3>${course?.price}</h3>
                                         <ul>
-                                            <li>{course?.instructor?.name}</li>
+                                            <li>{course?.instructor}</li>
                                         </ul>
                                     </div>
 

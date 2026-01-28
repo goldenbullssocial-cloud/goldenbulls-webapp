@@ -226,7 +226,7 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                                 <div className={styles.dot}></div>
                                 <div className={styles.rating}>
                                     <StarIcon />
-                                    <span>4.5</span>
+                                    <span>{courseData?.averageRating ? Number(courseData.averageRating).toFixed(1) : "0.0"}</span>
                                 </div>
                             </div>
 
@@ -303,7 +303,7 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                                         </h4>
                                         <ul>
                                             <li>
-                                                {courseData?.instructor?.name}
+                                                {courseData?.instructor}
                                             </li>
                                         </ul>
                                     </div>

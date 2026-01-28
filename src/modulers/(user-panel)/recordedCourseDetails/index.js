@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function RecordedCourseDetails() {
     const [courses, setCourses] = useState(null);
-    const [chapters, setChapters] = useState([]);
+    const [chapters, setChapters] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const searchParams = useSearchParams();
     const type = searchParams.get('type');
