@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './header.module.scss';
 import Topbar from '../topbar';
 import Button from '../button';
@@ -9,9 +9,34 @@ import { header } from 'framer-motion/client';
 import { useRouter } from 'next/navigation';
 import classNames from 'classnames';
 const Logo = '/assets/logo/logo.svg';
+
+// Utility function to get cookie value
+const getCookie = (name) => {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
 export default function Header() {
   const [headerOpen, setHeaderOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const userToken = getCookie('userToken');
+    setIsAuthenticated(!!userToken);
+  }, []);
+
+  const handleLogout = () => {
+    // Remove the userToken cookie
+    document.cookie = 'userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    setIsAuthenticated(false);
+    setDropdownOpen(false);
+    router.push('/');
+  };
+
   return (
     <>
       <div className={styles.headerTop}>
@@ -30,7 +55,41 @@ export default function Header() {
                 <Link href="/blog" aria-label='Blogs'>Blogs</Link>
                 <Link href="/contact-us" aria-label='Contact Us'>Contact Us</Link>
                 <Link href="/register" aria-label='Sign-up'>Sign-up</Link>
-                <Button onClick={() => router.push('/login')} text='Login' />
+                {isAuthenticated ? (
+                  <div className={styles.userDropdown}>
+                    <Button
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className={styles.userButtonWrapper}
+                      text={
+                        <span className={styles.userButtonContent}>
+                          User
+                          <svg
+                            className={classNames(styles.dropdownArrow, dropdownOpen ? styles.open : '')}
+                            width="12"
+                            height="8"
+                            viewBox="0 0 12 8"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
+                      }
+                    />
+                    {dropdownOpen && (
+                      <div className={styles.dropdownMenu}>
+                        <button onClick={() => { router.push('/profile'); setDropdownOpen(false); }}>
+                          Profile
+                        </button>
+                        <button onClick={handleLogout}>
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Button onClick={() => router.push('/login')} text='Login' />
+                )}
               </div>
               <div className={styles.menuIcon} onClick={() => setHeaderOpen(!headerOpen)}>
                 <MenuIcon />
