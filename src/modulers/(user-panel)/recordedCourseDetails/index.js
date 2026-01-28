@@ -51,6 +51,7 @@ export default function RecordedCourseDetails() {
         <div className={styles.recordedCourseDetails}>
             <CourseDetails
                 selectedVideo={selectedVideo}
+                chapters={chapters}
                 onVideoSelect={setSelectedVideo}
                 onProgressUpdate={fetchChaptersData}
             />

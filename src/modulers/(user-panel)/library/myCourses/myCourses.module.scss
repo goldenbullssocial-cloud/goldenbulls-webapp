@@ -56,6 +56,16 @@
                 @include border;
             }
 
+            &.clickable {
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.05);
+                    transform: translateY(-5px);
+                }
+            }
+
             .cardImage {
                 img {
                     width: 100%;

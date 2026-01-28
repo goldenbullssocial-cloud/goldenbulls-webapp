@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import styles from './algobots.module.scss';
 import Button from '@/components/button';
 import toast from 'react-hot-toast';
@@ -8,6 +8,7 @@ import NoData from '@/components/noData';
 import AlgobotsIcon from '@/icons/algobotsIcon';
 import { getCookie } from '../../../../cookie';
 import Input from '@/components/input';
+import { useSearchParams } from 'next/navigation';
 const BlackChartImage = '/assets/images/black-chart.png';
 const CloseIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -46,7 +47,6 @@ export default function Algobots() {
 
         fetchBots();
     }, []);
-
     return (
         <div className={styles.algobotsPageAlignment}>
             <div className={styles.title}>
@@ -54,53 +54,68 @@ export default function Algobots() {
                     available algobots
                 </h2>
             </div>
-            <div className={styles.grid}>
-                {console.log(bots,"---bots")
-                }
-                {loading ? (
-                    Array.from({ length: 5 }).map((_, index) => (
-                        <div className={`${styles.box} ${styles.skeletonBox}`} key={index}>
-                            <div className={styles.skeletonDetailsBox}>
-                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '120px', height: '16px', marginBottom: '8px' }} />
-                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '80px', height: '16px' }} />
+            <Suspense fallback={<div>Loading...</div>}>
+                <AlgobotsList loading={loading} bots={bots} />
+            </Suspense>
+        </div>
+    )
+}
+
+const AlgobotsList = ({ loading, bots }) => {
+    return (
+        <div className={styles.grid}>
+            {loading ? (
+                Array.from({ length: 5 }).map((_, index) => (
+                    <div className={`${styles.box} ${styles.skeletonBox}`} key={index}>
+                        <div className={styles.skeletonDetailsBox}>
+                            <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '120px', height: '16px', marginBottom: '8px' }} />
+                            <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '80px', height: '16px' }} />
+                        </div>
+
+                        <div className={styles.contentBody}>
+                            <div className={styles.titleSection}>
+                                <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
                             </div>
 
-                            <div className={styles.contentBody}>
-                                <div className={styles.titleSection}>
-                                    <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
-                                </div>
+                            <div className={styles.planSection}>
+                                <div className={`${styles.skeletonPlan} ${styles.skeleton}`} />
+                            </div>
 
-                                <div className={styles.planSection}>
-                                    <div className={`${styles.skeletonPlan} ${styles.skeleton}`} />
-                                </div>
-
-                                <div className={styles.actionBtn}>
-                                    <div className={`${styles.skeletonButton} ${styles.skeleton}`} />
-                                </div>
+                            <div className={styles.actionBtn}>
+                                <div className={`${styles.skeletonButton} ${styles.skeleton}`} />
                             </div>
                         </div>
-                    ))
-                ) : bots?.length > 0 ? (
-                    bots?.map((bot, index) => {
-                        return (
-                            <BotCard bot={bot} key={index} />
-                        )
-                    })
-                ) : (
-                    <NoData
-                        icon={<AlgobotsIcon />}
-                        title="No algobots found"
-                        description="You haven't activated any algobots yet. Check out our available strategies to automate your trades."
-                    />
-                )}
-            </div>
+                    </div>
+                ))
+            ) : bots?.length > 0 ? (
+                bots?.map((bot, index) => {
+                    return (
+                        <BotCard bot={bot} key={index} />
+                    )
+                })
+            ) : (
+                <NoData
+                    icon={<AlgobotsIcon />}
+                    title="No algobots found"
+                    description="You haven't activated any algobots yet. Check out our available strategies to automate your trades."
+                />
+            )}
         </div>
     )
 }
 
 const BotCard = ({ bot }) => {
+    const searchParams = useSearchParams();
     const [open, setOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        const botIdFromUrl = searchParams.get('botId');
+        const showModalFromUrl = searchParams.get('showModal');
+        if (showModalFromUrl === 'true' && botIdFromUrl === bot._id) {
+            setShowModal(true);
+        }
+    }, [searchParams, bot._id]);
     const [selectedPlan, setSelectedPlan] = useState(bot?.strategyPlan?.[0] || {});
     const [couponCode, setCouponCode] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState(null);

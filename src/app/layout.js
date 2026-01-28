@@ -15,7 +15,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body >
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          containerStyle={{ zIndex: 99999 }}
+        />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
