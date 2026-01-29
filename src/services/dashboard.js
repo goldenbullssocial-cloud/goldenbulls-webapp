@@ -11,24 +11,24 @@ export const getCourseByType = async () => {
   }
 };
 
-export const getCourseById = async (data) => {
-  const params = new URLSearchParams();
-  if (data.id) {
-    params.append("id", data.id);
-  }
-  if (data.courseType) {
-    params.append("courseType", data.courseType);
-  }
-  try {
-    const response = await api.get(
-      `/course/getAllCourseDashboard?${params.toString()}`
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching course by id:", error);
-    throw error;
-  }
-};
+// export const getCourseById = async (data) => {
+//   const params = new URLSearchParams();
+//   if (data.id) {
+//     params.append("id", data.id);
+//   }
+//   if (data.courseType) {
+//     params.append("courseType", data.courseType);
+//   }
+//   try {
+//     const response = await api.get(
+//       `/course/getAllCourseDashboard?${params.toString()}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching course by id:", error);
+//     throw error;
+//   }
+// };
 
 export const getChapters = async (id) => {
   try {

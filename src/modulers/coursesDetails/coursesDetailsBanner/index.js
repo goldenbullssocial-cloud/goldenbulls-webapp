@@ -6,7 +6,9 @@ import styles from './coursesDetailsBanner.module.scss';
 import Button from '@/components/button';
 import ClockIcon from '@/icons/clockIcon';
 import StarIcon from '@/icons/starIcon';
-import { getCourseById } from '@/services/dashboard';
+import { getCourses } from '@/services/courses';
+import { getDashboardCourses } from '@/services/dashboard';
+import { getCookie } from '../../../../cookie';
 
 const CourseImage = '/assets/images/course-xs.png';
 
@@ -58,13 +60,33 @@ const cardAnim = {
 export default function CoursesDetailsBanner() {
     const params = useParams();
     const [courseData, setCourseData] = useState([]);
+    const [user, setUser] = useState(null);
     const course = Array.isArray(courseData) ? courseData[0] : courseData;
+
+    useEffect(() => {
+        const userCookie = getCookie("user");
+        if (userCookie) {
+            try {
+                const userData = JSON.parse(userCookie);
+                setUser(userData?.firstName || userData?.name || "User");
+            } catch (error) {
+                console.error("Error parsing user cookie:", error);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const fetchCourse = async () => {
             if (params?.id) {
                 try {
-                    const response = await getCourseById({ id: params.id });
+                    const paramsData = { id: params.id };
+
+                    let response;
+                    if (user) {
+                        response = await getCourses(paramsData);
+                    } else {
+                        response = await getDashboardCourses(paramsData);
+                    }
 
                     if (response?.success) {
                         setCourseData(response?.payload?.data);
@@ -75,14 +97,14 @@ export default function CoursesDetailsBanner() {
             }
         };
         fetchCourse();
-    }, [params?.id]);
+    }, [params?.id, user]);
 
     const getYoutubeId = (url) => {
         if (!url) return null;
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
-    };    
+    };
 
     return (
         <motion.div
@@ -101,12 +123,12 @@ export default function CoursesDetailsBanner() {
                             variants={container}
                         >
                             <motion.h1 variants={fadeUp}>
-                                {/* {course?.CourseName && (
+                                {course?.CourseName && (
                                     <>
                                         <span>{course.CourseName.split(' ').slice(0, 2).join(' ')} </span>
                                         {course.CourseName.split(' ').slice(2).join(' ')}
                                     </>
-                                )} */}
+                                )}
                             </motion.h1>
 
                             <motion.p variants={fadeUp}>
@@ -128,13 +150,11 @@ export default function CoursesDetailsBanner() {
                                         <span>{course?.courseLevel}</span>
                                     </button>
                                 </div>
-{console.log(course,"======course")
-}
                                 <div className={styles.ratingAlignment}>
                                     <div className={styles.dot}></div>
                                     <div className={styles.rating}>
                                         <StarIcon />
-                                        <span>4.5</span>
+                                        <span>{course?.averageRating ? Number(course?.averageRating).toFixed(1) : "0.0"}</span>
                                     </div>
                                 </div>
                             </motion.div>
@@ -188,9 +208,12 @@ export default function CoursesDetailsBanner() {
                                             <li>{course?.instructor}</li>
                                         </ul>
                                     </div>
-
                                     <Button
-                                        text="Enroll Now"
+                                        text={
+                                            user && course?.isPayment
+                                                ? "Enrolled"
+                                                : "Enroll Now"
+                                    }
                                         className={styles.buttonWidth}
                                     />
                                 </div>

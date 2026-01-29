@@ -1,13 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import styles from "./onDemandCourses.module.scss";
 import CoursesCard from "@/components/coursesCard";
-
 import CoursesIcon from "@/icons/coursesIcon";
 import NoData from "@/components/noData";
+import { getCourses } from "@/services/courses";
+import { getDashboardCourses } from "@/services/dashboard";
+import { getCookie } from "../../../../cookie";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -34,7 +36,59 @@ const itemVariants = {
   },
 };
 
-export default function OnDemandCourses({ title, data, activeType, bgColor = "#0C0C0C", loading }) {
+export default function OnDemandCourses({ title, activeType, bgColor = "#0C0C0C", excludeCourseId = null }) {
+  const [user, setUser] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const userCookie = getCookie("user");
+    if (userCookie) {
+      try {
+        const userData = JSON.parse(userCookie);
+        setUser(userData?.firstName || userData?.name || "User");
+      } catch (error) {
+        console.error("Error parsing user cookie:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const params = {
+          page: 1,
+          limit: 10,
+          courseType: activeType || "recorded",
+        };
+        let response;
+        if (user) {
+          response = await getCourses(params);
+        } else {
+          response = await getDashboardCourses(params);
+        }
+
+        if (response && response.payload && response.payload.data) {
+          let coursesData = response.payload.data;
+          // Filter out the excluded course if excludeCourseId is provided
+          if (excludeCourseId) {
+            coursesData = coursesData.filter(course => course._id !== excludeCourseId);
+          }
+          setCourses(coursesData);
+        } else {
+          setCourses([]);
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        setCourses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, [user, activeType, excludeCourseId]);
+
   return (
     <motion.section
       className={styles.onDemandCourses}
@@ -102,12 +156,14 @@ export default function OnDemandCourses({ title, data, activeType, bgColor = "#0
                 </div>
               </div>
             ))
-          ) : data?.length > 0 ? (
-            data?.map((item) => (
+          ) : courses?.length > 0 ? (
+            courses?.map((item) => (
               console.log(item, "item"),
 
               <motion.div key={item._id} variants={itemVariants}>
                 <Link href={`/courses/${item._id}`}>
+                  {console.log(item, "22222item")
+                  }
                   <CoursesCard
                     title={item?.CourseName}
                     price={item?.price}
@@ -118,6 +174,7 @@ export default function OnDemandCourses({ title, data, activeType, bgColor = "#0
                     image={item.courseVideo}
                     location={item?.location || ""}
                     btnLink={`/courses/${item._id}?courseType=${activeType}`}
+                    btnTitle={item?.isPayment ? "Enrolled" : "Enroll Now"}
                   />
                 </Link>
               </motion.div>
