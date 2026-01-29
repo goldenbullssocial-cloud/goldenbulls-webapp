@@ -8,7 +8,8 @@ import {
 import styles from './automateTrades.module.scss';
 import Button from '@/components/button';
 import LeftIcon from '@/icons/leftIcon';
-import { getBots } from '@/services/dashboard';
+import { getBots, getAlgobot } from '@/services/dashboard';
+import { getCookie } from '../../../../cookie';
 
 import AlgobotsIcon from '@/icons/algobotsIcon';
 
@@ -18,15 +19,36 @@ export default function AutomateTrades() {
     const [bots, setBots] = useState([]);
     const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
     const [selectedPlans, setSelectedPlans] = useState({});
+    const [user, setUser] = useState(null);
+    const [categoryId, setCategoryId] = useState(''); // Add state for category filter
+    const [searchQuery, setSearchQuery] = useState(''); // Add state for search filter
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+
+    useEffect(() => {
+        const userCookie = getCookie("user");
+        if (userCookie) {
+            try {
+                const userData = JSON.parse(userCookie);
+                setUser(userData);
+            } catch (error) {
+                console.error("Error parsing user cookie:", error);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const fetchBots = async () => {
             try {
-                const res = await getBots();
-                if (res?.payload) {
-                    setBots(res?.payload?.data);
-                } else if (Array.isArray(res)) {
-                    setBots(res);
+                // If user is authenticated, use getAlgobot API
+                if (user) {
+                    const data = await getAlgobot(categoryId, searchQuery, page, limit);
+                    setBots(data?.payload?.result || []);
+                } else {
+                    // If user is not authenticated, use getBots API
+                    const response = await getBots(page, limit);
+                    const allStrategies = response?.payload?.data || [];
+                    setBots(allStrategies);
                 }
             } catch (error) {
                 console.error("Error fetching bots:", error);
@@ -34,7 +56,7 @@ export default function AutomateTrades() {
         };
 
         fetchBots();
-    }, []);
+    }, [user, categoryId, searchQuery, page, limit]);
     return (
         <div className={styles.automateTrades}>
             <div className='container-md'>
@@ -146,7 +168,21 @@ export default function AutomateTrades() {
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                            <Button text="Subscribe Now" className={styles.btn} />
+                                                            <Button
+                                                                text={
+                                                                    user && item?.strategyPlan?.some((plan) => plan.isPayment)
+                                                                        ? "See Details"
+                                                                        : "Subscribe Now"
+                                                                }
+                                                                className={styles.btn}
+                                                                // onClick={() => {
+                                                                //     if (user && item?.strategyPlan?.some((plan) => plan.isPayment)) {
+                                                                //         navigate(`/dashboard/my-trades/${item?._id}`);
+                                                                //     } else {
+                                                                //         navigate(`/dashboard/my-trades/${item?._id}`);
+                                                                //     }
+                                                                // }}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </SwiperSlide>
