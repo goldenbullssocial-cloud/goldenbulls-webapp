@@ -9,9 +9,22 @@
     min-height: calc(100dvh - 126px);
     background: #0F0F0F;
     padding: 32px;
+    min-height: calc(100dvh - 126px);
 
     @include respond-to("xl") {
         padding: 22px;
+        min-height: calc(100dvh - 93px);
+    }
+
+
+    @include respond-to("md") {
+        background-color: transparent;
+        border: none;
+        padding: 24px 20px 24px 20px;
+    }
+
+    @include respond-to("sm") {
+        min-height: auto;
     }
 
     .title {

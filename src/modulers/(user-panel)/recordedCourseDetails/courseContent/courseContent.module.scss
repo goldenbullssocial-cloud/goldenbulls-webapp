@@ -6,6 +6,10 @@
 .courseContentUser {
     padding: 60px 0 120px 0;
 
+    @include respond-to("sm") {
+        padding: 60px 0;
+    }
+
     .childwidth {
         max-width: 832px;
     }
@@ -23,8 +27,7 @@
             @include heading-font;
 
             @include respond-to("sm") {
-                @include heading32;
-                text-align: center;
+                @include heading24;
             }
         }
     }

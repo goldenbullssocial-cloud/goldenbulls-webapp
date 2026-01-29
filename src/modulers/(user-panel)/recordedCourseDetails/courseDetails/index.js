@@ -350,53 +350,10 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                     />
                 </div>
                 <div className={styles.griditems}>
-                    <div className={styles.card}>
-                        <div className={styles.image}>
-                            {(type === 'live' || type === 'physical') ? (
-                                courseData?.courseIntroVideo ? (
-                                    <video
-                                        src={courseData?.courseIntroVideo}
-                                        controls
-                                        autoPlay
-                                        muted
-                                        width="100%"
-                                        height="326px"
-                                        style={{ borderRadius: '12px', objectFit: 'cover' }}
-                                    />
-                                ) : (
-                                    <>
-                                        <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
-                                        <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
-                                            <PlayIcon />
-                                        </div>
-                                    </>
-                                )
-                            ) : (
-                                // For recorded courses, use existing logic
-                                courseData?.isPayment ? (
-                                    (isPlaying || selectedVideo?.url) ? (
-                                        <video
-                                            ref={videoRef}
-                                            src={selectedVideo?.url || currentChapter?.chapterVideo}
-                                            controls
-                                            onPause={handleVideoPause}
-                                            onEnded={handleVideoPause}
-                                            onLoadedMetadata={handleLoadedMetadata}
-                                            onTimeUpdate={handleTimeUpdate}
-                                            autoPlay={isPlaying}
-                                            width="100%"
-                                            height="326px"
-                                            style={{ borderRadius: '12px', objectFit: 'cover' }}
-                                        />
-                                    ) : (
-                                        <>
-                                            <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
-                                            <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
-                                                <PlayIcon />
-                                            </div>
-                                        </>
-                                    )
-                                ) : (
+                    <div className={styles.stickySection}>
+                        <div className={styles.card}>
+                            <div className={styles.image}>
+                                {(type === 'live' || type === 'physical') ? (
                                     courseData?.courseIntroVideo ? (
                                         <video
                                             src={courseData?.courseIntroVideo}
@@ -415,45 +372,90 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                             </div>
                                         </>
                                     )
-                                )
-                            )}
-                        </div>
-                        <div className={styles.details}>
-                            {courseData?.isPayment ? (
-                                <div className={styles.progressContainer}>
-                                    <div className={styles.progress}>
-                                        <div
-                                            className={styles.active}
-                                            style={{ width: `${displayPercentage}%` }}
-                                        ></div>
+                                ) : (
+                                    // For recorded courses, use existing logic
+                                    courseData?.isPayment ? (
+                                        (isPlaying || selectedVideo?.url) ? (
+                                            <video
+                                                ref={videoRef}
+                                                src={selectedVideo?.url || currentChapter?.chapterVideo}
+                                                controls
+                                                onPause={handleVideoPause}
+                                                onEnded={handleVideoPause}
+                                                onLoadedMetadata={handleLoadedMetadata}
+                                                onTimeUpdate={handleTimeUpdate}
+                                                autoPlay={isPlaying}
+                                                width="100%"
+                                                height="326px"
+                                                style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                            />
+                                        ) : (
+                                            <>
+                                                <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                                                <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
+                                                    <PlayIcon />
+                                                </div>
+                                            </>
+                                        )
+                                    ) : (
+                                        courseData?.courseIntroVideo ? (
+                                            <video
+                                                src={courseData?.courseIntroVideo}
+                                                controls
+                                                autoPlay
+                                                muted
+                                                width="100%"
+                                                height="326px"
+                                                style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                            />
+                                        ) : (
+                                            <>
+                                                <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                                                <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
+                                                    <PlayIcon />
+                                                </div>
+                                            </>
+                                        )
+                                    )
+                                )}
+                            </div>
+                            <div className={styles.details}>
+                                {courseData?.isPayment ? (
+                                    <div className={styles.progressContainer}>
+                                        <div className={styles.progress}>
+                                            <div
+                                                className={styles.active}
+                                                style={{ width: `${displayPercentage}%` }}
+                                            ></div>
+                                        </div>
+                                        <div className={styles.bottomText}>
+                                            <span>{Math.round(displayPercentage)}% Completed</span>
+                                        </div>
+                                        <div className={styles.button}>
+                                            <Button
+                                                text="Resume Course"
+                                                onClick={handlePlayVideo}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className={styles.bottomText}>
-                                        <span>{Math.round(displayPercentage)}% Completed</span>
-                                    </div>
-                                    <div className={styles.button}>
-                                        <Button
-                                            text="Resume Course"
-                                            onClick={handlePlayVideo}
-                                        />
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className={styles.twoText}>
-                                        <h4>
-                                            ${courseData?.price}
-                                        </h4>
-                                        <ul>
-                                            <li>
-                                                {courseData?.instructor}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className={styles.button}>
-                                        <Button text="Enroll Now" onClick={handleEnrollClick} />
-                                    </div>
-                                </>
-                            )}
+                                ) : (
+                                    <>
+                                        <div className={styles.twoText}>
+                                            <h4>
+                                                ${courseData?.price}
+                                            </h4>
+                                            <ul>
+                                                <li>
+                                                    {courseData?.instructor}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.button}>
+                                            <Button text="Enroll Now" onClick={handleEnrollClick} />
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

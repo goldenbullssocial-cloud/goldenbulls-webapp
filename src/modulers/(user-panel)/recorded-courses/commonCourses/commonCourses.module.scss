@@ -33,6 +33,10 @@
         gap: 20px;
         grid-template-columns: repeat(4, 1fr);
 
+        @include respond-to("xl") {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
         @include respond-to("md") {
             grid-template-columns: repeat(2, 1fr);
             gap: 16px;
@@ -50,6 +54,12 @@
 
             @include respond-to("sm") {
                 padding: 16px;
+            }
+
+            &:hover {
+                &::before {
+                    @include border-hover;
+                }
             }
 
             &::before {

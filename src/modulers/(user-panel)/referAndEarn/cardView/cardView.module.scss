@@ -8,6 +8,14 @@
     gap: 20px;
     padding: 0 0 34px 0;
 
+    @include respond-to("sm") {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .width {
+        width: 100%;
+    }
+
     .items {
         position: relative;
         padding: 24px;
@@ -17,6 +25,13 @@
         overflow: hidden;
         align-items: center;
 
+        @include respond-to("xl") {
+            padding: 16px;
+        }
+
+        @include respond-to("sm") {
+            min-height: 154px;
+        }
 
         &::before {
             @include border;
@@ -27,8 +42,20 @@
             right: 0;
             top: 0;
 
+            @include respond-to("sm") {
+                right: 30px;
+            }
+
             img {
                 display: block;
+
+                @include respond-to("xl") {
+                    max-width: 80px;
+                }
+
+                @include respond-to("sm") {
+                    max-width: 130px;
+                }
             }
         }
 
@@ -40,6 +67,14 @@
             color: #fff;
             @include font-medium;
             line-height: normal;
+
+            @include respond-to("xl") {
+                font-size: 20px;
+            }
+
+            @include respond-to("sm") {
+                font-size: 24px;
+            }
 
             &.spaceRemove {
                 margin: 0 0 5px 0;
@@ -53,6 +88,10 @@
             @include font-bold;
             @include gradient-text;
             line-height: normal;
+
+            @include respond-to("xl") {
+                font-size: 30px;
+            }
         }
 
         .linkCopy {

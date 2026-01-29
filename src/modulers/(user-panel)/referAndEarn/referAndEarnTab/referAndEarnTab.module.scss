@@ -9,6 +9,11 @@
     align-items: center;
     gap: 0px;
 
+    @include respond-to("sm") {
+        overflow: auto;
+        scrollbar-width: none;
+    }
+
     button {
         background-color: transparent;
         padding: 16px 24px;
@@ -22,6 +27,10 @@
         line-height: normal;
         position: relative;
         transition: color 0.3s ease;
+
+        @include respond-to("sm") {
+            white-space: nowrap;
+        }
 
         &:hover {
             background: linear-gradient(90deg, #F9F490 0%, #E4AB40 33%, #FEFBA5 66%, #BD894E 100%);

@@ -8,6 +8,9 @@
     background: #0F0F0F;
     display: none;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 99;
     justify-content: space-between;
 
     @include respond-to("md") {
@@ -28,6 +31,10 @@
         }
 
         .mobileMenu {
+            width: 34px;
+            min-width: 34px;
+            max-width: 34px;
+
             img {
                 display: block;
                 cursor: pointer;
@@ -41,4 +48,26 @@
             cursor: pointer;
         }
     }
+}
+
+.mobilesidebar {
+    background: #0F0F0F;
+    height: calc(100dvh - 89px);
+    position: fixed;
+    max-width: 260px;
+    top: 89px;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+
+    &.hide {
+        transform: translateX(-100%);
+        transition: .3s ease-in-out;
+    }
+
+    &.show {
+        transform: translateX(0%);
+        transition: .3s ease-in-out;
+    }
+
 }
