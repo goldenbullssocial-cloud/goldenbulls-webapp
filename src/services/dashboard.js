@@ -43,6 +43,32 @@ export const getChapters = async (id) => {
   }
 };
 
+export const getDashboardCourses = async ({ page = 1, limit = 10, searchQuery = "", courseType = "", id = "" }) => {
+  try {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      limit: limit.toString(),
+    });
+
+    if (searchQuery) {
+      params.append("search", searchQuery);
+    }
+    if (courseType) {
+      params.append("courseType", courseType);
+    }
+    if (id) {
+      params.append("id", id);
+    }
+
+    const response = await api.get(`/course/getAllCourseDashboard?${params.toString()}`);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching courses", error);
+    throw error;
+  }
+};
+
 export const getCourseSyllabus = async (id) => {
   try {
     const response = await api.get(`/syllabus/getAllSyllabus?courseId=${id}`);

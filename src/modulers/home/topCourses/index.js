@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./topCourses.module.scss";
 import CoursesIcon from "@/icons/coursesIcon";
 import CoursesCard from "@/components/coursesCard";
-import { getCourseByType } from "@/services/dashboard";
+import { getDashboardCourses } from "@/services/dashboard";
+import { getCourses } from "@/services/courses";
+import { getCookie } from "../../../../cookie";
 import DownPrimaryIcon from "@/icons/downPrimaryIcon";
 import classNames from "classnames";
 
@@ -13,18 +15,52 @@ export default function TopCourses() {
   const [activeTab, setActiveTab] = React.useState("recorded");
   const [toggle, setToggle] = React.useState(false);
   const [courses, setCourses] = useState([]);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const userCookie = getCookie("user");
+    if (userCookie) {
+      try {
+        const userData = JSON.parse(userCookie);
+        setUser(userData?.firstName || userData?.name || "User");
+      } catch (error) {
+        console.error("Error parsing user cookie:", error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await getCourseByType();
-        setCourses(response.payload.courses);
+        setIsLoading(true);
+        const params = {
+          page: 1,
+          limit: 10,
+          courseType: activeTab || "recorded",
+        };
+
+        let response;
+        if (user) {
+          response = await getCourses(params);
+        } else {
+          response = await getDashboardCourses(params);
+        }
+
+        if (response && response.payload && response.payload.data) {
+          setCourses(response.payload.data);
+        } else {
+          setCourses([]);
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
+        setCourses([]);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCourses();
-  }, []);
+  }, [user, activeTab]);
 
   return (
     <div className={styles.topCourses}>
@@ -96,8 +132,24 @@ export default function TopCourses() {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            {courses[activeTab]?.length > 0 ? (
-              courses[activeTab]?.map((item) => (
+            {isLoading ? (
+              Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className={styles.skeletonCard}>
+                  <div className={styles.skeletonImage} />
+                  <div className={styles.skeletonContent}>
+                    <div className={styles.skeletonTitle} />
+                    <div className={styles.skeletonText} />
+                    <div className={styles.skeletonMeta}>
+                      <div className={styles.skeletonIcon} />
+                      <div className={styles.skeletonIcon} />
+                      <div className={styles.skeletonIcon} />
+                    </div>
+                  </div>
+                  <div className={styles.skeletonButton} />
+                </div>
+              ))
+            ) : courses?.length > 0 ? (
+              courses?.map((item) => (
                 <CoursesCard
                   key={item?._id}
                   title={item?.CourseName}
@@ -109,6 +161,7 @@ export default function TopCourses() {
                   image={item?.courseVideo}
                   location={item?.location || ""}
                   btnLink={`/courses/${item._id}?courseType=${activeTab}`}
+                  btnTitle={item?.isPayment ? `Enrolled` : `Enroll Now`}
                 />
               ))
             ) : (
@@ -122,20 +175,20 @@ export default function TopCourses() {
             )}
           </motion.div>
         </AnimatePresence>
-        {courses[activeTab]?.length > 0 && (
-        <motion.div
-          className={styles.buttonCenter}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          <Link href="/courses">
-            <button>
-              <span>See All Courses</span>
-            </button>
-          </Link>
-        </motion.div>
+        {(courses?.length > 0 && !isLoading) && (
+          <motion.div
+            className={styles.buttonCenter}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <Link href="/courses">
+              <button>
+                <span>See All Courses</span>
+              </button>
+            </Link>
+          </motion.div>
         )}
       </div>
     </div>

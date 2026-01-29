@@ -11,7 +11,7 @@ const CourseImage = '/assets/images/course.png'
 const ClockIcon = "/assets/icons/calender-icon.png";
 const Location = "/assets/icons/location-icon.png";
 
-export default function CoursesCard({ title, price, author, duration, level, rating, image, location, btnLink }) {
+export default function CoursesCard({ title, price, author, duration, level, rating, image, location, btnLink, btnTitle}) {
     const router = useRouter();
     return (
         <motion.div
@@ -102,7 +102,7 @@ export default function CoursesCard({ title, price, author, duration, level, rat
                 </div>
 
                 <Button
-                    text="Enroll Now"
+                    text={btnTitle}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
