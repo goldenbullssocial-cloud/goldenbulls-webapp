@@ -14,6 +14,25 @@
         grid-template-columns: 1fr 540px;
         gap: 20px;
 
+        @include respond-to("xl") {
+            grid-template-columns: 1fr 400px;
+        }
+
+        @include respond-to("md") {
+            grid-template-columns: 1fr;
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .griditems:first-child {
+            @include respond-to("sm") {
+                order: 2;
+            }
+        }
+
         .griditems {
 
             .contnetStyle {
@@ -23,6 +42,10 @@
                     display: flex;
                     align-items: center;
                     gap: 16px;
+
+                    @include respond-to("sm") {
+                        flex-wrap: wrap;
+                    }
 
                     .dot {
                         width: 7px;
@@ -134,6 +157,12 @@
                         margin: 24px 0;
                         text-transform: uppercase;
                         @include heading-font;
+
+                        @include respond-to("sm") {
+                            font-size: 32px;
+                            line-height: normal;
+                            text-align: center;
+                        }
                     }
 
                     p {
@@ -144,6 +173,13 @@
                         font-weight: 400;
                         line-height: normal;
                         @include font-normal;
+
+                        @include respond-to("sm") {
+                            font-weight: 400;
+                            font-size: 20px;
+                            text-align: center;
+                            line-height: normal;
+                        }
                     }
 
                     span {
@@ -172,11 +208,20 @@
                 }
             }
 
+            .stickySection {
+                position: sticky;
+                top: 60px;
+            }
+
             .card {
                 border-radius: 30px;
                 background: #0C0C0C;
                 padding: 28px;
                 position: relative;
+
+                @include respond-to("sm") {
+                    padding: 16px;
+                }
 
                 &::before {
                     @include border;

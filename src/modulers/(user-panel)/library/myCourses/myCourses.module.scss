@@ -52,6 +52,12 @@
                 padding: 16px;
             }
 
+            &:hover {
+                &::before {
+                    @include border-hover;
+                }
+            }
+
             &::before {
                 @include border;
             }
@@ -318,6 +324,7 @@
 
 .buttonDesign {
     margin-top: 20px;
+
 
     .skeletonButton {
         height: 10px;

@@ -8,13 +8,29 @@
     border-left: 1px solid #66666693;
     background: #0F0F0F;
     padding: 32px;
+    min-height: calc(100dvh - 126px);
 
     @include respond-to("xl") {
         padding: 22px;
+        min-height: calc(100dvh - 93px);
+    }
+
+    @include respond-to("md") {
+        background-color: transparent;
+        border: none;
+        padding: 24px 20px 0 20px;
+    }
+
+    @include respond-to("sm") {
+        min-height: auto;
     }
 
     .title {
         padding: 0 0 23px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 16px 0;
+        }
 
         h2 {
             font-size: 24px;
@@ -32,6 +48,19 @@
         grid-template-columns: repeat(5, 1fr);
         gap: 20px;
 
+        @include respond-to("xl") {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
         .box {
             background-image: url('/assets/images/card-img.png');
             background-repeat: no-repeat;
@@ -46,6 +75,7 @@
 
             @include respond-to("sm") {
                 padding: 24px 0 20px 0;
+
             }
 
             .btn {
@@ -85,6 +115,11 @@
 
                     @include respond-to("xl") {
                         font-size: 20px;
+                        margin: 90px 0 16px 0;
+                    }
+
+                    @include respond-to("sm") {
+                        margin: 120px 0 16px 0;
                     }
                 }
 
@@ -218,6 +253,10 @@
                     max-width: 248px;
                 }
 
+                @include respond-to("sm") {
+                    padding: 12px;
+                }
+
                 h4 {
                     color: #E1E1E1;
                     font-size: 20px;
@@ -227,7 +266,7 @@
                     line-height: normal;
 
                     @include respond-to("sm") {
-                        font-size: 20px;
+                        font-size: 16px;
                         font-style: normal;
                         line-height: normal;
                     }
@@ -247,7 +286,7 @@
                     @include font-medium;
 
                     @include respond-to("sm") {
-                        font-size: 20px;
+                        font-size: 16px;
                         font-style: normal;
                         line-height: normal;
                     }

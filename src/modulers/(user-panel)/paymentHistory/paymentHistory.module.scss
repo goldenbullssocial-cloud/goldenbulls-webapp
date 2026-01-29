@@ -10,8 +10,15 @@
     background: #0F0F0F;
     padding: 32px;
 
+    min-height: calc(100dvh - 126px);
+
     @include respond-to("xl") {
         padding: 22px;
+        min-height: calc(100dvh - 93px);
+    }
+
+    @include respond-to("sm") {
+        min-height: auto;
     }
 
     .title {

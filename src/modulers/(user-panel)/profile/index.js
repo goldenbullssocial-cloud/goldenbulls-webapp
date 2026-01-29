@@ -372,6 +372,7 @@ export default function Profile() {
                 </div>
                 <div className={styles.saveButton}>
                     <Button
+                    className={styles.buttonwidth}
                         text={saving ? "Saving..." : "Save"}
                         disabled={loading || saving}
                         onClick={handleSave}

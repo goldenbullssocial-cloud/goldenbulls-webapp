@@ -16,6 +16,11 @@
     width: 100%;
     grid-column: 1 / -1;
 
+    @include respond-to("sm") {
+        margin: 0;
+        padding: 40px 20px;
+    }
+
     &::before {
         content: "";
         position: absolute;

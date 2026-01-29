@@ -9,7 +9,11 @@
     top: 0;
     display: flex;
     flex-direction: column;
-    background: #000; // Ensuring background is black as per design
+    background: #000;
+
+    @include respond-to("sm") {
+        position: unset;
+    }
 
     .sidebarlogo {
         padding: 24px 0;
@@ -17,6 +21,10 @@
         display: flex;
         justify-content: center;
         border-bottom: 1px solid #212121;
+
+        @include respond-to("sm") {
+            display: none;
+        }
 
         img {
             max-width: 120px;
@@ -28,6 +36,13 @@
         padding: 24px 20px;
         flex: 1;
         overflow-y: auto;
+
+        @include respond-to("sm") {
+            padding: 20px;
+            height: calc(100dvh - 89px - 185px);
+            overflow: auto;
+            flex: inherit;
+        }
 
         .menu:last-child {
             margin: 0;

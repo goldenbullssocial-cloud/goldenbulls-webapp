@@ -5,11 +5,16 @@
 .earningHistory {
     max-width: 1083px;
 
+
+
     .tableUi {
         border: 1px solid var(--Linear, #6666668c);
         border-radius: 24px;
-        // height: calc(100dvh - 324px);
-        // overflow: auto;
+
+        @include respond-to("sm") {
+            width: 100%;
+            overflow: auto;
+        }
 
         table {
             width: 100%;
@@ -72,6 +77,10 @@
                         line-height: normal;
                         @include font-medium;
                         color: #fff;
+
+                        @include respond-to("sm") {
+                            white-space: nowrap;
+                        }
                     }
                 }
             }

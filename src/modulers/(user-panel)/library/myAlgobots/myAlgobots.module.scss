@@ -23,6 +23,14 @@
         grid-template-columns: repeat(5, 1fr);
         gap: 20px;
 
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
         .box {
             background-image: url('/assets/images/card-sec.png');
             background-repeat: no-repeat;
@@ -37,6 +45,8 @@
 
             @include respond-to("sm") {
                 padding: 24px 0 20px 0;
+                background-image: url('/assets/images/mobile-card.png');
+
             }
 
             &.clickable {
@@ -81,6 +91,10 @@
 
                     @include respond-to("xl") {
                         font-size: 20px;
+                    }
+
+                    @include respond-to("sm") {
+                        margin: 20px 0 16px 0;
                     }
                 }
 

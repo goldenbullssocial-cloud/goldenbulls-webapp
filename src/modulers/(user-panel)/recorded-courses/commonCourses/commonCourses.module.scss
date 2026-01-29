@@ -5,8 +5,16 @@
 .commonCourses {
     padding: 0 0 32px 0;
 
+    @include respond-to("sm") {
+        padding: 0 0 50px 0;
+    }
+
     .title {
         padding: 0 0 24px 0;
+
+        @include respond-to("sm") {
+            padding: 0 0 16px 0;
+        }
 
         h2 {
             display: inline;
@@ -25,11 +33,34 @@
         gap: 20px;
         grid-template-columns: repeat(4, 1fr);
 
+        @include respond-to("xl") {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        @include respond-to("md") {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
         .griditems {
             border-radius: 21.348px;
             position: relative;
             background: #000;
             padding: 20px;
+
+            @include respond-to("sm") {
+                padding: 16px;
+            }
+
+            &:hover {
+                &::before {
+                    @include border-hover;
+                }
+            }
 
             &::before {
                 @include border;
@@ -81,6 +112,7 @@
                 .buttonDesign {
                     button {
                         width: 100%;
+                        padding: 12px;
                     }
                 }
 

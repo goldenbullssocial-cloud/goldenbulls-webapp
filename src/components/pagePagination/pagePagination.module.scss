@@ -6,12 +6,21 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
+    @include respond-to("sm") {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
 
     .rightalignment {
         display: flex;
         align-items: center;
         gap: 10px;
+
+        @include respond-to("sm") {
+            justify-content: center;
+        }
 
         div:last-child {
             svg {
@@ -27,6 +36,10 @@
         font-weight: 500;
         line-height: normal;
         @include font-medium;
+
+        @include respond-to("sm") {
+            text-align: center;
+        }
     }
 
     svg {

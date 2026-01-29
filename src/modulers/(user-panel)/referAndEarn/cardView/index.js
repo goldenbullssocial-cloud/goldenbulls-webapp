@@ -44,7 +44,7 @@ export default function CardView() {
     return (
         <div className={styles.cardView}>
             <div className={styles.items}>
-                <div>
+                <div className={styles.width}>
                     <h3>
                         Referral Code
                     </h3>
