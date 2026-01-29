@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import styles from './courseContent.module.scss'
 import classNames from 'classnames'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -27,6 +27,8 @@ export default function CourseContent() {
     const [chapters, setChapters] = useState([]);
     const [loading, setLoading] = useState(true);
     const params = useParams();
+    const searchParams = useSearchParams();
+    const courseType = searchParams.get("courseType");
 
     useEffect(() => {
         const fetchSyllabus = async () => {
@@ -88,10 +90,10 @@ export default function CourseContent() {
                                     }
                                 >
                                     <h3>
-                                        CHAPTER {index + 1}
-                                        <span> {item.title}</span>
+                                        {courseType === "recorded" ? "CHAPTER" : "DAY"} {index + 1}
+                                        <span> {item?.chapterName}</span>
                                     </h3>
-                                    <p>40 Min</p>
+                                    <p>{item?.duration} Min</p>
                                 </div>
 
                                 {/* BODY */}

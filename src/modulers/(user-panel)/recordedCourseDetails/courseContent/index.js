@@ -31,6 +31,7 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
     const [loading, setLoading] = useState(true);
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
+    const type = searchParams.get('type');
 
     useEffect(() => {
         if (Array.isArray(chapters)) {
@@ -107,14 +108,14 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                                     }}
                                 >
                                     <h3>
-                                        CHAPTER {item?.chapterNo} <span> | {item?.chapterName}</span>
+                                        {type === 'recorded' ? 'CHAPTER' : 'DAY'} {item?.chapterNo} <span>| {item?.chapterName}</span>
                                     </h3>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <p>{`${item?.duration} Min` || ""}</p>
                                         {parseInt(item?.courseTracking?.percentage) >= 100 ? (
                                             <img src={CheckIcon} alt="CheckIcon" />
                                         ) : (
-                                            <img src={PlayIcon} alt="PlayIcon" />
+                                            type === 'recorded' && (<img src={PlayIcon} alt="PlayIcon" />)
                                         )}
                                     </div>
                                 </div>

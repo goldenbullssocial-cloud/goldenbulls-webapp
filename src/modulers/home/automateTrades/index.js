@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation';
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
     Pagination,
@@ -24,6 +25,7 @@ export default function AutomateTrades() {
     const [searchQuery, setSearchQuery] = useState(''); // Add state for search filter
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const router = useRouter();
 
     useEffect(() => {
         const userCookie = getCookie("user");
@@ -57,6 +59,14 @@ export default function AutomateTrades() {
 
         fetchBots();
     }, [user, categoryId, searchQuery, page, limit]);
+
+    const handleSubscribeClick = (botId) => {
+        if (user) {
+            router.push(`/algobots?botId=${botId}&showModal=true`);
+        } else {
+            router.push('/login');
+        }
+    };
     return (
         <div className={styles.automateTrades}>
             <div className='container-md'>
@@ -175,13 +185,7 @@ export default function AutomateTrades() {
                                                                         : "Subscribe Now"
                                                                 }
                                                                 className={styles.btn}
-                                                                // onClick={() => {
-                                                                //     if (user && item?.strategyPlan?.some((plan) => plan.isPayment)) {
-                                                                //         navigate(`/dashboard/my-trades/${item?._id}`);
-                                                                //     } else {
-                                                                //         navigate(`/dashboard/my-trades/${item?._id}`);
-                                                                //     }
-                                                                // }}
+                                                                onClick={() => handleSubscribeClick(item?._id)}
                                                             />
                                                         </div>
                                                     </div>

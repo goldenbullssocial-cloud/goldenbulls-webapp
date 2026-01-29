@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import styles from './coursesDetailsBanner.module.scss';
 import Button from '@/components/button';
@@ -59,9 +59,12 @@ const cardAnim = {
 
 export default function CoursesDetailsBanner() {
     const params = useParams();
+    const searchParams = useSearchParams();
+    const router = useRouter();
     const [courseData, setCourseData] = useState([]);
     const [user, setUser] = useState(null);
     const course = Array.isArray(courseData) ? courseData[0] : courseData;
+    const courseType = searchParams.get("courseType");
 
     useEffect(() => {
         const userCookie = getCookie("user");
@@ -104,6 +107,14 @@ export default function CoursesDetailsBanner() {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
+    };
+
+    const handleEnrollClick = () => {
+        if (user) {
+            router.push(`/recorded-course-details?id=${params?.id}&type=${courseType || 'recorded'}`);
+        } else {
+            router.push('/login');
+        }
     };
 
     return (
@@ -213,8 +224,9 @@ export default function CoursesDetailsBanner() {
                                             user && course?.isPayment
                                                 ? "Enrolled"
                                                 : "Enroll Now"
-                                    }
+                                        }
                                         className={styles.buttonWidth}
+                                        onClick={handleEnrollClick}
                                     />
                                 </div>
                             </div>
