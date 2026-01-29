@@ -21,10 +21,11 @@ export default function AutomateTrades() {
     const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
     const [selectedPlans, setSelectedPlans] = useState({});
     const [user, setUser] = useState(null);
-    const [categoryId, setCategoryId] = useState(''); // Add state for category filter
-    const [searchQuery, setSearchQuery] = useState(''); // Add state for search filter
+    const [categoryId, setCategoryId] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
@@ -42,18 +43,19 @@ export default function AutomateTrades() {
     useEffect(() => {
         const fetchBots = async () => {
             try {
-                // If user is authenticated, use getAlgobot API
+                setLoading(true);
                 if (user) {
                     const data = await getAlgobot(categoryId, searchQuery, page, limit);
                     setBots(data?.payload?.result || []);
                 } else {
-                    // If user is not authenticated, use getBots API
                     const response = await getBots(page, limit);
                     const allStrategies = response?.payload?.data || [];
                     setBots(allStrategies);
                 }
             } catch (error) {
                 console.error("Error fetching bots:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -77,7 +79,70 @@ export default function AutomateTrades() {
                 </div>
 
                 <div className={styles.relative}>
-                    {bots?.length > 0 ? (
+                    {loading ? (
+                        <div className={styles.paginationWrapper}>
+                            <Swiper
+                                effect={"coverflow"}
+                                grabCursor={true}
+                                loop={false}
+                                slidesPerView={"4"}
+                                spaceBetween={24}
+                                speed={800}
+                                pagination={{
+                                    clickable: true,
+                                }}
+                                modules={[Pagination, Navigation]}
+                                breakpoints={{
+                                    1800: {
+                                        slidesPerView: 4,
+                                    },
+                                    1200: {
+                                        slidesPerView: 4,
+                                    },
+                                    1024: {
+                                        slidesPerView: 2,
+                                    },
+                                    576: {
+                                        slidesPerView: 1,
+                                        spaceBetween: 30,
+                                    },
+                                    480: {
+                                        slidesPerView: 1,
+                                        spaceBetween: 12,
+                                    },
+                                    360: {
+                                        slidesPerView: 1,
+                                        spaceBetween: 10,
+                                    },
+                                }}
+                            >
+                                {Array.from({ length: 4 }).map((_, index) => (
+                                    <SwiperSlide key={index}>
+                                        <div className={`${styles.box} ${styles.skeletonBox}`}>
+                                            <div className={styles.skeletonDetailsBox}>
+                                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '120px', height: '16px', marginBottom: '8px' }} />
+                                                <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '80px', height: '16px' }} />
+                                            </div>
+
+                                            <div className={styles.contentBody}>
+                                                <div className={styles.titleSection}>
+                                                    <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
+                                                </div>
+
+                                                <div className={styles.planSection}>
+                                                    <div className={`${styles.skeletonPlan} ${styles.skeleton}`} />
+                                                </div>
+
+                                                <div className={styles.actionBtn}>
+                                                    <div className={`${styles.skeletonButton} ${styles.skeleton}`} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                    ) : bots?.length > 0 ? (
                         <>
                             <div className={styles.paginationWrapper}>
                                 <Swiper

@@ -7,9 +7,15 @@ export default function UserHeader() {
     const [user, setUser] = useState(null);
     useEffect(() => {
         const user = getCookie('user');
-        const parsedUser = JSON.parse(user);
-        const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
-        setUser(userName);
+        if (user) {
+            try {
+                const parsedUser = JSON.parse(user);
+                const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
+                setUser(userName);
+            } catch (error) {
+                console.error('Error parsing user cookie:', error);
+            }
+        }
     }, []);
 
     return (

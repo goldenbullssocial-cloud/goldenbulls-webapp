@@ -9,17 +9,15 @@ export default function middleware(req) {
   // Protected routes
   const protectedPaths = [
     "/library",
-    // "/contact-us",
-    "/my-courses",
-    "/notification",
-    "/paymentHistory",
+    "/notifications",
+    "/payment-history",
     "/profile",
-    "/telegram",
-    "/algobot",
-    "/course",
-    "/categories",
-    "/instructor",
-    "/refer-and-earn"
+    "/algobots",
+    "/recorded-courses",
+    "/refer-and-earn",
+    "/new-password",
+    "/otp-screen",
+    "/successfully-password",
   ];
 
   const isProtected = protectedPaths.some((path) =>
@@ -32,7 +30,7 @@ export default function middleware(req) {
   }
 
   // If authenticated, block auth routes
-  if (isAuthenticated && ["/login", "/signup"].includes(pathname)) {
+  if (isAuthenticated && ["/login", "/signup", "/register"].includes(pathname)) {
     return NextResponse.redirect(new URL("/library", origin));
   }
 
@@ -42,20 +40,16 @@ export default function middleware(req) {
 export const config = {
   matcher: [
     "/library",
-    // "/contact-us",
-    "/my-courses",
-    "/notification",
-    "/paymentHistory",
+    "/notifications",
+    "/payment-history",
     "/profile",
     "/login",
     "/signup",
+    "/register",
 
     // Courses routes (with dynamic segments)
-    "/course/:path*",
-    "/algobot/:path*",
-    "/telegram/:path*",
-    "/categories/:path*",
-    "/instructor/:path*",
+    "/recorded-courses/:path*",
+    "/algobots/:path*",
     "/refer-and-earn/:path*",
   ],
 };
