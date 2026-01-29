@@ -8,9 +8,11 @@ import classNames from 'classnames';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getPaymentUrl } from '@/services/dashboard';
 import toast from 'react-hot-toast';
-import { getCourses, submitReview, updateVideoProgress } from '@/services/courses';
-import { getChapters } from '@/services/dashboard';
+import { getCourses, submitReview, updateVideoProgress, getBatches } from '@/services/courses';
+import { getChapters, getProfile } from '@/services/dashboard';
 import { useRef } from 'react';
+import CourseContent from '../courseContent';
+import { getCookie } from '../../../../../cookie';
 
 const PlayIcon = () => (
     <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,12 +29,11 @@ const CloseIcon = () => (
     </svg>
 );
 
-export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
+export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, onProgressUpdate }) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const id = searchParams.get('id');
     const [course, setCourse] = useState(null);
-    const [chapters, setChapters] = useState([]);
     const [currentPercentage, setCurrentPercentage] = useState(0); // This tracks the saved/highest percentage
     const [displayPercentage, setDisplayPercentage] = useState(0); // This tracks the live UI percentage
     const [currentChapter, setCurrentChapter] = useState(null);
@@ -42,6 +43,38 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
     const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
+
+    // Batch Modal State
+    const [showBatchModal, setShowBatchModal] = useState(false);
+    const [selectedBatchId, setSelectedBatchId] = useState(null);
+    const [isNearbyCenters, setIsNearbyCenters] = useState(false);
+    const [batchData, setBatchData] = useState([]);
+    const [isBatchesLoading, setIsBatchesLoading] = useState(false);
+
+    // Before Proceed Modal State
+    const [showBeforeProceedModal, setShowBeforeProceedModal] = useState(false);
+    const [useWalletBalance, setUseWalletBalance] = useState(false);
+    const [userProfile, setUserProfile] = useState(null);
+    const [selectedBatch, setSelectedBatch] = useState(null);
+
+    const type = searchParams.get('type');
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const userData = getCookie("user");
+                if (userData) {
+                    const parsedUser = JSON.parse(userData)._id;
+                    const response = await getProfile(parsedUser);
+                    const user = response?.payload?.data?.[0] || response?.payload?.data;
+                    setUserProfile(user);
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        };
+        fetchUserProfile();
+    }, []);
 
     useEffect(() => {
         const fetchCourseData = async () => {
@@ -54,12 +87,17 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                     setCourse(Array.isArray(data) ? data[0] : data);
                 }
 
-                // If chapters aren't passed yet, we can fetch them here for initial state
-                if (!selectedVideo) {
+                // If chapters are passed and no video selected, set initial video
+                if (!selectedVideo && chapters && chapters.length > 0) {
+                    const firstChapter = chapters[0];
+                    const savedPercent = parseFloat(firstChapter?.courseTracking?.percentage || 0);
+                    setCurrentChapter(firstChapter);
+                    setCurrentPercentage(savedPercent);
+                    setDisplayPercentage(savedPercent);
+                } else if (!selectedVideo && !chapters) {
+                    // Only fetch if chapters were not passed (initial load fallback)
                     const chaptersRes = await getChapters(id);
                     const chaptersData = chaptersRes?.payload?.data || [];
-                    setChapters(chaptersData);
-
                     if (chaptersData.length > 0) {
                         const firstChapter = chaptersData[0];
                         const savedPercent = parseFloat(firstChapter?.courseTracking?.percentage || 0);
@@ -74,7 +112,36 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
         };
 
         fetchCourseData();
-    }, [id, selectedVideo]);
+    }, [id, selectedVideo, chapters]);
+
+    useEffect(() => {
+        const fetchBatches = async () => {
+            if (!id || !showBatchModal) return;
+            try {
+                setIsBatchesLoading(true);
+                const res = await getBatches({
+                    courseId: id,
+                    isMatchBatch: isNearbyCenters
+                });
+                if (res?.payload?.data) {
+                    setBatchData(res?.payload?.data);
+                } else if (res?.payload) {
+                    setBatchData(res?.payload);
+                } else {
+                    setBatchData([]);
+                }
+            } catch (error) {
+                console.error("Error fetching batches:", error);
+                setBatchData([]);
+            } finally {
+                setIsBatchesLoading(false);
+            }
+        };
+
+        if (showBatchModal) {
+            fetchBatches();
+        }
+    }, [id, showBatchModal, isNearbyCenters]);
 
     useEffect(() => {
         if (selectedVideo) {
@@ -142,25 +209,55 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
 
     const handlePayment = async () => {
         try {
+            const batchId = selectedBatch?._id;
+            const successUrl = new URL(window.location.href);
+            if (batchId) {
+                successUrl.searchParams.set("batchId", batchId);
+            }
+
+            const walletAmount = useWalletBalance ? Math.min(userProfile?.earningBalance || 0, courseData?.price || 0) : 0;
+            const actualAmount = useWalletBalance ? Math.max(0, (courseData?.price || 0) - (userProfile?.earningBalance || 0)) : courseData?.price || 0;
+
             const paymentData = {
-                success_url: window.location.href,
+                success_url: successUrl.toString(),
                 cancel_url: window.location.href,
                 courseId: id,
-                isWalletUse: false,
-                walletAmount: 0,
-                actualAmount: 129,
+                isWalletUse: useWalletBalance,
+                walletAmount: walletAmount,
+                actualAmount: actualAmount,
                 price: courseData?.price || 0,
             };
+
+            // Only add batchId if it's provided (for live/physical courses)
+            if (batchId) {
+                paymentData.batchId = batchId;
+            }
+
             const response = await getPaymentUrl(paymentData);
 
-            if (response?.success && response?.payload?.data?.checkout_url) {
+            if (response?.payload?.code !== "00000") {
+                toast.error(
+                    "A payment session is already active and will expire in 10 minutes. Please complete the current payment or try again after it expires."
+                );
+            } else if (response?.payload?.data?.checkout_url) {
                 toast.success("Redirecting to payment...");
-                window.location.href = response.payload.data.checkout_url;
+                router.replace(response.payload.data.checkout_url);
             } else {
-                toast.error(response?.message || "Failed to create payment");
+                toast.error(response?.message || "Failed to process payment. Please try again.");
             }
         } catch (error) {
             console.error("Payment error:", error);
+            toast.error("Failed to process payment. Please try again.");
+        } finally {
+            setShowBeforeProceedModal(false);
+        }
+    };
+
+    const handleEnrollClick = () => {
+        if (type === 'live' || type === 'physical') {
+            setShowBatchModal(true);
+        } else {
+            setShowBeforeProceedModal(true);
         }
     };
 
@@ -226,7 +323,7 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                                 <div className={styles.dot}></div>
                                 <div className={styles.rating}>
                                     <StarIcon />
-                                    <span>4.5</span>
+                                    <span>{courseData?.averageRating ? Number(courseData.averageRating).toFixed(1) : "0.0"}</span>
                                 </div>
                             </div>
 
@@ -247,33 +344,78 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                             </div>
                         </div>
                     </div>
+                    <CourseContent
+                        onVideoSelect={onVideoSelect}
+                        chapters={chapters}
+                    />
                 </div>
                 <div className={styles.griditems}>
                     <div className={styles.card}>
                         <div className={styles.image}>
-                            {(courseData?.isPayment && (isPlaying || selectedVideo?.url)) ? (
-                                <video
-                                    ref={videoRef}
-                                    src={selectedVideo?.url || currentChapter?.chapterVideo}
-                                    controls
-                                    onPause={handleVideoPause}
-                                    onEnded={handleVideoPause}
-                                    onLoadedMetadata={handleLoadedMetadata}
-                                    onTimeUpdate={handleTimeUpdate}
-                                    autoPlay={isPlaying}
-                                    width="100%"
-                                    height="326px"
-                                    style={{ borderRadius: '12px', objectFit: 'cover' }}
-                                />
-                            ) : (
-                                <>
-                                    <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
-                                    {courseData?.isPayment && (
+                            {(type === 'live' || type === 'physical') ? (
+                                courseData?.courseIntroVideo ? (
+                                    <video
+                                        src={courseData?.courseIntroVideo}
+                                        controls
+                                        autoPlay
+                                        muted
+                                        width="100%"
+                                        height="326px"
+                                        style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                    />
+                                ) : (
+                                    <>
+                                        <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
                                         <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
                                             <PlayIcon />
                                         </div>
-                                    )}
-                                </>
+                                    </>
+                                )
+                            ) : (
+                                // For recorded courses, use existing logic
+                                courseData?.isPayment ? (
+                                    (isPlaying || selectedVideo?.url) ? (
+                                        <video
+                                            ref={videoRef}
+                                            src={selectedVideo?.url || currentChapter?.chapterVideo}
+                                            controls
+                                            onPause={handleVideoPause}
+                                            onEnded={handleVideoPause}
+                                            onLoadedMetadata={handleLoadedMetadata}
+                                            onTimeUpdate={handleTimeUpdate}
+                                            autoPlay={isPlaying}
+                                            width="100%"
+                                            height="326px"
+                                            style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <>
+                                            <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                                            <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
+                                                <PlayIcon />
+                                            </div>
+                                        </>
+                                    )
+                                ) : (
+                                    courseData?.courseIntroVideo ? (
+                                        <video
+                                            src={courseData?.courseIntroVideo}
+                                            controls
+                                            autoPlay
+                                            muted
+                                            width="100%"
+                                            height="326px"
+                                            style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <>
+                                            <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                                            <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
+                                                <PlayIcon />
+                                            </div>
+                                        </>
+                                    )
+                                )
                             )}
                         </div>
                         <div className={styles.details}>
@@ -303,12 +445,12 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                                         </h4>
                                         <ul>
                                             <li>
-                                                {courseData?.instructor?.name}
+                                                {courseData?.instructor}
                                             </li>
                                         </ul>
                                     </div>
                                     <div className={styles.button}>
-                                        <Button text="Enroll Now" onClick={handlePayment} />
+                                        <Button text="Enroll Now" onClick={handleEnrollClick} />
                                     </div>
                                 </>
                             )}
@@ -316,6 +458,169 @@ export default function CourseDetails({ selectedVideo, onProgressUpdate }) {
                     </div>
                 </div>
             </div>
+
+            {/* Batch Selection Modal */}
+            {showBatchModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <div className={styles.modalHeader}>
+                            <h2>Select A Batch</h2>
+                            <button className={styles.closeBtn} onClick={() => setShowBatchModal(false)}>
+                                <CloseIcon />
+                            </button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div className={styles.batchGrid}>
+                                {isBatchesLoading ? (
+                                    <p style={{ gridColumn: '1/-1', textAlign: 'center', color: '#B6B6B6' }}>Loading batches...</p>
+                                ) : batchData?.length > 0 ? (
+                                    batchData.map((batch) => (
+                                        <div
+                                            key={batch._id}
+                                            className={classNames(styles.batchCard, { [styles.selected]: selectedBatchId === batch._id })}
+                                            onClick={() => {
+                                                setSelectedBatchId(batch._id);
+                                                setSelectedBatch(batch);
+                                            }}
+                                        >
+                                            <h4>{batch.batchName || `Batch ${batch.startDate ? new Date(batch.startDate).getFullYear() : '2025'}`}</h4>
+                                            <p>Starts: <strong>{batch.startDate ? new Date(batch.startDate).toLocaleDateString('en-GB') : (batch.startTime ? new Date(batch.startTime).toLocaleDateString('en-GB') : 'N/A')}</strong></p>
+                                            <p>Ends: <strong>{batch.endDate ? new Date(batch.endDate).toLocaleDateString('en-GB') : (batch.endTime ? new Date(batch.endTime).toLocaleDateString('en-GB') : 'N/A')}</strong></p>
+                                            <p>Center: <strong>{batch.centerId?.centerName || batch.centerName || 'Main Center'}</strong></p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p style={{ gridColumn: '1/-1', textAlign: 'center', color: '#B6B6B6' }}>No batches available for this course.</p>
+                                )}
+                            </div>
+
+                            {/* <div className={styles.toggleContainer}>
+                                <span>Find centers in the nearby area</span>
+                                <label className={styles.switch}>
+                                    <input
+                                        type="checkbox"
+                                        checked={isNearbyCenters}
+                                        onChange={(e) => setIsNearbyCenters(e.target.checked)}
+                                    />
+                                    <span className={styles.slider}></span>
+                                </label>
+                            </div> */}
+
+                            <div className={styles.modalFooter}>
+                                <button className={styles.cancelBtn} onClick={() => setShowBatchModal(false)}>
+                                    <span>Cancel</span>
+                                </button>
+                                <Button
+                                    text="Proceed to Payment"
+                                    onClick={() => {
+                                        if (!selectedBatchId) {
+                                            toast.error("Please select a batch first");
+                                            return;
+                                        }
+                                        setShowBatchModal(false);
+                                        setShowBeforeProceedModal(true);
+                                    }}
+                                    disabled={!selectedBatchId}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Before You Proceed Modal */}
+            {showBeforeProceedModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalContent}>
+                        <div className={styles.modalHeader}>
+                            <h2>Before You Proceed</h2>
+                            <button className={styles.closeBtn} onClick={() => setShowBeforeProceedModal(false)}>
+                                <CloseIcon />
+                            </button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div className={styles.beforeProceedBody}>
+                                {type === 'recorded' ? (
+                                    <p className={styles.modalText}>
+                                        You are about to enroll in this recorded course.
+                                        You will have lifetime access to all course materials after payment.
+                                    </p>
+                                ) : (
+                                    <>
+                                        <div className={styles.detailsSection}>
+                                            <h3>Location Details</h3>
+                                            <div className={styles.detailsGrid}>
+                                                <div className={styles.detailItem}>
+                                                    <label>City</label>
+                                                    <span>{selectedBatch?.centerId?.city}</span>
+                                                </div>
+                                                <div className={styles.detailItem}>
+                                                    <label>State</label>
+                                                    <span>{selectedBatch?.centerId?.state}</span>
+                                                </div>
+                                                <div className={styles.detailItem}>
+                                                    <label>Country</label>
+                                                    <span>{selectedBatch?.centerId?.country}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className={styles.detailsSection}>
+                                            <h3>Batch Details</h3>
+                                            <div className={styles.simpleList}>
+                                                <div className={styles.listItem}>
+                                                    <label>Course Name</label>
+                                                    <span>{selectedBatch?.courseId?.CourseName}</span>
+                                                </div>
+                                                <div className={styles.listItem}>
+                                                    <label>Start Date</label>
+                                                    <span>{selectedBatch?.startDate ? new Date(selectedBatch.startDate).toLocaleDateString('en-GB') : (selectedBatch?.startTime ? new Date(selectedBatch.startTime).toLocaleDateString('en-GB') : 'N/A')}</span>
+                                                </div>
+                                                <div className={styles.listItem}>
+                                                    <label>End Date</label>
+                                                    <span>{selectedBatch?.endDate ? new Date(selectedBatch.endDate).toLocaleDateString('en-GB') : (selectedBatch?.endTime ? new Date(selectedBatch.endTime).toLocaleDateString('en-GB') : 'N/A')}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {userProfile?.earningBalance > 0 && (
+                                    <div className={styles.walletSection}>
+                                        <label className={styles.checkboxContainer}>
+                                            <input
+                                                type="checkbox"
+                                                checked={useWalletBalance}
+                                                onChange={(e) => setUseWalletBalance(e.target.checked)}
+                                            />
+                                            <span className={styles.checkboxLabel}>
+                                                Use Wallet Balance
+                                                <span className={styles.amount}>(Available: ${(userProfile?.earningBalance || 0).toFixed(2)})</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                )}
+
+                                <div className={styles.noteSection}>
+                                    <p>
+                                        <strong>Note:</strong> Please verify all the details before proceeding to payment.
+                                        Once payment is made, it cannot be refunded.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className={styles.modalFooter}>
+                                <button className={styles.cancelBtn} onClick={() => setShowBeforeProceedModal(false)}>
+                                    <span>Cancel</span>
+                                </button>
+                                <Button
+                                    text="Proceed to Payment"
+                                    onClick={handlePayment}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {showReviewModal && (
                 <div className={styles.modalOverlay}>

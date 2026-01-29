@@ -5,8 +5,10 @@ import { purchasedAllCourses } from '@/services/dashboard';
 import AlgobotsIcon from '@/icons/algobotsIcon';
 import classNames from 'classnames';
 import NoData from '@/components/noData';
+import { useRouter } from 'next/navigation';
 
 export default function MyAlgobots() {
+    const router = useRouter();
     const [bots, setBots] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -102,7 +104,11 @@ export default function MyAlgobots() {
                         );
 
                         return (
-                            <div className={styles.box} key={item?._id || index}>
+                            <div
+                                className={classNames(styles.box, styles.clickable)}
+                                key={item?._id || index}
+                                onClick={() => router.push(`/algobots?botId=${item?.botId?.strategyId?._id}&showModal=true`)}
+                            >
                                 <div className={styles.detailsBox}>
                                     <h3>
                                         Returns: <span className={styles.green}>{item?.botId?.strategyId?.return}%</span> <small>({item?.botId?.strategyId?.duration} Days)</small>

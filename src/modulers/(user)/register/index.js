@@ -160,9 +160,7 @@ export default function Register() {
         <div className={styles.registerWrapper}>
             <div className={styles.mobileHeader}>
                 <img src={Logo} alt='Logo' />
-            </div>
-            {/* <Toaster position="top-right" /> */}
-
+            </div>  
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>
                     <div className={styles.mainrelative}>
@@ -172,83 +170,85 @@ export default function Register() {
                     </div>
                     <div>
                         <div className={styles.box}>
-                            <div className={styles.contnet}>
-                                <h1>Sign Up</h1>
-                                <h3>Already have an account?</h3>
-                                <p>
-                                    You can <span onClick={() => router.push('/login')} style={{ cursor: 'pointer' }}>Login here !</span>
-                                </p>
-                            </div>
+                            <form onSubmit={(e) => { e.preventDefault(); handleSignup(); }}>
+                                <div className={styles.contnet}>
+                                    <h1>Sign Up</h1>
+                                    <h3>Already have an account?</h3>
+                                    <p>
+                                        You can <span onClick={() => router.push('/login')} style={{ cursor: 'pointer' }}>Login here !</span>
+                                    </p>
+                                </div>
 
-                            <div className={styles.twocol}>
-                                <Input
-                                    label='First Name'
-                                    placeholder='Enter your first name'
-                                    icon={UserIcon}
-                                    name="firstName"
-                                    value={data.firstName}
-                                    onChange={handleChange}
-                                    error={errors.firstName}
-                                />
-                                <Input
-                                    label='Last Name'
-                                    placeholder='Enter your Last name'
-                                    icon={UserIcon}
-                                    name="lastName"
-                                    value={data.lastName}
-                                    onChange={handleChange}
-                                    error={errors.lastName}
-                                />
-                            </div>
+                                <div className={styles.twocol}>
+                                    <Input
+                                        label='First Name'
+                                        placeholder='Enter your first name'
+                                        icon={UserIcon}
+                                        name="firstName"
+                                        value={data.firstName}
+                                        onChange={handleChange}
+                                        error={errors.firstName}
+                                    />
+                                    <Input
+                                        label='Last Name'
+                                        placeholder='Enter your Last name'
+                                        icon={UserIcon}
+                                        name="lastName"
+                                        value={data.lastName}
+                                        onChange={handleChange}
+                                        error={errors.lastName}
+                                    />
+                                </div>
 
-                            <div className={styles.bottomSpacing}>
-                                <Input
-                                    label='Email'
-                                    placeholder='Enter your email address'
-                                    icon={EmailIcon}
-                                    name="email"
-                                    value={data.email}
-                                    onChange={handleChange}
-                                    error={errors.email}
-                                />
-                            </div>
+                                <div className={styles.bottomSpacing}>
+                                    <Input
+                                        label='Email'
+                                        placeholder='Enter your email address'
+                                        icon={EmailIcon}
+                                        name="email"
+                                        value={data.email}
+                                        onChange={handleChange}
+                                        error={errors.email}
+                                    />
+                                </div>
 
-                            <div className={styles.bottomSpacing}>
+                                <div className={styles.bottomSpacing}>
+                                    <Input
+                                        label='Create a Password'
+                                        placeholder='Enter your password'
+                                        icon={LockIcon}
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        value={data.password}
+                                        onChange={handleChange}
+                                        error={errors.password}
+                                        onIconClick={() => setShowPassword(!showPassword)}
+                                    />
+                                </div>
+
                                 <Input
-                                    label='Create a Password'
-                                    placeholder='Enter your password'
+                                    label='Confirm Password'
+                                    placeholder='Re-Enter your password'
                                     icon={LockIcon}
-                                    type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    value={data.password}
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    name="confirmPassword"
+                                    value={data.confirmPassword}
                                     onChange={handleChange}
-                                    error={errors.password}
-                                    onIconClick={() => setShowPassword(!showPassword)}
+                                    error={errors.confirmPassword}
+                                    onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 />
-                            </div>
 
-                            <Input
-                                label='Confirm Password'
-                                placeholder='Re-Enter your password'
-                                icon={LockIcon}
-                                type={showConfirmPassword ? "text" : "password"}
-                                name="confirmPassword"
-                                value={data.confirmPassword}
-                                onChange={handleChange}
-                                error={errors.confirmPassword}
-                                onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            />
+                                {errors.submit && <div className={styles.submitError}>{errors.submit}</div>}
 
-                            {errors.submit && <div className={styles.submitError}>{errors.submit}</div>}
-
-                            <div className={styles.loginButton}>
-                                <button onClick={handleSignup} disabled={isSubmitting}>
-                                    {isSubmitting ? 'Submitting...' : 'Continue'}
-                                    {!isSubmitting && <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M18.8889 6.37387C16.18 6.37387 13.7111 3.87387 13.7111 1.12613V0H11.4889V1.12613C11.4889 3.12387 12.3533 4.99775 13.71 6.37387H0V8.62613H13.71C12.3533 10.0023 11.4889 11.8761 11.4889 13.8739V15H13.7111V13.8739C13.7111 11.1273 16.18 8.62613 18.8889 8.62613H20V6.37387H18.8889Z" fill="black" />
-                                    </svg>}
-                                </button>
-                            </div>
+                                <div className={styles.loginButton}>
+                                    <button type="submit" disabled={isSubmitting}>
+                                        {isSubmitting ? 'Submitting...' : 'Continue'}
+                                        {!isSubmitting && <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M18.8889 6.37387C16.18 6.37387 13.7111 3.87387 13.7111 1.12613V0H11.4889V1.12613C11.4889 3.12387 12.3533 4.99775 13.71 6.37387H0V8.62613H13.71C12.3533 10.0023 11.4889 11.8761 11.4889 13.8739V15H13.7111V13.8739C13.7111 11.1273 16.18 8.62613 18.8889 8.62613H20V6.37387H18.8889Z" fill="black" />
+                                        </svg>}
+                                    </button>
+                                </div>
+                            </form>
                             <Authentication />
                             {/* <div className={styles.continueGoogle}>
                                 <button>

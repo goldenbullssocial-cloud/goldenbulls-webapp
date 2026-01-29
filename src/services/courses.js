@@ -73,3 +73,22 @@ export const updateVideoProgress = async (
     throw error;
   }
 };
+
+export const getBatches = async (data) => {
+  try {
+    const params = new URLSearchParams();
+    params.append('courseId', data.courseId);
+    
+    if (data.isMatchBatch !== undefined) {
+      params.append('isMatchBatch', data.isMatchBatch);
+    }
+    
+    const response = await api.get(
+      `/batch/getBatchByCourse?${params.toString()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching batches:", error);
+    throw error;
+  }
+};

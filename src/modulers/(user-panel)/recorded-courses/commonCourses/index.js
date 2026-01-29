@@ -66,7 +66,7 @@ export default function CommonCourses({ title, courses, loading }) {
                                             ${course?.price}
                                         </h4>
                                         <ul>
-                                            <li>{course?.instructor?.name}</li>
+                                            <li>{course?.instructor}</li>
                                         </ul>
                                     </div>
                                     <div className={styles.listAlignment}>
@@ -86,7 +86,7 @@ export default function CommonCourses({ title, courses, loading }) {
                                             <div className={styles.dot}></div>
                                             <div className={styles.rating}>
                                                 <StarIcon />
-                                                <span>4.5</span>
+                                                <span>{course?.averageRating ? Number(course.averageRating).toFixed(1) : "0.0"}</span>
                                             </div>
                                         </div>
                                     </div>

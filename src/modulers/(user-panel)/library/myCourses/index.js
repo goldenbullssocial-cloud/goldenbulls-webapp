@@ -7,10 +7,12 @@ import { purchasedAllCourses } from '@/services/dashboard';
 import CoursesIcon from '@/icons/coursesIcon';
 import classNames from 'classnames';
 import NoData from '@/components/noData';
+import { useRouter } from 'next/navigation';
 
 const CardImage = '/assets/images/course-user.png';
 
 export default function MyCourses() {
+  const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,9 +23,9 @@ export default function MyCourses() {
         const res = await purchasedAllCourses({ page: 1, limit: 10 });
         if (res && res.payload) {
           const allCourses = [
-            ...(res.payload.RECORDED || []),
-            ...(res.payload.LIVE || []),
-            ...(res.payload.PHYSICAL || [])
+            ...(res.payload.RECORDED || []).map(item => ({ ...item, type: 'recorded' })),
+            ...(res.payload.LIVE || []).map(item => ({ ...item, type: 'live' })),
+            ...(res.payload.PHYSICAL || []).map(item => ({ ...item, type: 'physical' }))
           ];
           setCourses(allCourses);
         }
@@ -83,7 +85,11 @@ export default function MyCourses() {
             const averagePercentage = tracking.length > 0 ? Math.round(totalPercentage / tracking.length) : 0;
 
             return (
-              <div className={styles.griditems} key={item._id || i}>
+              <div
+                className={classNames(styles.griditems, styles.clickable)}
+                key={item._id || i}
+                onClick={() => router.push(`/recorded-course-details?id=${course?._id}&type=${item.type}`)}
+              >
                 <div className={styles.cardImage}>
                   <img src={course?.courseVideo || CardImage} alt='CardImage' />
                 </div>

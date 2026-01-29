@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import styles from './recordedCourseDetails.module.scss';
 import CourseDetails from './courseDetails';
-import CourseContent from './courseContent';
 import CommonCourses from '../recorded-courses/commonCourses';
 import { getCourseByType, getChapters } from '@/services/dashboard';
 import { useSearchParams } from 'next/navigation';
 
 export default function RecordedCourseDetails() {
     const [courses, setCourses] = useState(null);
-    const [chapters, setChapters] = useState([]);
+    const [chapters, setChapters] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const searchParams = useSearchParams();
     const type = searchParams.get('type');
@@ -52,12 +51,9 @@ export default function RecordedCourseDetails() {
         <div className={styles.recordedCourseDetails}>
             <CourseDetails
                 selectedVideo={selectedVideo}
-                onProgressUpdate={fetchChaptersData}
-            />
-            <CourseContent
-                onVideoSelect={setSelectedVideo}
                 chapters={chapters}
-                onChaptersLoaded={setChapters}
+                onVideoSelect={setSelectedVideo}
+                onProgressUpdate={fetchChaptersData}
             />
             <CommonCourses title='related courses' courses={filteredCourses} />
         </div>

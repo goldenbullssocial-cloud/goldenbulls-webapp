@@ -110,6 +110,70 @@
                     color: #fff;
                 }
             }
+
+            .userDropdown {
+                position: relative;
+
+                .userButtonWrapper {
+                    button {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+
+                .userButtonContent {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+
+                    .dropdownArrow {
+                        transition: transform 0.3s ease-in-out;
+                        stroke: currentColor;
+
+                        &.open {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+
+                .dropdownMenu {
+                    position: absolute;
+                    top: calc(100% + 10px);
+                    right: 0;
+                    background: #1a1a1a;
+                    border: 1px solid #E4AB40;
+                    border-radius: 8px;
+                    min-width: 150px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                    z-index: 100;
+                    overflow: hidden;
+
+                    button {
+                        display: block;
+                        width: 100%;
+                        padding: 12px 20px;
+                        background: transparent;
+                        border: none;
+                        color: rgba(255, 255, 255, 0.70);
+                        font-size: 16px;
+                        @include font-normal;
+                        text-align: left;
+                        cursor: pointer;
+                        transition: all 0.3s ease-in-out;
+                        border-bottom: 1px solid rgba(228, 171, 64, 0.2);
+
+                        &:last-child {
+                            border-bottom: none;
+                        }
+
+                        &:hover {
+                            background: rgba(228, 171, 64, 0.1);
+                            color: #fff;
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ export default function AutomateTrades() {
     const [prevEl, setPrevEl] = useState(null);
     const [nextEl, setNextEl] = useState(null);
     const [bots, setBots] = useState([]);
+    const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
+    const [selectedPlans, setSelectedPlans] = useState({});
 
     useEffect(() => {
         const fetchBots = async () => {
@@ -112,9 +114,38 @@ export default function AutomateTrades() {
                                                                 {item?.title}
                                                             </p>
                                                             <div className={styles.line}></div>
-                                                            <h5>
-                                                                {item?.strategyPlan[1]?.price} <span>/ {item?.strategyPlan[1]?.planType}</span>
-                                                            </h5>
+                                                            <div
+                                                                className={styles.dropdownContainer}
+                                                                onClick={() => setOpenDropdownIndex(openDropdownIndex === index ? null : index)}
+                                                            >
+                                                                <span>
+                                                                    ${selectedPlans[index]?.price || item?.strategyPlan[0]?.price || '0'}/{selectedPlans[index]?.planType || item?.strategyPlan[0]?.planType || 'Month'}
+                                                                </span>
+                                                                <div className={styles.imgIcon}>
+                                                                    <img
+                                                                        src="/assets/icons/vector.svg"
+                                                                        alt="icon"
+                                                                        style={{ transform: openDropdownIndex === index ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                                                                    />
+                                                                </div>
+                                                                {openDropdownIndex === index && (
+                                                                    <div className={styles.dropdownList}>
+                                                                        {item?.strategyPlan?.map((plan, planIndex) => (
+                                                                            <div
+                                                                                key={planIndex}
+                                                                                className={styles.dropdownItem}
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    setSelectedPlans({ ...selectedPlans, [index]: plan });
+                                                                                    setOpenDropdownIndex(null);
+                                                                                }}
+                                                                            >
+                                                                                {plan?.price}$/{plan?.planType}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                             <Button text="Subscribe Now" className={styles.btn} />
                                                         </div>
                                                     </div>

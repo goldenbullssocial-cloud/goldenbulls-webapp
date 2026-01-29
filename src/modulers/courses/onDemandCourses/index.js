@@ -111,7 +111,7 @@ export default function OnDemandCourses({ title, data, activeType, bgColor = "#0
                   <CoursesCard
                     title={item?.CourseName}
                     price={item?.price}
-                    author={item.instructor?.name}
+                    author={item.instructor}
                     duration={item?.hours}
                     level={item?.courseLevel}
                     rating={item?.averageRating ? Number(item.averageRating).toFixed(1) : "0.0"}

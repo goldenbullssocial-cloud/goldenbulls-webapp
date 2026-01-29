@@ -101,12 +101,12 @@ export default function CoursesDetailsBanner() {
                             variants={container}
                         >
                             <motion.h1 variants={fadeUp}>
-                                {course?.CourseName && (
+                                {/* {course?.CourseName && (
                                     <>
                                         <span>{course.CourseName.split(' ').slice(0, 2).join(' ')} </span>
                                         {course.CourseName.split(' ').slice(2).join(' ')}
                                     </>
-                                )}
+                                )} */}
                             </motion.h1>
 
                             <motion.p variants={fadeUp}>
@@ -128,7 +128,8 @@ export default function CoursesDetailsBanner() {
                                         <span>{course?.courseLevel}</span>
                                     </button>
                                 </div>
-
+{console.log(course,"======course")
+}
                                 <div className={styles.ratingAlignment}>
                                     <div className={styles.dot}></div>
                                     <div className={styles.rating}>
@@ -184,7 +185,7 @@ export default function CoursesDetailsBanner() {
                                     <div className={styles.contentAlignment}>
                                         <h3>${course?.price}</h3>
                                         <ul>
-                                            <li>{course?.instructor?.name}</li>
+                                            <li>{course?.instructor}</li>
                                         </ul>
                                     </div>
 

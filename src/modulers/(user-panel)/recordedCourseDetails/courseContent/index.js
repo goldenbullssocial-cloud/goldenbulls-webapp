@@ -33,7 +33,7 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
     const id = searchParams.get('id');
 
     useEffect(() => {
-        if (chapters && chapters.length > 0) {
+        if (Array.isArray(chapters)) {
             setChaptersData(chapters);
             setLoading(false);
             return;
