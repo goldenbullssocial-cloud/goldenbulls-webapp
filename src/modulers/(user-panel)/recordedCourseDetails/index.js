@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react'
 import styles from './recordedCourseDetails.module.scss';
 import CourseDetails from './courseDetails';
 import CommonCourses from '../recorded-courses/commonCourses';
-import { getCourseByType, getChapters } from '@/services/dashboard';
+import { getChapters } from '@/services/dashboard';
 import { useSearchParams } from 'next/navigation';
 
 export default function RecordedCourseDetails() {
-    const [courses, setCourses] = useState(null);
     const [chapters, setChapters] = useState(null);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const searchParams = useSearchParams();
@@ -27,25 +26,8 @@ export default function RecordedCourseDetails() {
     };
 
     useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                const res = await getCourseByType();
-
-                if (res && res.payload) {
-                    setCourses(res?.payload?.courses);
-                } else if (res) {
-                    setCourses(res);
-                }
-            } catch (error) {
-                console.error("Error fetching courses:", error);
-            }
-        };
-
-        fetchCourses();
         fetchChaptersData();
     }, [id]);
-
-    const filteredCourses = courses?.[type]?.filter(item => item._id !== id) || [];
 
     return (
         <div className={styles.recordedCourseDetails}>
@@ -55,7 +37,7 @@ export default function RecordedCourseDetails() {
                 onVideoSelect={setSelectedVideo}
                 onProgressUpdate={fetchChaptersData}
             />
-            <CommonCourses title='related courses' courses={filteredCourses} />
+            <CommonCourses title='related courses' activeType={type} excludeCourseId={id} />
         </div>
     )
 }

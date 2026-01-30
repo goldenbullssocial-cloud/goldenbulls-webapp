@@ -306,10 +306,22 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                 {courseData?.description}
                             </p>
                         </div>
+                        {type === 'physical' && (
+                                <div className={styles.locationInfo}>
+                                    <img src="/assets/icons/locationGrey.svg" alt="Location" />
+                                    {console.log(courseData,"************courseData")
+                                    }
+                                    <span>Dubai</span>
+                                </div>
+                            )}
                         <div className={styles.leftBottomAlignment}>
                             <div className={styles.time}>
                                 <ClockIcon />
-                                <span>{courseData?.hours} Hours</span>
+                                <span>
+                                    {(type === 'live' || type === 'physical')
+                                        ? `${courseData?.chapter?.length || 0} Days`
+                                        : `${courseData?.hours} Hours`}
+                                </span>
                             </div>
 
                             <div className={styles.dotButton}>
@@ -421,23 +433,39 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                             </div>
                             <div className={styles.details}>
                                 {courseData?.isPayment ? (
-                                    <div className={styles.progressContainer}>
-                                        <div className={styles.progress}>
-                                            <div
-                                                className={styles.active}
-                                                style={{ width: `${displayPercentage}%` }}
-                                            ></div>
-                                        </div>
-                                        <div className={styles.bottomText}>
-                                            <span>{Math.round(displayPercentage)}% Completed</span>
-                                        </div>
-                                        <div className={styles.button}>
-                                            <Button
-                                                text="Resume Course"
-                                                onClick={handlePlayVideo}
-                                            />
-                                        </div>
-                                    </div>
+                                    type === 'recorded' ? (
+                                        <div className={styles.progressContainer}>
+                                            <div className={styles.progress}>
+                                                <div
+                                                    className={styles.active}
+                                                    style={{ width: `${displayPercentage}%` }}
+                                                ></div>
+                                            </div>
+                                            <div className={styles.bottomText}>
+                                                <span>{Math.round(displayPercentage)}% Completed</span>
+                                            </div>
+                                            <div className={styles.button}>
+                                                <Button
+                                                    text="Resume Course"
+                                                    onClick={handlePlayVideo}
+                                                />
+                                            </div>
+                                        </div>) : (
+                                        type === 'live' ? (
+                                            <div className={styles.button}>
+                                                <Button
+                                                    text="Join Meeting"
+                                                    onClick={handlePlayVideo}
+                                                />
+                                            </div>) : (
+                                            <div className={styles.button}>
+                                                <Button
+                                                    text="Download Student ID"
+                                                    onClick={handlePlayVideo}
+                                                />
+                                            </div>
+                                        )
+                                    )
                                 ) : (
                                     <>
                                         <div className={styles.twoText}>

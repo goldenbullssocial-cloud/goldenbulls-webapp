@@ -193,6 +193,32 @@
                         @include gradient-text;
                     }
                 }
+
+                .locationInfo {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 16px;
+
+
+                    @include respond-to("sm") {
+                        justify-content: center;
+                    }
+
+                    img {
+                        width: 28px;
+                        height: 28px;
+                    }
+
+                    span {
+                        color: #B6B6B6;
+                        font-size: 18px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        @include font-normal;
+                    }
+                }
             }
 
             .addReviewLink {

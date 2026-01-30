@@ -40,24 +40,17 @@
 
     .grid {
         gap: 20px;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-
-        @include respond-to("md") {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @include respond-to("sm") {
-            grid-template-columns: repeat(1, 1fr);
-            max-width: 345px;
-            margin: 0 auto;
-        }
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
 
         .griditems {
             position: relative;
             border-radius: 20px;
             background: linear-gradient(106deg, rgba(15, 15, 15, 0.00) 1.04%, rgba(255, 255, 255, 0.10) 98.96%);
             padding: 24px;
+            width: 100%;
+            max-width: 345px;
 
             .buttonWidth {
                 padding: 24px 0 0 0;
@@ -95,6 +88,391 @@
 
             &::before {
                 @include border;
+            }
+        }
+    }
+
+    // Modal Overlay
+    .modalOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 20px;
+    }
+
+    .modalContent {
+        position: relative;
+        background: #000;
+        border-radius: 24px;
+        padding: 40px;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        @include respond-to("sm") {
+            padding: 24px;
+            max-width: 95%;
+        }
+
+        &::before {
+            @include border;
+        }
+    }
+
+    .closeBtn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .modalTitle {
+        text-align: center;
+        font-size: 25px;
+        font-style: normal;
+        padding-bottom: 25px;
+        font-weight: 400;
+        line-height: 140%;
+        text-transform: uppercase;
+        @include heading-font;
+        @include gradient-text;
+
+        @include respond-to("sm") {
+            @include heading32;
+            text-align: center;
+        }
+    }
+
+    .modalBody {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .inputSection {
+        width: 100%;
+    }
+
+    .planDetails {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .planName {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #fff;
+            // @include font-semibold;
+        }
+
+        .priceRow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            // border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &.total {
+                margin-top: 8px;
+                padding-top: 16px;
+                border-top: 2px solid rgba(255, 255, 255, 0.2);
+                font-size: 18px;
+                font-weight: 700;
+
+                .label,
+                .value {
+                    font-weight: 700;
+                    @include font-bold;
+                }
+
+                .value {
+                    @include gradient-text;
+                }
+            }
+
+            .label {
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 14px;
+                @include font-medium;
+
+                &.discount {
+                    @include gradient-text;
+                }
+            }
+
+            .value {
+                color: #fff;
+                font-size: 16px;
+                font-weight: 600;
+                // @include font-semibold;
+
+                &.discount {
+                    @include gradient-text;
+                }
+            }
+        }
+    }
+
+    .walletBalanceSection {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .checkboxContainer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            position: relative;
+
+            .checkboxInput {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+
+                &:checked~.checkboxCustom {
+                    background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
+                    border-color: #E4AB40;
+
+                    &::after {
+                        display: block;
+                    }
+                }
+            }
+
+            .checkboxCustom {
+                width: 20px;
+                height: 20px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 4px;
+                background: transparent;
+                transition: all 0.3s ease;
+                position: relative;
+                flex-shrink: 0;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    display: none;
+                    left: 5px;
+                    top: 2px;
+                    width: 5px;
+                    height: 10px;
+                    border: solid #000;
+                    border-width: 0 2px 2px 0;
+                    transform: rotate(45deg);
+                }
+            }
+
+            .checkboxLabel {
+                color: #fff;
+                font-size: 14px;
+                font-weight: 500;
+                @include font-medium;
+
+                .walletAmount {
+                    @include gradient-text;
+                    margin-left: 4px;
+                }
+            }
+        }
+    }
+
+    .couponSection {
+        width: 100%;
+    }
+
+    .subscribeSection {
+        margin-top: 8px;
+
+        .widthfull {
+            button {
+                width: 100%;
+            }
+        }
+    }
+
+    // Confirmation Modal
+    .confirmModalOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+        padding: 20px;
+    }
+
+    .confirmModalContent {
+        position: relative;
+        background: #000;
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 600px;
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        @include respond-to("sm") {
+            padding: 30px 20px;
+            max-width: 95%;
+        }
+    }
+
+    .confirmTitle {
+            text-align: start;
+            font-size: 25px;
+            font-style: normal;
+            padding-bottom: 25px;
+            font-weight: 400;
+            line-height: 140%;
+            text-transform: uppercase;
+            @include heading-font;
+            @include gradient-text;
+
+            @include respond-to("sm") {
+                @include heading32;
+                text-align: center;
+            }
+    }
+
+    .confirmBody {
+        .confirmList {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+
+            li {
+                color: #fff;
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 20px;
+                padding-left: 24px;
+                position: relative;
+
+                @include respond-to("sm") {
+                    font-size: 15px;
+                }
+
+                &::before {
+                    content: '•';
+                    position: absolute;
+                    left: 0;
+                    color: #fff;
+                    font-size: 20px;
+                }
+
+                .goldAmount {
+                    color: #E4AB40;
+                    font-weight: 600;
+                }
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .confirmActions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+
+            @include respond-to("sm") {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .cancelBtn {
+                padding: 14px 40px;
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 50px;
+                color: #fff;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 140px;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-color: rgba(255, 255, 255, 0.5);
+                }
+
+                @include respond-to("sm") {
+                    width: 100%;
+                }
+            }
+
+            .confirmBtn {
+                padding: 14px 40px;
+                background: linear-gradient(90deg, #F9F490, #E4AB40, #FEFBA5, #BD894E);
+                border: none;
+                border-radius: 50px;
+                color: #000;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 140px;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(228, 171, 64, 0.4);
+                }
+
+                &:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+                @include respond-to("sm") {
+                    width: 100%;
+                }
             }
         }
     }

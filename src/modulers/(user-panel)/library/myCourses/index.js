@@ -81,8 +81,42 @@ export default function MyCourses() {
           courses.map((item, i) => {
             const course = item.courseId;
             const tracking = course?.tracking || [];
-            const totalPercentage = tracking.reduce((sum, track) => sum + parseFloat(track.percentage || 0), 0);
-            const averagePercentage = tracking.length > 0 ? Math.round(totalPercentage / tracking.length) : 0;
+
+            let averagePercentage = 0;
+
+            // Calculate progress based on course type
+            if (item.type === 'live' || item.type === 'physical') {
+              // For live and physical courses, calculate based on days elapsed
+              const batchId = item.batchId;
+              const startDate = batchId?.startDate ? new Date(batchId.startDate) : null;
+              const endDate = batchId?.endDate ? new Date(batchId.endDate) : null;
+              const totalChapters = course?.totalChapter || 0;
+              const today = new Date();
+
+              if (startDate && endDate && totalChapters > 0) {
+                // Calculate total days in the course
+                const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+                // Calculate days elapsed from start date
+                const daysElapsed = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
+
+                // Calculate expected progress based on days elapsed
+                if (daysElapsed <= 0) {
+                  // Course hasn't started yet
+                  averagePercentage = 0;
+                } else if (daysElapsed >= totalDays) {
+                  // Course has ended
+                  averagePercentage = 100;
+                } else {
+                  // Calculate progress: (days elapsed / total days) * 100
+                  averagePercentage = Math.min(100, Math.round((daysElapsed / totalDays) * 100));
+                }
+              }
+            } else {
+              // For recorded courses, use existing tracking logic
+              const totalPercentage = tracking.reduce((sum, track) => sum + parseFloat(track.percentage || 0), 0);
+              averagePercentage = tracking.length > 0 ? Math.round(totalPercentage / tracking.length) : 0;
+            }
 
             return (
               <div

@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './commonCourses.module.scss';
 import StarIcon from '@/icons/starIcon';
 import ClockInIcon from '@/icons/clockInIcon';
@@ -7,10 +7,53 @@ import CoursesIcon from '@/icons/coursesIcon';
 import Button from '@/components/button';
 import { useRouter } from 'next/navigation';
 import NoData from '@/components/noData';
+import { getCourses } from '@/services/courses';
+
 const CardImage = '/assets/images/course-user.png';
 const ClockIcon = "/assets/icons/calender-icon.png";
-export default function CommonCourses({ title, courses, loading }) {
+
+export default function CommonCourses({ title, activeType, excludeCourseId }) {
     const router = useRouter();
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                setLoading(true);
+                const params = {
+                    page: 1,
+                    limit: 10,
+                    courseType: activeType || "recorded",
+                };
+
+                const response = await getCourses(params);
+
+                if (response && response.payload && response.payload.data) {
+                    let coursesData = response.payload.data;
+
+                    // Filter out the excluded course if excludeCourseId is provided
+                    if (excludeCourseId) {
+                        coursesData = coursesData.filter(course => course._id !== excludeCourseId);
+                    }
+
+                    setCourses(coursesData);
+                } else {
+                    setCourses([]);
+                }
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+                setCourses([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (activeType) {
+            fetchCourses();
+        }
+    }, [activeType, excludeCourseId]);
+
     return (
         <div className={styles.commonCourses}>
             <div className={styles.title}>
@@ -21,7 +64,7 @@ export default function CommonCourses({ title, courses, loading }) {
             <div className={styles.grid}>
                 {loading ? (
                     Array(4).fill(0).map((_, i) => (
-                        <div className={styles.griditems}>
+                        <div className={styles.griditems} key={i}>
                             <div className={`${styles.cardImage} ${styles.skeleton} ${styles.skeletonImage}`} />
 
                             <div className={styles.details}>
@@ -91,7 +134,10 @@ export default function CommonCourses({ title, courses, loading }) {
                                         </div>
                                     </div>
                                     <div className={styles.buttonDesign}>
-                                        <Button text="Enroll Now" onClick={() => { router.push(`/recorded-course-details?id=${course?._id}&type=${course?.courseType}`) }} />
+                                        <Button
+                                            text={course?.isPayment ? "Enrolled" : "Enroll Now"}
+                                            onClick={() => { router.push(`/recorded-course-details?id=${course?._id}&type=${course?.courseType}`) }}
+                                        />
                                     </div>
                                 </div>
                             </div>

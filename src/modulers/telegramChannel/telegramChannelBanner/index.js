@@ -39,7 +39,7 @@ const bullVariants = {
     },
   },
 }
-export default function TelegramChannelBanner() {
+export default function TelegramChannelBanner({ onSubscribeClick }) {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   return (
@@ -68,7 +68,11 @@ export default function TelegramChannelBanner() {
                 className={styles.buttonAlignment}
                 variants={itemVariants}
               >
-                <Button text="Subscribe Now" className={styles.fillbutton} />
+                <Button
+                  text="Subscribe Now"
+                  className={styles.fillbutton}
+                  onClick={onSubscribeClick}
+                />
                 <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
                   Download App
                 </button>
