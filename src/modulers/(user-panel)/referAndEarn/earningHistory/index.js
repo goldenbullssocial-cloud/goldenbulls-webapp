@@ -4,6 +4,7 @@ import styles from './earningHistory.module.scss';
 import PagePagination from '@/components/pagePagination';
 import { getWithdrawalHistory } from '@/services/referAndEarn';
 import NoData from '@/components/noData';
+import { useSearch } from '@/contexts/SearchContext';
 const EarningIcon = '/assets/icons/Earning.png';
 
 
@@ -13,6 +14,38 @@ export default function EarningHistory({ activeTab }) {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const limit = 10;
+    const { searchQuery } = useSearch();
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+    // Debounce search query with 500ms delay
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
+
+    // Filter history data based on debounced search query
+    const filteredHistoryData = historyData.filter(item => {
+        if (!debouncedSearchQuery.trim()) return true;
+
+        const query = debouncedSearchQuery.toLowerCase();
+        const isEarning = activeTab === 'Earning History';
+
+        if (isEarning) {
+            const name = item?.user?.name?.toLowerCase() || '';
+            const status = item?.status?.toLowerCase() || '';
+            return name.includes(query) || status.includes(query);
+        } else {
+            const transactionId = item?.transactionId?.toLowerCase() || '';
+            const withdrawalType = item?.withdrawalType?.toLowerCase() || '';
+            const status = item?.status?.toLowerCase() || '';
+            return transactionId.includes(query) || withdrawalType.includes(query) || status.includes(query);
+        }
+    });
 
     useEffect(() => {
         setPage(1); // Reset to first page when tab changes
@@ -85,8 +118,8 @@ export default function EarningHistory({ activeTab }) {
                                     ))}
                                 </tr>
                             ))
-                        ) : historyData.length > 0 ? (
-                            historyData.map((item, index) => (
+                        ) : filteredHistoryData.length > 0 ? (
+                            filteredHistoryData.map((item, index) => (
                                 console.log(item, "-----item"),
 
                                 <tr key={item._id || index}>

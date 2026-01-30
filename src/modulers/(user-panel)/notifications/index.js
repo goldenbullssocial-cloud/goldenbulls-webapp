@@ -7,15 +7,40 @@ import { getSocket } from '@/utils/webSocket';
 import { formatDistanceToNow } from 'date-fns';
 import classNames from 'classnames';
 import NoData from '@/components/noData';
+import { useSearch } from '@/contexts/SearchContext';
 
 const CheckIcon = '/assets/icons/check.svg';
 const NotificationIcon = '/assets/icons/notification.svg';
 
-export default function Notifications() {
+export default function () {
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const notificationsRef = React.useRef(notifications);
     const router = useRouter();
+    const { searchQuery } = useSearch();
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+    // Debounce search query with 500ms delay
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
+
+    // Filter notifications based on debounced search query
+    const filteredNotifications = notifications.filter(notification => {
+        if (!debouncedSearchQuery.trim()) return true;
+
+        const title = notification?.title?.toLowerCase() || '';
+        const description = notification?.description?.toLowerCase() || '';
+        const query = debouncedSearchQuery.toLowerCase();
+
+        return title.includes(query) || description.includes(query);
+    });
 
     React.useEffect(() => {
         notificationsRef.current = notifications;
@@ -92,7 +117,7 @@ export default function Notifications() {
         <div className={styles.notifications}>
             <div className={styles.title}>
                 <h2>
-                    Notifications
+
                 </h2>
             </div>
             <div className={styles.allBoxAlignment}>
@@ -109,8 +134,8 @@ export default function Notifications() {
                             <div className={`${styles.skeletonDesc} ${styles.skeleton}`} />
                         </div>
                     ))
-                ) : notifications?.length > 0 ? (
-                    notifications?.map((notification) => {
+                ) : filteredNotifications?.length > 0 ? (
+                    filteredNotifications?.map((notification) => {
                         return (
                             <div
                                 className={classNames(styles.box, { [styles.read]: notification?.isRead })}

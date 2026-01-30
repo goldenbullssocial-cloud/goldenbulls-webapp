@@ -6,11 +6,36 @@ import AlgobotsIcon from '@/icons/algobotsIcon';
 import classNames from 'classnames';
 import NoData from '@/components/noData';
 import { useRouter } from 'next/navigation';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function MyAlgobots() {
     const router = useRouter();
     const [bots, setBots] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { searchQuery } = useSearch();
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+    // Debounce search query with 500ms delay
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
+
+    // Filter bots based on debounced search query
+    const filteredBots = bots.filter(item => {
+        if (!debouncedSearchQuery.trim()) return true;
+
+        const botTitle = item?.botId?.strategyId?.title?.toLowerCase() || '';
+        const botRisk = item?.botId?.strategyId?.risk?.toLowerCase() || '';
+        const query = debouncedSearchQuery.toLowerCase();
+
+        return botTitle.includes(query) || botRisk.includes(query);
+    });
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -96,8 +121,8 @@ export default function MyAlgobots() {
                             </div>
                         </div>
                     ))
-                ) : bots.length > 0 ? (
-                    bots?.map((item, index) => {
+                ) : filteredBots.length > 0 ? (
+                    filteredBots?.map((item, index) => {
                         const { percentage, daysLeft } = calculateSubscriptionData(
                             item?.createdAt,
                             item?.planType

@@ -7,7 +7,7 @@ import CustomDropdown from '@/components/customDropdown';
 import { getProfile, editProfile, uploadImage } from '@/services/dashboard';
 import { getCookie } from '../../../../cookie';
 import toast from 'react-hot-toast';
-import { CountrySelect, StateSelect, CitySelect } from "react-country-state-city";
+import { CountrySelect, StateSelect, CitySelect, GetCountries, GetState, GetCity } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
 import { regions } from '@/utils/regions';
 
@@ -65,6 +65,42 @@ export default function Profile() {
                         if (data.profileImage) {
                             setProfileImagePreview(data.profileImage);
                         }
+
+                        // Set location IDs from API data
+                        if (data.country) {
+                            const countries = await GetCountries();
+                            console.log('All countries:', countries);
+                            const foundCountry = countries.find(c => c.name === data.country);
+                            console.log('Found country:', foundCountry, 'for', data.country);
+                            if (foundCountry) {
+                                setCountryId(foundCountry.id);
+                                console.log('Set countryId to:', foundCountry.id);
+
+                                // Set state ID if state exists
+                                if (data.state) {
+                                    const states = await GetState(foundCountry.id);
+                                    console.log('All states for country:', states);
+                                    const foundState = states.find(s => s.name === data.state);
+                                    console.log('Found state:', foundState, 'for', data.state);
+                                    if (foundState) {
+                                        setStateId(foundState.id);
+                                        console.log('Set stateId to:', foundState.id);
+
+                                        // Set city ID if city exists
+                                        if (data.city) {
+                                            const cities = await GetCity(foundCountry.id, foundState.id);
+                                            console.log('All cities for state:', cities);
+                                            const foundCity = cities.find(c => c.name === data.city);
+                                            console.log('Found city:', foundCity, 'for', data.city);
+                                            if (foundCity) {
+                                                setCityId(foundCity.id);
+                                                console.log('Set cityId to:', foundCity.id);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             } catch (error) {
@@ -77,6 +113,11 @@ export default function Profile() {
 
         fetchProfile();
     }, []);
+
+    // Debug: Log when IDs change
+    useEffect(() => {
+        console.log('Location IDs updated:', { countryId, stateId, cityId });
+    }, [countryId, stateId, cityId]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -339,6 +380,8 @@ export default function Profile() {
                         <CountrySelect
                             onChange={handleCountryChange}
                             placeHolder="Select Country"
+                            defaultValue={countryId}
+                            key={`country-${countryId}`}
                         />
                     </div>
                     <div className={styles.selectWrapper}>
@@ -347,6 +390,8 @@ export default function Profile() {
                             countryid={countryId}
                             onChange={handleStateChange}
                             placeHolder="Select State"
+                            defaultValue={stateId}
+                            key={`state-${stateId}`}
                         />
                     </div>
                     <div className={styles.selectWrapper}>
@@ -356,6 +401,8 @@ export default function Profile() {
                             stateid={stateId}
                             onChange={handleCityChange}
                             placeHolder="Select City"
+                            defaultValue={cityId}
+                            key={`city-${cityId}`}
                         />
                     </div>
                     <CustomDropdown
@@ -372,7 +419,7 @@ export default function Profile() {
                 </div>
                 <div className={styles.saveButton}>
                     <Button
-                    className={styles.buttonwidth}
+                        className={styles.buttonwidth}
                         text={saving ? "Saving..." : "Save"}
                         disabled={loading || saving}
                         onClick={handleSave}

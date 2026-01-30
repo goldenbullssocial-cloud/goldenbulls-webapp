@@ -5,6 +5,7 @@ import PagePagination from '@/components/pagePagination';
 import { getpaymentHistory } from '@/services/paymentHistory';
 import NoData from '@/components/noData';
 import PaymentIcon from '@/icons/paymentIcon';
+import { useSearch } from '@/contexts/SearchContext';
 
 
 export default function PaymentHistory() {
@@ -13,6 +14,31 @@ export default function PaymentHistory() {
     const [total, setTotal] = useState(0);
     const limit = 10;
     const [loading, setLoading] = useState(false);
+    const { searchQuery } = useSearch();
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+    // Debounce search query with 500ms delay
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
+
+    // Filter payment data based on debounced search query
+    const filteredPaymentData = paymentData.filter(item => {
+        if (!debouncedSearchQuery.trim()) return true;
+
+        const productName = item.courseId?.CourseName?.toLowerCase() || '';
+        const transactionId = item?.orderId?.toLowerCase() || '';
+        const status = item?.status?.toLowerCase() || '';
+        const query = debouncedSearchQuery.toLowerCase();
+
+        return productName.includes(query) || transactionId.includes(query) || status.includes(query);
+    });
 
     useEffect(() => {
         fetchPaymentHistory();
@@ -65,8 +91,8 @@ export default function PaymentHistory() {
                                     ))}
                                 </tr>
                             ))
-                        ) : paymentData.length > 0 ? (
-                            paymentData.map((item, index) => (
+                        ) : filteredPaymentData.length > 0 ? (
+                            filteredPaymentData.map((item, index) => (
                                 <tr key={item._id || index}>
                                     <td>{(page - 1) * limit + index + 1}</td>
                                     <td>{item.createdAt

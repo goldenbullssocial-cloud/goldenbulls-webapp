@@ -3,8 +3,15 @@ import React, { useEffect, useState } from 'react'
 import styles from './userHeader.module.scss';
 import Button from '../button';
 import { getCookie } from '../../../cookie';
-export default function UserHeader() {
+import { usePathname } from 'next/navigation';
+
+export default function UserHeader({ searchValue = '', onSearchChange, onSearch }) {
     const [user, setUser] = useState(null);
+    const pathname = usePathname();
+
+    // Hide search bar on profile page
+    const showSearchBar = pathname !== '/profile';
+
     useEffect(() => {
         const user = getCookie('user');
         if (user) {
@@ -31,10 +38,17 @@ export default function UserHeader() {
                     </p>
                 </div>
             </div>
-            <div className={styles.rightContent}>
-                <input type='text' placeholder='Search Courses and Algobots' />
-                <Button text="Search" />
-            </div>
+            {showSearchBar && (
+                <div className={styles.rightContent}>
+                    <input
+                        type='text'
+                        placeholder='Search Courses and Algobots'
+                        value={searchValue}
+                        onChange={onSearchChange}
+                    />
+                    <Button text="Search" onClick={onSearch} />
+                </div>
+            )}
         </div>
     )
 }

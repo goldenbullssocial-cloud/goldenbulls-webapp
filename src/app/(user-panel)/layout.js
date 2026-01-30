@@ -4,10 +4,12 @@ import UserHeader from '@/components/userHeader'
 import React, { useEffect, useState } from 'react'
 import { getSocket } from '@/utils/webSocket'
 import MobileHeader from '@/components/mobileHeader'
+import { SearchProvider, useSearch } from '@/contexts/SearchContext'
 
-export default function Layout({ children }) {
+function LayoutContent({ children }) {
     const [toogle, setToogle] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const { searchQuery, handleSearchChange, handleSearch } = useSearch();
 
     useEffect(() => {
         const socket = getSocket();
@@ -49,9 +51,21 @@ export default function Layout({ children }) {
                 <Sidebar toogle={toogle} setToogle={setToogle} unreadCount={unreadCount} />
             </div>
             <div className='children-layout'>
-                <UserHeader />
+                <UserHeader
+                    searchValue={searchQuery}
+                    onSearchChange={handleSearchChange}
+                    onSearch={handleSearch}
+                />
                 {children}
             </div>
         </div>
+    )
+}
+
+export default function Layout({ children }) {
+    return (
+        <SearchProvider>
+            <LayoutContent>{children}</LayoutContent>
+        </SearchProvider>
     )
 }

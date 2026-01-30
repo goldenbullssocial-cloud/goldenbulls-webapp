@@ -8,6 +8,7 @@ import CoursesIcon from '@/icons/coursesIcon';
 import classNames from 'classnames';
 import NoData from '@/components/noData';
 import { useRouter } from 'next/navigation';
+import { useSearch } from '@/contexts/SearchContext';
 
 const CardImage = '/assets/images/course-user.png';
 
@@ -15,6 +16,31 @@ export default function MyCourses() {
   const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { searchQuery } = useSearch();
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+  // Debounce search query with 500ms delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
+
+  // Filter courses based on debounced search query
+  const filteredCourses = courses.filter(item => {
+    if (!debouncedSearchQuery.trim()) return true;
+
+    const course = item.courseId;
+    const courseName = course?.CourseName?.toLowerCase() || '';
+    const courseLevel = course?.courseLevel?.toLowerCase() || '';
+    const query = debouncedSearchQuery.toLowerCase();
+
+    return courseName.includes(query) || courseLevel.includes(query);
+  });
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -77,8 +103,8 @@ export default function MyCourses() {
               </div>
             </div>
           ))
-        ) : courses.length > 0 ? (
-          courses.map((item, i) => {
+        ) : filteredCourses.length > 0 ? (
+          filteredCourses.map((item, i) => {
             const course = item.courseId;
             const tracking = course?.tracking || [];
 

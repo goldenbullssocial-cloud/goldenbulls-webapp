@@ -9,6 +9,7 @@ import AlgobotsIcon from '@/icons/algobotsIcon';
 import { getCookie } from '../../../../cookie';
 import Input from '@/components/input';
 import { useSearchParams } from 'next/navigation';
+import { useSearch } from '@/contexts/SearchContext';
 const BlackChartImage = '/assets/images/black-chart.png';
 const CloseIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,12 +27,25 @@ const getYouTubeEmbedUrl = (url) => {
 export default function Algobots() {
     const [bots, setBots] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { searchQuery } = useSearch();
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+    // Debounce search query with 500ms delay
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
 
     useEffect(() => {
         const fetchBots = async () => {
             try {
                 setLoading(true);
-                const res = await getAlgobot();
+                const res = await getAlgobot('', debouncedSearchQuery);
 
                 if (res?.payload) {
                     setBots(res?.payload?.result);
@@ -46,7 +60,7 @@ export default function Algobots() {
         };
 
         fetchBots();
-    }, []);
+    }, [debouncedSearchQuery]);
     return (
         <div className={styles.algobotsPageAlignment}>
             <div className={styles.title}>
