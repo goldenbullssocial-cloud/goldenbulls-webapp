@@ -3,16 +3,13 @@ import CoursesDetails from "@/modulers/coursesDetails";
 import { topCoursesData } from "@/constants";
 
 export async function generateMetadata({ params }) {
-  const { id } = params;
+  const { id } = await params;
 
   // Find course from all categories
-  const allCourses = [
-    ...topCoursesData.recorded,
-    ...topCoursesData.live,
-    ...topCoursesData.inPerson
-  ];
+  const allCourses = [...topCoursesData.recorded, ...topCoursesData.live, ...topCoursesData.inPerson];
+  console.log("All Courses:", allCourses);
 
-  const course = allCourses.find(c => c.id === id);
+  const course = allCourses.find((c) => c.id === id);
 
   if (!course) {
     return {

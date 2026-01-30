@@ -43,6 +43,18 @@ export const getChapters = async (id) => {
   }
 };
 
+export const getAllChapter = async (id) => {
+  try {
+    const res = await api.get(
+      `/chapter/getAllChapter?courseId=${id}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching all chapters", error);
+    throw error;
+  }
+};
+
 export const getDashboardCourses = async ({ page = 1, limit = 10, searchQuery = "", courseType = "", id = "" }) => {
   try {
     const params = new URLSearchParams({
@@ -223,9 +235,21 @@ export const getCouponByName = async (couponCode) => {
 export const getTelegramChannels = async (id, searchQuery) => {
   try {
     const res = await api.get(
-      `/telegram/getAllTelegram${
-        id ? `?id=${id}` : searchQuery ? `?search=${searchQuery}` : ""
+      `/telegram/getAllTelegram${id ? `?id=${id}` : searchQuery ? `?search=${searchQuery}` : ""
       }`
+    );
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching dashboard data", error);
+    throw error;
+  }
+};
+
+export const getTelegramForDashboard = async (id) => {
+  try {
+    const res = await api.get(
+      `/telegram/getAllTelegramDashboard${id ? `?id=${id}` : ""}`
     );
     const data = await res.data;
     return data;

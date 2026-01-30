@@ -1,13 +1,13 @@
-'use client'
-import React, { useState, useEffect } from 'react'
-import { useParams, useSearchParams } from 'next/navigation';
-import styles from './courseContent.module.scss'
-import classNames from 'classnames'
-import { motion, AnimatePresence } from 'framer-motion'
-import Reviews from '../reviews'
-import { getChapters } from '@/services/dashboard';
-import NoData from '@/components/noData';
-import LibraryIcon from '@/icons/libraryIcon';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useParams, useSearchParams } from "next/navigation";
+import styles from "./courseContent.module.scss";
+import classNames from "classnames";
+import { motion, AnimatePresence } from "framer-motion";
+import Reviews from "../reviews";
+import { getAllChapter } from "@/services/dashboard";
+import NoData from "@/components/noData";
+import LibraryIcon from "@/icons/libraryIcon";
 
 const titleAnim = {
     hidden: { opacity: 0, y: 30 },
@@ -20,7 +20,6 @@ const titleAnim = {
         },
     },
 };
-
 
 export default function CourseContent() {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -35,8 +34,14 @@ export default function CourseContent() {
             if (params?.id) {
                 try {
                     setLoading(true);
-                    const response = await getChapters(params?.id);
-                    const data = response?.payload?.data || (Array.isArray(response?.payload) ? response.payload : (Array.isArray(response) ? response : []));
+                    const response = await getAllChapter(params?.id);
+                    const data =
+                        response?.payload?.data ||
+                        (Array.isArray(response?.payload)
+                            ? response.payload
+                            : Array.isArray(response)
+                                ? response
+                                : []);
                     if (data) {
                         setChapters(data);
                     }
@@ -53,22 +58,21 @@ export default function CourseContent() {
     return (
         <div className={styles.courseContent}>
             <div className="container-md">
-                <motion.div
-                    className={styles.title}
-                    variants={titleAnim}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.6 }}
-                >
+                <motion.div className={styles.title} variants={titleAnim} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }}>
                     <h2>Course content</h2>
                 </motion.div>
                 <div className={styles.allBoxAlignment}>
                     {loading ? (
                         Array.from({ length: 5 }).map((_, index) => (
-                            <div key={index} className={classNames(styles.box, styles.skeletonBox)}>
+                            <div
+                                key={index}
+                                className={classNames(styles.box, styles.skeletonBox)}
+                            >
                                 <div className={styles.boxHeader}>
                                     <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
-                                    <div className={`${styles.skeleton} ${styles.skeletonDuration}`} />
+                                    <div
+                                        className={`${styles.skeleton} ${styles.skeletonDuration}`}
+                                    />
                                 </div>
                             </div>
                         ))
@@ -82,7 +86,6 @@ export default function CourseContent() {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.4, delay: index * 0.05 }}
                             >
-                                {/* HEADER */}
                                 <div
                                     className={styles.boxHeader}
                                     onClick={() =>
@@ -96,15 +99,14 @@ export default function CourseContent() {
                                     <p>{item?.duration} Min</p>
                                 </div>
 
-                                {/* BODY */}
                                 <AnimatePresence initial={false}>
                                     {activeIndex === index && (
                                         <motion.div
                                             className={classNames(styles.boxBody, styles.show)}
                                             initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: 'auto', opacity: 1 }}
+                                            animate={{ height: "auto", opacity: 1 }}
                                             exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.35, ease: 'easeInOut' }}
+                                            transition={{ duration: 0.35, ease: "easeInOut" }}
                                         >
                                             <motion.div
                                                 className={styles.spacing}
@@ -130,5 +132,5 @@ export default function CourseContent() {
                 <Reviews />
             </div>
         </div>
-    )
+    );
 }

@@ -5,8 +5,10 @@ import styles from './transparentPricing.module.scss';
 import Button from '@/components/button';
 import Input from '@/components/input';
 import toast from 'react-hot-toast';
-import { getProfile, getCouponByName, getPaymentUrl } from '@/services/dashboard';
+import { getProfile, getCouponByName, getPaymentUrl, getTelegramForDashboard } from '@/services/dashboard';
 import { getCookie } from '../../../../cookie';
+import NoData from "@/components/noData";
+import LibraryIcon from "@/icons/libraryIcon";
 
 const container = {
     hidden: {},
@@ -19,7 +21,7 @@ const container = {
 
 const fadeUp = {
     hidden: {
-        opacity: 0,
+        // opacity: 0,
         y: 30,
     },
     visible: {
@@ -34,7 +36,7 @@ const fadeUp = {
 
 const cardAnim = {
     hidden: {
-        opacity: 0,
+        // opacity: 0,
         y: 40,
         scale: 0.95,
     },
@@ -58,7 +60,7 @@ const CloseIcon = () => (
 export default function TransparentPricing() {
     const [showModal, setShowModal] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [telegramId, setTelegramId] = useState('');
+    const [userTelegramId, setUserTelegramId] = useState('');
     const [couponCode, setCouponCode] = useState('');
     const [appliedCoupon, setAppliedCoupon] = useState(null);
     const [useWalletBalance, setUseWalletBalance] = useState(false);
@@ -66,11 +68,26 @@ export default function TransparentPricing() {
     const [user, setUser] = useState(null);
 
     // Plan details (you can make this dynamic by fetching from API)
-    const plan = {
-        price: 149,
-        duration: '3 Months',
-        discount: 1 // 1% discount as shown in the image
-    };
+    const [telegramPlans, setTelegramPlans] = useState([]);
+    const [selectedPlan, setSelectedPlan] = useState(null);
+
+    useEffect(() => {
+        const fetchTelegramPlans = async () => {
+            try {
+                const res = await getTelegramForDashboard();
+                console.log(res, "res");
+
+                if (res?.payload) {
+                    setTelegramPlans(Array.isArray(res.payload) ? res.payload : res.payload.data || []);
+                } else if (Array.isArray(res)) {
+                    setTelegramPlans(res);
+                }
+            } catch (error) {
+                console.error("Error fetching telegram plans:", error);
+            }
+        };
+        fetchTelegramPlans();
+    }, []);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -91,10 +108,10 @@ export default function TransparentPricing() {
     }, []);
 
     useEffect(() => {
-        if (user && user.earningBalance <= plan.price) {
+        if (user && selectedPlan && user.earningBalance <= selectedPlan.price) {
             setUseWalletBalance(false);
         }
-    }, [user?.earningBalance]);
+    }, [user?.earningBalance, selectedPlan]);
 
     const handleApplyCoupon = async () => {
         if (!couponCode.trim()) {
@@ -123,7 +140,7 @@ export default function TransparentPricing() {
     };
 
     const handleSubscribeClick = () => {
-        if (!telegramId.trim()) {
+        if (!userTelegramId.trim()) {
             toast.error("Please enter your Telegram ID");
             return;
         }
@@ -136,7 +153,7 @@ export default function TransparentPricing() {
     };
 
     const processPayment = async () => {
-        if (!telegramId.trim()) {
+        if (!userTelegramId.trim()) {
             toast.error("Please enter your Telegram ID");
             return;
         }
@@ -145,8 +162,8 @@ export default function TransparentPricing() {
         setShowConfirmModal(false);
 
         try {
-            const originalPrice = plan.price;
-            const commonDiscountAmount = (originalPrice * plan.discount) / 100;
+            const originalPrice = selectedPlan?.price || 0;
+            const commonDiscountAmount = (originalPrice * (selectedPlan?.discount || 0)) / 100;
             const priceAfterCommonDiscount = originalPrice - commonDiscountAmount;
 
             let finalPrice = priceAfterCommonDiscount;
@@ -158,7 +175,8 @@ export default function TransparentPricing() {
             }
 
             const paymentData = {
-                telegramId: telegramId,
+                telegramId: userTelegramId,
+                telegramPlanId: selectedPlan?._id,
                 planPrice: originalPrice,
                 success_url: window.location.href,
                 cancel_url: window.location.href,
@@ -192,8 +210,8 @@ export default function TransparentPricing() {
     };
 
     const calculateTotalAmount = () => {
-        const originalPrice = plan.price;
-        const commonDiscountAmount = (originalPrice * plan.discount) / 100;
+        const originalPrice = selectedPlan?.price || 0;
+        const commonDiscountAmount = (originalPrice * (selectedPlan?.discount || 0)) / 100;
         let finalPrice = originalPrice - commonDiscountAmount;
 
         if (appliedCoupon) {
@@ -219,30 +237,47 @@ export default function TransparentPricing() {
 
                 {/* Pricing Grid */}
                 <motion.div className={styles.grid} variants={container}>
-                    {[...Array(1)].map((_, index) => (
-                        <motion.div
-                            key={index}
-                            className={styles.griditems}
-                            variants={cardAnim}
-                            whileHover={{
-                                y: -6,
-                                transition: { duration: 0.2 },
-                            }}
-                        >
-                            <div className={styles.cardHeader}>
-                                <h2>
-                                    <span className={styles.lgText}>${plan.price}</span>{' '}
-                                    <span className={styles.smallText}>/ {plan.duration}</span>
-                                </h2>
-                            </div>
+                    {telegramPlans?.length > 0 ? (
+                        telegramPlans.map((channel) =>
+                            channel?.telegramPlan?.map((planItem, index) => (
+                                <motion.div
+                                    key={planItem._id || `${channel._id}-${index}`}
+                                    className={styles.griditems}
+                                    variants={cardAnim}
+                                    whileHover={{
+                                        y: -6,
+                                        transition: { duration: 0.2 },
+                                    }}
+                                >
+                                    <div className={styles.cardHeader}>
+                                        <h2>
+                                            <span className={styles.lgText}>${planItem.price}</span>{' '}
+                                            <span className={styles.smallText}>/ {planItem.planType}</span>
+                                        </h2>
+                                    </div>
 
-                            <Button
-                                text="Subscribe Now"
-                                className={styles.buttonWidth}
-                                onClick={() => setShowModal(true)}
-                            />
-                        </motion.div>
-                    ))}
+                                    <Button
+                                        text="Subscribe Now"
+                                        className={styles.buttonWidth}
+                                        onClick={() => {
+                                            if (!user) {
+                                                toast.error("Please login first");
+                                                return;
+                                            }
+                                            setSelectedPlan(planItem);
+                                            setShowModal(true);
+                                        }}
+                                    />
+                                </motion.div>
+                            ))
+                        )
+                    ) : (
+                        <NoData
+                            icon={<LibraryIcon />}
+                            title="No plans found"
+                            description="We couldn't find any pricing plans at this time."
+                        />
+                    )}
                 </motion.div>
             </div>
 
@@ -261,27 +296,27 @@ export default function TransparentPricing() {
                             <div className={styles.inputSection}>
                                 <Input
                                     placeholder="Enter your Telegram ID"
-                                    value={telegramId}
-                                    onChange={(e) => setTelegramId(e.target.value)}
+                                    value={userTelegramId}
+                                    onChange={(e) => setUserTelegramId(e.target.value)}
                                 />
                             </div>
 
                             {/* Plan Details */}
                             <div className={styles.planDetails}>
-                                <h3 className={styles.planName}>{plan.duration} Plan</h3>
+                                <h3 className={styles.planName}>{selectedPlan?.planType} Plan</h3>
 
                                 <div className={styles.priceRow}>
                                     <span className={styles.label}>Original Price:</span>
-                                    <span className={styles.value}>${plan.price.toFixed(2)}</span>
+                                    <span className={styles.value}>${Number(selectedPlan?.price || 0).toFixed(2)}</span>
                                 </div>
 
-                                {plan.discount > 0 && (
+                                {selectedPlan?.discount > 0 && (
                                     <div className={styles.priceRow}>
                                         <span className={`${styles.label} ${styles.discount}`}>
-                                            Common Discount ({plan.discount}%):
+                                            Common Discount ({selectedPlan?.discount}%):
                                         </span>
                                         <span className={`${styles.value} ${styles.discount}`}>
-                                            -${((plan.price * plan.discount) / 100).toFixed(2)}
+                                            -${((selectedPlan.price * selectedPlan.discount) / 100).toFixed(2)}
                                         </span>
                                     </div>
                                 )}
@@ -292,7 +327,7 @@ export default function TransparentPricing() {
                                             Coupon Discount ({appliedCoupon.discount}%):
                                         </span>
                                         <span className={`${styles.value} ${styles.discount}`}>
-                                            -${((plan.price * appliedCoupon.discount) / 100).toFixed(2)}
+                                            -${((selectedPlan.price * appliedCoupon.discount) / 100).toFixed(2)}
                                         </span>
                                     </div>
                                 )}

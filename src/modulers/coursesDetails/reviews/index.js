@@ -38,6 +38,7 @@ const cardVariants = {
 export default function Reviews({ smallFont }) {
     const [courseRating, setCourseRating] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [visibleReviews, setVisibleReviews] = useState(3);
     const id = useSearchParams().get("id");
 
     useEffect(() => {
@@ -66,6 +67,10 @@ export default function Reviews({ smallFont }) {
 
     const ratingData = Array.isArray(courseRating) ? courseRating[0] : courseRating;
     const reviews = ratingData?.usersRating || [];
+
+    const handleLoadMore = () => {
+        setVisibleReviews((prev) => prev + 3);
+    };
 
     return (
         <motion.div className={classNames(styles.reviewsContentAlignment, smallFont ? styles.smallSize : "")} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={containerVariants}>
@@ -101,7 +106,7 @@ export default function Reviews({ smallFont }) {
             ) : reviews.length > 0 ? (
                 <>
                     <motion.div className={styles.allBox}>
-                        {reviews.map((item, index) => (
+                        {reviews.slice(0, visibleReviews).map((item, index) => (
                             <div key={index} className={styles.box}>
                                 <div className={styles.text}>
                                     <p>{item?.review}</p>
@@ -136,11 +141,13 @@ export default function Reviews({ smallFont }) {
                     </motion.div>
 
                     {/* Load More */}
-                    <motion.div className={styles.loadMore} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} viewport={{ once: true }}>
-                        <button>
-                            <span>Load More</span>
-                        </button>
-                    </motion.div>
+                    {visibleReviews < reviews.length && (
+                        <motion.div className={styles.loadMore} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} viewport={{ once: true }}>
+                            <button onClick={handleLoadMore}>
+                                <span>Load More</span>
+                            </button>
+                        </motion.div>
+                    )}
                 </>
             ) : (
                 <NoData

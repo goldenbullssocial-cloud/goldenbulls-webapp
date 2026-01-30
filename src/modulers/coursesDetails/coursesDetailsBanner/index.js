@@ -117,6 +117,15 @@ export default function CoursesDetailsBanner() {
         }
     };
 
+    const handleJoinMeeting = () => {
+        const meetingLink = course?.payment?.[0]?.batchId?.meetingLink;
+        if (meetingLink) {
+            window.open(meetingLink, '_blank');
+        } else {
+            toast.error("Meeting link is not available");
+        }
+    };
+
     return (
         <motion.div
             className={styles.coursesDetailsBanner}
@@ -146,15 +155,27 @@ export default function CoursesDetailsBanner() {
                                 {course?.description}
                             </motion.p>
 
+                            {(courseType === 'physical' && course?.isPayment === true) && (
+                                <div className={styles.locationInfo}>
+                                    <img src="/assets/icons/locationGrey.svg" alt="Location" />
+                                    <span>
+                                        {course?.payment?.[0]?.batchId?.centerId
+                                            ? `${course.payment[0].batchId.centerId.centerName}, ${course.payment[0].batchId.centerId.city}, ${course.payment[0].batchId.centerId.state}, ${course.payment[0].batchId.centerId.country}`
+                                            : "Location info not available"}
+                                    </span>
+                                </div>
+                            )}
+
                             <motion.div
                                 className={styles.leftBottomAlignment}
                                 variants={fadeUp}
                             >
                                 <div className={styles.time}>
                                     <ClockIcon />
-                                    <span>{course?.hours} Hours</span>
+                                    <span>{(courseType === 'live' || courseType === 'physical')
+                                        ? `${course?.chapter?.length || 0} Days`
+                                        : `${course?.hours} Hours`}</span>
                                 </div>
-
                                 <div className={styles.dotButton}>
                                     <div className={styles.dot}></div>
                                     <button>
@@ -222,11 +243,15 @@ export default function CoursesDetailsBanner() {
                                     <Button
                                         text={
                                             user && course?.isPayment
-                                                ? "Enrolled"
+                                                ? courseType === "live"
+                                                    ? "Meeting Link"
+                                                    : courseType === "physical"
+                                                        ? "Download Student ID"
+                                                        : "Enrolled"
                                                 : "Enroll Now"
                                         }
                                         className={styles.buttonWidth}
-                                        onClick={handleEnrollClick}
+                                        onClick={courseType === "live" ? handleJoinMeeting : handleEnrollClick}
                                     />
                                 </div>
                             </div>

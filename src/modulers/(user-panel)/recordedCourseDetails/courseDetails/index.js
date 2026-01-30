@@ -290,6 +290,15 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
         }
     };
 
+    const handleJoinMeeting = () => {
+        const meetingLink = courseData?.payment?.[0]?.batchId?.meetingLink;
+        if (meetingLink) {
+            window.open(meetingLink, '_blank');
+        } else {
+            toast.error("Meeting link is not available");
+        }
+    };
+
     return (
         <div className={styles.courseDetails}>
             <div className={styles.grid}>
@@ -306,14 +315,16 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                 {courseData?.description}
                             </p>
                         </div>
-                        {type === 'physical' && (
-                                <div className={styles.locationInfo}>
-                                    <img src="/assets/icons/locationGrey.svg" alt="Location" />
-                                    {console.log(courseData,"************courseData")
-                                    }
-                                    <span>Dubai</span>
-                                </div>
-                            )}
+                        {(type === 'physical' && courseData?.isPayment === true) && (
+                            <div className={styles.locationInfo}>
+                                <img src="/assets/icons/locationGrey.svg" alt="Location" />
+                                <span>
+                                    {courseData?.payment?.[0]?.batchId?.centerId
+                                        ? `${courseData.payment[0].batchId.centerId.centerName}, ${courseData.payment[0].batchId.centerId.city}, ${courseData.payment[0].batchId.centerId.state}, ${courseData.payment[0].batchId.centerId.country}`
+                                        : "Location info not available"}
+                                </span>
+                            </div>
+                        )}
                         <div className={styles.leftBottomAlignment}>
                             <div className={styles.time}>
                                 <ClockIcon />
@@ -455,7 +466,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                             <div className={styles.button}>
                                                 <Button
                                                     text="Join Meeting"
-                                                    onClick={handlePlayVideo}
+                                                    onClick={handleJoinMeeting}
                                                 />
                                             </div>) : (
                                             <div className={styles.button}>

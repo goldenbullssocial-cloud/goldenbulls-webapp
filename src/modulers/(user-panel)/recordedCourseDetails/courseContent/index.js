@@ -1,84 +1,77 @@
-'use client'
-import React, { useEffect, useState } from 'react'
-import styles from './courseContent.module.scss';
-import classNames from 'classnames'
-import { motion, AnimatePresence } from 'framer-motion'
-import Reviews from '@/modulers/coursesDetails/reviews';
-import { getChapters } from '@/services/dashboard';
-import { useSearchParams } from 'next/navigation';
-const CheckIcon = '/assets/icons/checkCourse.svg'
-const PlayIcon = '/assets/icons/playCourse.svg'
+"use client";
+import React, { useEffect, useState } from "react";
+import styles from "./courseContent.module.scss";
+import classNames from "classnames";
+import { motion, AnimatePresence } from "framer-motion";
+import Reviews from "@/modulers/coursesDetails/reviews";
+import { getChapters } from "@/services/dashboard";
+import { useSearchParams } from "next/navigation";
+const CheckIcon = "/assets/icons/checkCourse.svg";
+const PlayIcon = "/assets/icons/playCourse.svg";
 
-import NoData from '@/components/noData';
-import LibraryIcon from '@/icons/libraryIcon';
+import NoData from "@/components/noData";
+import LibraryIcon from "@/icons/libraryIcon";
 
 const titleAnim = {
-    hidden: { y: 30 },
-    show: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 0.5,
-            ease: [0.25, 0.8, 0.25, 1],
-        },
+  hidden: { y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.8, 0.25, 1],
     },
+  },
 };
 
 export default function CourseContent({ onVideoSelect, chapters, onChaptersLoaded }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [chaptersData, setChaptersData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const type = searchParams.get("type");
 
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [chaptersData, setChaptersData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const searchParams = useSearchParams();
-    const id = searchParams.get('id');
-    const type = searchParams.get('type');
+  useEffect(() => {
+      if (Array.isArray(chapters)) {
+          setChaptersData(chapters);
+          setLoading(false);
+          return;
+      }
 
-    useEffect(() => {
-        if (Array.isArray(chapters)) {
-            setChaptersData(chapters);
-            setLoading(false);
-            return;
-        }
+      const fetchChapters = async () => {
+          if (id) {
+              try {
+                  setLoading(true);
+                  const response = await getChapters(id);
+                  const data = response?.payload?.data || (Array.isArray(response?.payload) ? response.payload : (Array.isArray(response) ? response : []));
+                  setChaptersData(data);
+                  if (onChaptersLoaded) onChaptersLoaded(data);
 
-        const fetchChapters = async () => {
-            if (id) {
-                try {
-                    setLoading(true);
-                    const response = await getChapters(id);
-                    const data = response?.payload?.data || (Array.isArray(response?.payload) ? response.payload : (Array.isArray(response) ? response : []));
-                    setChaptersData(data);
-                    if (onChaptersLoaded) onChaptersLoaded(data);
+                  // Set initial video if data exists and no video selected
+                  if (data && data.length > 0 && !chapters) {
+                      onVideoSelect({ url: data[0]?.chapterVideo, chapterId: data[0]?.courseTracking?.chapterId, chapterTrakingId: data[0]?.courseTracking?._id, percentageCompleted: data[0]?.courseTracking?.percentage });
+                  }
+              } catch (error) {
+                  console.error("Error fetching chapters:", error);
+              } finally {
+                  setLoading(false);
+              }
+          } else {
+              setLoading(false);
+          }
+      };
+      fetchChapters();
+  }, [id, chapters]);
 
-                    // Set initial video if data exists and no video selected
-                    if (data && data.length > 0 && !chapters) {
-                        onVideoSelect({ url: data[0]?.chapterVideo, chapterId: data[0]?.courseTracking?.chapterId, chapterTrakingId: data[0]?.courseTracking?._id, percentageCompleted: data[0]?.courseTracking?.percentage });
-                    }
-                } catch (error) {
-                    console.error("Error fetching chapters:", error);
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setLoading(false);
-            }
-        };
-        fetchChapters();
-    }, [id, chapters]);
-
-    return (
-        <div className={styles.courseContentUser}>
-            <div className={styles.childwidth}>
-                <motion.div
-                    className={styles.title}
-                    variants={titleAnim}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.6 }}
-                >
-                    <h2>Course content</h2>
-                </motion.div>
-                <div className={styles.allBoxAlignment}>
-                    {loading ? (
+  return (
+    <div className={styles.courseContentUser}>
+      <div className={styles.childwidth}>
+        <motion.div className={styles.title} variants={titleAnim} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.6 }}>
+          <h2>Course content</h2>
+        </motion.div>
+        <div className={styles.allBoxAlignment}>
+          {loading ? (
                         Array.from({ length: 5 }).map((_, index) => (
                             <div key={index} className={classNames(styles.box, styles.skeletonBox)}>
                                 <div className={styles.boxHeader}>
@@ -97,7 +90,6 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.4, delay: index * 0.05 }}
                             >
-                                {/* HEADER */}
                                 <div
                                     className={styles.boxHeader}
                                     onClick={() => {
@@ -119,8 +111,6 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                                         )}
                                     </div>
                                 </div>
-
-                                {/* BODY */}
                                 <AnimatePresence initial={false}>
                                     {activeIndex === index && (
                                         <motion.div
@@ -136,7 +126,6 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ delay: 0.1 }}
                                             >
-                                                {/* Use description since 'content' array doesn't exist in API */}
                                                 <p>{item.description}</p>
                                             </motion.div>
                                         </motion.div>
@@ -151,10 +140,9 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                             description="We are currently updating the course content. Please check back later."
                         />
                     )}
-                </div>
-                <Reviews smallFont />
-
-            </div>
         </div>
-    )
+        <Reviews smallFont />
+      </div>
+    </div>
+  );
 }
