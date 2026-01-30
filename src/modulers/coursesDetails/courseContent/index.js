@@ -10,7 +10,7 @@ import NoData from "@/components/noData";
 import LibraryIcon from "@/icons/libraryIcon";
 
 const titleAnim = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { y: 30 },
     show: {
         opacity: 1,
         y: 0,

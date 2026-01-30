@@ -156,3 +156,14 @@ img {
     display: none;
   }
 }
+
+.blocker {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 9999999999 !important;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}

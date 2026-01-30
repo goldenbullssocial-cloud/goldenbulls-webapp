@@ -13,12 +13,9 @@ export default function Layout({ children }) {
         const socket = getSocket();
 
         const handleCheckNotification = (data) => {
-            console.log(data, "====check-notification-data");
             const count = data?.data ?? data?.unreadNotification ?? data?.unreadCount ?? 0;
             setUnreadCount(count);
         };
-
-        console.log(socket, "socket");
 
         if (socket) {
             const handleConnect = () => {

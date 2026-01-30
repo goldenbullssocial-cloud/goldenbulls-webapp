@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './cardView.module.scss';
 import CopyIcon from '@/icons/copyIcon';
+import toast from 'react-hot-toast';
 import { getProfile } from '@/services/dashboard';
 import { getCookie } from '../../../../../cookie';
 import { getUserWithdrawalDash } from '@/services/referAndEarn';
@@ -16,8 +17,8 @@ export default function CardView() {
         const fetchProfile = async () => {
             try {
                 const userData = getCookie("user");
-                    const parsedUser = JSON.parse(userData)._id;
-                const response = await getProfile(parsedUser);                
+                const parsedUser = JSON.parse(userData)._id;
+                const response = await getProfile(parsedUser);
                 const user = response.payload.data[0];
 
                 setUser(user);
@@ -39,7 +40,7 @@ export default function CardView() {
 
         fetchProfile();
         fetchWithdrawalData();
-    }, []);   
+    }, []);
 
     return (
         <div className={styles.cardView}>
@@ -48,7 +49,16 @@ export default function CardView() {
                     <h3>
                         Referral Code
                     </h3>
-                    <div className={styles.linkCopy}>
+                    <div
+                        className={styles.linkCopy}
+                        onClick={() => {
+                            if (user?.referralCode) {
+                                navigator.clipboard.writeText(user.referralCode);
+                                toast.success("Referral code copied!");
+                            }
+                        }}
+                        style={{ cursor: "pointer" }}
+                    >
                         <span>
                             {user?.referralCode}
                         </span>

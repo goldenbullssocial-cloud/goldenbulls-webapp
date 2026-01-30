@@ -29,6 +29,12 @@ const CloseIcon = () => (
     </svg>
 );
 
+const ExpandIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 3H21M21 3V9M21 3L14 10M9 21H3M3 21V15M3 21L10 14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
 export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, onProgressUpdate }) {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -43,6 +49,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
     const [rating, setRating] = useState(0);
     const [reviewText, setReviewText] = useState("");
     const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
+    const [showVideoModal, setShowVideoModal] = useState(false);
 
     // Batch Modal State
     const [showBatchModal, setShowBatchModal] = useState(false);
@@ -398,27 +405,48 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                 ) : (
                                     // For recorded courses, use existing logic
                                     courseData?.isPayment ? (
-                                        (isPlaying || selectedVideo?.url) ? (
-                                            <video
-                                                ref={videoRef}
-                                                src={selectedVideo?.url || currentChapter?.chapterVideo}
-                                                controls
-                                                onPause={handleVideoPause}
-                                                onEnded={handleVideoPause}
-                                                onLoadedMetadata={handleLoadedMetadata}
-                                                onTimeUpdate={handleTimeUpdate}
-                                                autoPlay={isPlaying}
-                                                width="100%"
-                                                height="326px"
-                                                style={{ borderRadius: '12px', objectFit: 'cover' }}
-                                            />
-                                        ) : (
+                                        showVideoModal ? (
                                             <>
-                                                <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
-                                                <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
-                                                    <PlayIcon />
+                                                <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' style={{ opacity: 0.3 }} />
+                                                <div className={styles.playButtonOverlay} onClick={() => setShowVideoModal(false)}>
+                                                    <span style={{ color: '#fff', textAlign: 'center' }}>Video playing in expanded view...<br /><br />Click to Close</span>
                                                 </div>
                                             </>
+                                        ) : (
+                                            (isPlaying || selectedVideo?.url) ? (
+                                                <>
+                                                    <video
+                                                        ref={videoRef}
+                                                        src={selectedVideo?.url || currentChapter?.chapterVideo}
+                                                        controls
+                                                        onPause={handleVideoPause}
+                                                        onEnded={handleVideoPause}
+                                                        onLoadedMetadata={handleLoadedMetadata}
+                                                        onTimeUpdate={handleTimeUpdate}
+                                                        autoPlay={isPlaying}
+                                                        width="100%"
+                                                        height="326px"
+                                                        style={{ borderRadius: '12px', objectFit: 'cover' }}
+                                                    />
+                                                    <div
+                                                        className={styles.expandOverlay}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setShowVideoModal(true);
+                                                        }}
+                                                        title="Expand Video"
+                                                    >
+                                                        <ExpandIcon />
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <img src={courseData?.courseVideo || CourseImageDefault} alt='CourseImage' />
+                                                    <div className={styles.playButtonOverlay} onClick={handlePlayVideo}>
+                                                        <PlayIcon />
+                                                    </div>
+                                                </>
+                                            )
                                         )
                                     ) : (
                                         courseData?.courseIntroVideo ? (
@@ -714,6 +742,30 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                 />
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Video Expansion Modal */}
+            {showVideoModal && (
+                <div className={styles.modalOverlay} onClick={() => setShowVideoModal(false)}>
+                    <div className={styles.videoModalContent} onClick={(e) => e.stopPropagation()}>
+                        <button className={styles.closeBtn} onClick={() => setShowVideoModal(false)}>
+                            <CloseIcon />
+                        </button>
+                        <video
+                            ref={videoRef}
+                            src={selectedVideo?.url || currentChapter?.chapterVideo}
+                            controls
+                            autoPlay
+                            onPause={handleVideoPause}
+                            onEnded={handleVideoPause}
+                            onLoadedMetadata={handleLoadedMetadata}
+                            onTimeUpdate={handleTimeUpdate}
+                            width="100%"
+                            height="100%"
+                            style={{ borderRadius: '12px' }}
+                        />
                     </div>
                 </div>
             )}
