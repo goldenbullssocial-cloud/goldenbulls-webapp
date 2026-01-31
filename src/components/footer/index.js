@@ -92,10 +92,10 @@ export default function Footer() {
                   Support
                 </h2>
                 <div className={styles.line}></div>
-                <a aria-label='Terms of Service'>Terms of Service</a>
-                <a aria-label='Privacy Policy'>Privacy Policy</a>
+                <Link href="/terms-conditions" aria-label='Terms of Service'>Terms of Service</Link>
+                <Link href="/privacy-policy" aria-label='Privacy Policy'>Privacy Policy</Link>
                 <a aria-label='Telegram Group'>Telegram Group</a>
-                <a aria-label='Refund Policy'>Refund Policy</a>
+                <Link href="/refund-policy" aria-label='Refund Policy'>Refund Policy</Link>
               </div>
               <div className={styles.text}>
                 <h2>
