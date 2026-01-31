@@ -1,10 +1,13 @@
 import NewPassword from '@/modulers/(user)/new-password'
-import React from 'react'
+import React, { Suspense } from 'react'
+import Loader from '@/components/loader'
 
 export default function page() {
     return (
         <div>
-            <NewPassword />
+            <Suspense fallback={<Loader />}>
+                <NewPassword />
+            </Suspense>
         </div>
     )
 }
