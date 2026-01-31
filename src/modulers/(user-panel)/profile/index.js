@@ -64,6 +64,8 @@ export default function Profile() {
                                 setSelectedCountryCode(`+${data.countryCode}`);
                             }
                             if (data.profileImage) {
+                                // If the image path is relative, you might need to prefix it with your base URL
+                                // For now, we'll set it directly and let the onError handler handle it if it fails
                                 setProfileImagePreview(data.profileImage);
                             }
 
@@ -256,18 +258,23 @@ export default function Profile() {
                 </h2>
             </div>
             <div className={styles.profile} onClick={triggerFileInput}>
-                <img src={profileImagePreview} alt='ProfileImage' className={styles.img} />
+                <img
+                    src={profileImagePreview || ProfileImage}
+                    alt='ProfileImage'
+                    className={styles.img}
+                    onError={(e) => { e.target.src = ProfileImage; }}
+                />
                 <div className={styles.editIcon}>
                     <img src={EditIcon} alt='EditIcon' />
                 </div>
-                <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleImageChange}
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                />
             </div>
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                style={{ display: 'none' }}
+            />
             <div className={styles.profileInformation}>
                 <div className={styles.twoCol}>
                     <Input
