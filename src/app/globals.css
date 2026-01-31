@@ -167,3 +167,20 @@ img {
   pointer-events: none;
   transition: opacity 0.3s;
 }
+
+.no-spin-number {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.no-spin-number::-webkit-outer-spin-button,
+.no-spin-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spin-number:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
