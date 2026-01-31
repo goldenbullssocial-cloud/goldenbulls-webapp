@@ -44,63 +44,67 @@ export default function Profile() {
             try {
                 const user = getCookie('user');
                 if (user) {
-                    const parsedUser = JSON.parse(user);
-                    const response = await getProfile(parsedUser._id);
+                    try {
+                        const parsedUser = JSON.parse(user);
+                        const response = await getProfile(parsedUser._id);
 
-                    if (response.success) {
-                        const data = response.payload.data[0];
-                        setFormData({
-                            firstName: data.firstName || '',
-                            lastName: data.lastName || '',
-                            phoneNumber: data.phone || data.phoneNumber || '',
-                            email: data.email || '',
-                            city: data.city || '',
-                            state: data.state || '',
-                            country: data.country || '',
-                            gender: data.gender || ''
-                        });
-                        if (data.countryCode) {
-                            setSelectedCountryCode(`+${data.countryCode}`);
-                        }
-                        if (data.profileImage) {
-                            setProfileImagePreview(data.profileImage);
-                        }
+                        if (response.success) {
+                            const data = response.payload.data[0];
+                            setFormData({
+                                firstName: data.firstName || '',
+                                lastName: data.lastName || '',
+                                phoneNumber: data.phone || data.phoneNumber || '',
+                                email: data.email || '',
+                                city: data.city || '',
+                                state: data.state || '',
+                                country: data.country || '',
+                                gender: data.gender || ''
+                            });
+                            if (data.countryCode) {
+                                setSelectedCountryCode(`+${data.countryCode}`);
+                            }
+                            if (data.profileImage) {
+                                setProfileImagePreview(data.profileImage);
+                            }
 
-                        // Set location IDs from API data
-                        if (data.country) {
-                            const countries = await GetCountries();
-                            console.log('All countries:', countries);
-                            const foundCountry = countries.find(c => c.name === data.country);
-                            console.log('Found country:', foundCountry, 'for', data.country);
-                            if (foundCountry) {
-                                setCountryId(foundCountry.id);
-                                console.log('Set countryId to:', foundCountry.id);
+                            // Set location IDs from API data
+                            if (data.country) {
+                                const countries = await GetCountries();
+                                console.log('All countries:', countries);
+                                const foundCountry = countries.find(c => c.name === data.country);
+                                console.log('Found country:', foundCountry, 'for', data.country);
+                                if (foundCountry) {
+                                    setCountryId(foundCountry.id);
+                                    console.log('Set countryId to:', foundCountry.id);
 
-                                // Set state ID if state exists
-                                if (data.state) {
-                                    const states = await GetState(foundCountry.id);
-                                    console.log('All states for country:', states);
-                                    const foundState = states.find(s => s.name === data.state);
-                                    console.log('Found state:', foundState, 'for', data.state);
-                                    if (foundState) {
-                                        setStateId(foundState.id);
-                                        console.log('Set stateId to:', foundState.id);
+                                    // Set state ID if state exists
+                                    if (data.state) {
+                                        const states = await GetState(foundCountry.id);
+                                        console.log('All states for country:', states);
+                                        const foundState = states.find(s => s.name === data.state);
+                                        console.log('Found state:', foundState, 'for', data.state);
+                                        if (foundState) {
+                                            setStateId(foundState.id);
+                                            console.log('Set stateId to:', foundState.id);
 
-                                        // Set city ID if city exists
-                                        if (data.city) {
-                                            const cities = await GetCity(foundCountry.id, foundState.id);
-                                            console.log('All cities for state:', cities);
-                                            const foundCity = cities.find(c => c.name === data.city);
-                                            console.log('Found city:', foundCity, 'for', data.city);
-                                            if (foundCity) {
-                                                setCityId(foundCity.id);
-                                                console.log('Set cityId to:', foundCity.id);
+                                            // Set city ID if city exists
+                                            if (data.city) {
+                                                const cities = await GetCity(foundCountry.id, foundState.id);
+                                                console.log('All cities for state:', cities);
+                                                const foundCity = cities.find(c => c.name === data.city);
+                                                console.log('Found city:', foundCity, 'for', data.city);
+                                                if (foundCity) {
+                                                    setCityId(foundCity.id);
+                                                    console.log('Set cityId to:', foundCity.id);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                    } catch (error) {
+                        console.error("Error parsing user cookie:", error);
                     }
                 }
             } catch (error) {
@@ -192,7 +196,14 @@ export default function Profile() {
                 return;
             }
 
-            const parsedUser = JSON.parse(user);
+            let parsedUser;
+            try {
+                parsedUser = JSON.parse(user);
+            } catch (error) {
+                console.error("Error parsing user cookie:", error);
+                toast.error("Session error. Please log in again.");
+                return;
+            }
 
             let profileImageUrl = profileImagePreview;
 

@@ -95,7 +95,7 @@ export default function BlogDetails() {
             </div>
             <div className={styles.tableofContentDetails}>
                 <div className='container-md'>
-                    {/* <div className={styles.grid}>
+                    <div className={styles.grid}>
                         <div className={styles.griditems}>
                             <div className={styles.box}>
                                 <div className={styles.boxHeader}>
@@ -104,20 +104,16 @@ export default function BlogDetails() {
                                     </h2>
                                 </div>
                                 <ol>
-                                    <li>Introduction to the Forex Market</li>
-                                    <li>How Currency Pairs Work</li>
-                                    <li>Understanding Market Sessions</li>
-                                    <li>Basic Types of Analysis</li>
-                                    <li>Why Risk Management Matters</li>
-                                    <li>Common Beginner Mistakes</li>
-                                    <li>Building a Trading Routine</li>
-                                    <li>Final Thoughts for New Traders</li>
+                                    {(blogData?.tableOfContent || blogData?.tableOfContents)?.map((item, index) => (
+                                        <li key={index}>{item}</li>
+                                    ))}
                                 </ol>
                             </div>
                         </div>
-                    </div> */}
-                    <p>{blogData?.description || ''}</p>
-                    {/* <div dangerouslySetInnerHTML={{ __html: blogData?.description || '' }} /> */}
+                        <div className={styles.griditems}>
+                            <p>{blogData?.description || ''}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <SimilarBlogs />

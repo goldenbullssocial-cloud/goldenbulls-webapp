@@ -135,7 +135,8 @@ export default function NewPassword() {
                     value={password}
                     onChange={handlePasswordChange}
                     error={errors.password}
-                    onIconClick={() => setShowPassword(!showPassword)}
+                    isPassword
+                    onTogglePassword={() => setShowPassword(!showPassword)}
                   />
                 </div>
                 <Input
@@ -146,7 +147,8 @@ export default function NewPassword() {
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   error={errors.confirmPassword}
-                  onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  isPassword
+                  onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
                 />
 
                 {errors.submit && <div className={styles.submitError}>{errors.submit}</div>}

@@ -14,11 +14,11 @@ export default function Authentication() {
 
   const googleLogin = async () => {
     try {
-      const data = await loginWithGoogle();      
+      const data = await loginWithGoogle();
       if (data.success) {
         toast.success("Login successful.");
         setCookie("userToken", data.payload.token);
-        setCookie("user", data.payload);
+        setCookie("user", JSON.stringify(data.payload));
         router.push("/library");
       } else {
         toast.error(errorMessages[data?.message] ?? errorMessages["default"]);
@@ -30,12 +30,12 @@ export default function Authentication() {
 
   return (
     <div className={styles.authentication}>
-          <div className={styles.continueGoogle}>
-              <button onClick={googleLogin}>
-                  Continue with
-                  <img src={GoogleIcon} alt='GoogleIcon' />
-              </button>
-          </div>
+      <div className={styles.continueGoogle}>
+        <button onClick={googleLogin}>
+          Continue with
+          <img src={GoogleIcon} alt='GoogleIcon' />
+        </button>
+      </div>
     </div>
   );
 }

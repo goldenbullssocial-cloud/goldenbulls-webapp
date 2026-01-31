@@ -29,9 +29,15 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
     useEffect(() => {
         const user = getCookie('user');
         if (user) {
-            const parsedUser = JSON.parse(user);
-            const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
-            setUser(userName);
+            try {
+                const parsedUser = JSON.parse(user);
+                const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
+                setUser(userName);
+            } catch (error) {
+                console.error("Error parsing user cookie:", error);
+                // Fallback to empty user name if parsing fails
+                setUser("");
+            }
         }
     }, []);
 

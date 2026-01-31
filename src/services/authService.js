@@ -43,11 +43,16 @@ export const signIn = async (email, password) => {
 export const loginWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
+    const displayName = result.user.displayName || "";
+    const nameParts = displayName.split(" ");
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+
     const user = {
       email: result.user.email,
-      firstName: result.user.firstName,
-      lastName: result.user.lastName,
-      accessToken: result.user.stsTokenManager.accessToken,
+      firstName: firstName,
+      lastName: lastName,
+      accessToken: await result.user.getIdToken(),
       profileImage: result.user.photoURL,
     }
     const response = await api.post(`/user/signinWithGoogle`,
