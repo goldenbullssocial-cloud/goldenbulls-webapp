@@ -9,3 +9,15 @@ export const getpaymentHistory = async (type, queryData) => {
         throw error;
     }
 };
+
+export const addmetaAccountNo = async (paymentId, metaAccountNo) => {
+    try {
+        const response = await api.put(`/payment/updateMetaAccountNo/${paymentId}`, {
+            "metaAccountNo": [metaAccountNo]
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error adding meta account number:', error);
+        throw error;
+    }
+};

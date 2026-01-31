@@ -9,8 +9,7 @@ import {
 import styles from './blogSection.module.scss';
 import LeftIcon from '@/icons/leftIcon';
 import Link from 'next/link';
-import { useQuery } from "@apollo/client/react";
-import { GET_ALL_BLOG_DATA } from '@/graphql/getBlogData';
+import { getAllBlogs } from '@/services/blog';
 const BlogImage = '/assets/images/blog-image.png';
 import LibraryIcon from '@/icons/libraryIcon';
 
@@ -18,16 +17,27 @@ export default function BlogSection() {
     const [prevEl, setPrevEl] = useState(null);
     const [nextEl, setNextEl] = useState(null);
     const [blogs, setBlogs] = useState([]);
-
-    const {
-        data: blogData,
-    } = useQuery(GET_ALL_BLOG_DATA);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (blogData) {
-            setBlogs(blogData?.blogs_connection?.nodes);
+        fetchBlogs();
+    }, []);
+
+    const fetchBlogs = async () => {
+        try {
+            setLoading(true);
+            const res = await getAllBlogs();
+            if (res && res.payload) {
+                // Flatten the nested structure: each item has a blogs array
+                const allBlogs = (res.payload.data || []).flatMap(item => item.blogs || []);
+                setBlogs(allBlogs);
+            }
+        } catch (error) {
+            console.error("Failed to fetch blogs", error);
+        } finally {
+            setLoading(false);
         }
-    }, [blogData]);
+    };
 
     return (
         <div className={styles.blogSectionAlignment}>
@@ -96,8 +106,7 @@ export default function BlogSection() {
                                                     <div className={styles.card}>
                                                         <div className={styles.cardImage}>
                                                             <img src={
-                                                                process.env.NEXT_PUBLIC_NEXT_GRAPHQL_IMAGE_URL +
-                                                                item?.coverImage?.url
+                                                                item?.coverImage || BlogImage
                                                             } alt='BlogImage' />
                                                         </div>
                                                         <div className={styles.details}>
@@ -106,7 +115,7 @@ export default function BlogSection() {
                                                             </h3>
                                                             <div className={styles.twoContent}>
                                                                 <span>
-                                                                    {item?.author?.name}
+                                                                    {item?.name || 'Admin'}
                                                                 </span>
                                                                 <ul>
                                                                     <li>

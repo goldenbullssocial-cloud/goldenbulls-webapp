@@ -1,27 +1,92 @@
-import React from 'react'
+'use client';
+import React, { useEffect, useState } from 'react'
 import styles from './blogDetails.module.scss';
 import FaqSection from '../home/faqSection';
 import SimilarBlogs from './similarBlogs';
+import { useSearchParams } from 'next/navigation';
+import { getSingleBlog } from '@/services/blog';
+import NoData from '@/components/noData';
+import LibraryIcon from '@/icons/libraryIcon';
+
 const BlogDetailsImage = '/assets/images/blog-details-banner.png';
+
 export default function BlogDetails() {
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
+    const [blogData, setBlogData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBlogDetails = async () => {
+            if (!id) return;
+
+            try {
+                setLoading(true);
+                const res = await getSingleBlog(id);
+
+                if (res && res.payload) {
+                    setBlogData(res.payload[0]);
+                }
+            } catch (error) {
+                console.error("Failed to fetch blog details", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogDetails();
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className={styles.blogDetailsAlignment}>
+                <div className='container-md'>
+                    <div className={styles.blogImage} style={{ background: '#1a1a1a', height: '400px', borderRadius: '12px', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
+                    <div className={styles.blogtitle}>
+                        <div style={{ background: '#1a1a1a', height: '40px', width: '70%', borderRadius: '8px', marginBottom: '16px', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
+                        <div style={{ background: '#1a1a1a', height: '20px', width: '30%', borderRadius: '8px', animation: 'pulse 1.5s ease-in-out infinite' }}></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!blogData) {
+        return (
+            <div className={styles.blogDetailsAlignment}>
+                <div className='container-md' style={{ padding: '60px 0' }}>
+                    <NoData
+                        icon={<LibraryIcon />}
+                        title="Blog Not Found"
+                        description="The blog you're looking for doesn't exist or has been removed."
+                    />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
             <div className={styles.blogDetailsAlignment}>
                 <div className='container-md'>
                     <div className={styles.blogImage}>
-                        <img src={BlogDetailsImage} alt='BlogDetailsImage' />
+                        <img src={blogData?.coverImage} alt='BlogDetailsImage' />
                     </div>
                     <div className={styles.blogtitle}>
                         <h2>
-                            Forex trading masterclass for absolute beginners, and market enthusiasts
+                            {blogData?.title || 'Blog Title'}
                         </h2>
                         <div className={styles.twoText}>
                             <p>
-                                By Johnathan Doe
+                                By {blogData?.name || 'Author'}
                             </p>
                             <ul>
                                 <li>
-                                    19 November 2025
+                                    {blogData?.createdAt ? new Date(blogData.createdAt).toLocaleDateString('en-GB', {
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    }) : ''}
                                 </li>
                             </ul>
                         </div>
@@ -30,7 +95,7 @@ export default function BlogDetails() {
             </div>
             <div className={styles.tableofContentDetails}>
                 <div className='container-md'>
-                    <div className={styles.grid}>
+                    {/* <div className={styles.grid}>
                         <div className={styles.griditems}>
                             <div className={styles.box}>
                                 <div className={styles.boxHeader}>
@@ -50,78 +115,13 @@ export default function BlogDetails() {
                                 </ol>
                             </div>
                         </div>
-                        <div className={styles.griditems}>
-                            <h3>
-                                Forex trading masterclass for absolute beginners, and market enthusiasts
-                            </h3>
-                            <p>
-                                The foreign exchange market—commonly known as forex—is the world’s largest financial market, where currencies are bought and sold every second of the day. Unlike traditional stock markets, forex operates globally and remains open 24 hours, five days a week. This accessibility makes it appealing to new learners, but it also means understanding how the market functions is essential before taking any steps. In this guide, we break down the
-                                basics in simple language to help beginners build a strong foundation.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                How Currency Pairs Work
-                            </h3>
-                            <p>
-                                Forex trading always involves two currencies paired together, such as EUR/USD or GBP/JPY. The first currency is called the base, and the second is the quote. When you trade, you are effectively buying one currency while selling the other. The price of a currency pair tells you how much of the quote currency you need to buy one unit of the base currency. Understanding how these pairs move is the first step toward analyzing
-                                market behavior.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                Forex trading masterclass for absolute beginners, and market enthusiasts
-                            </h3>
-                            <p>
-                                The foreign exchange market—commonly known as forex—is the world’s largest financial market, where currencies are bought and sold every second of the day. Unlike traditional stock markets, forex operates globally and remains open 24 hours, five days a week. This accessibility makes it appealing to new learners, but it also means understanding how the market functions is essential before taking any steps. In this guide, we break down the
-                                basics in simple language to help beginners build a strong foundation.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                How Currency Pairs Work
-                            </h3>
-                            <p>
-                                Forex trading always involves two currencies paired together, such as EUR/USD or GBP/JPY. The first currency is called the base, and the second is the quote. When you trade, you are effectively buying one currency while selling the other. The price of a currency pair tells you how much of the quote currency you need to buy one unit of the base currency. Understanding how these pairs move is the first step toward analyzing
-                                market behavior.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                Forex trading masterclass for absolute beginners, and market enthusiasts
-                            </h3>
-                            <p>
-                                The foreign exchange market—commonly known as forex—is the world’s largest financial market, where currencies are bought and sold every second of the day. Unlike traditional stock markets, forex operates globally and remains open 24 hours, five days a week. This accessibility makes it appealing to new learners, but it also means understanding how the market functions is essential before taking any steps. In this guide, we break down the
-                                basics in simple language to help beginners build a strong foundation.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                How Currency Pairs Work
-                            </h3>
-                            <p>
-                                Forex trading always involves two currencies paired together, such as EUR/USD or GBP/JPY. The first currency is called the base, and the second is the quote. When you trade, you are effectively buying one currency while selling the other. The price of a currency pair tells you how much of the quote currency you need to buy one unit of the base currency. Understanding how these pairs move is the first step toward analyzing
-                                market behavior.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                Forex trading masterclass for absolute beginners, and market enthusiasts
-                            </h3>
-                            <p>
-                                The foreign exchange market—commonly known as forex—is the world’s largest financial market, where currencies are bought and sold every second of the day. Unlike traditional stock markets, forex operates globally and remains open 24 hours, five days a week. This accessibility makes it appealing to new learners, but it also means understanding how the market functions is essential before taking any steps. In this guide, we break down the
-                                basics in simple language to help beginners build a strong foundation.
-                            </p>
-                            <div className={styles.spacer}></div>
-                            <h3>
-                                How Currency Pairs Work
-                            </h3>
-                            <p>
-                                Forex trading always involves two currencies paired together, such as EUR/USD or GBP/JPY. The first currency is called the base, and the second is the quote. When you trade, you are effectively buying one currency while selling the other. The price of a currency pair tells you how much of the quote currency you need to buy one unit of the base currency. Understanding how these pairs move is the first step toward analyzing
-                                market behavior.
-                            </p>
-                            <div className={styles.spacer}></div>
-                        </div>
-                    </div>
+                    </div> */}
+                    <p>{blogData?.description || ''}</p>
+                    {/* <div dangerouslySetInnerHTML={{ __html: blogData?.description || '' }} /> */}
                 </div>
             </div>
             <SimilarBlogs />
             <FaqSection />
-
         </>
     )
 }
