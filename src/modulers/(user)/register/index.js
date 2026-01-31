@@ -160,7 +160,7 @@ export default function Register() {
         <div className={styles.registerWrapper}>
             <div className={styles.mobileHeader}>
                 <img src={Logo} alt='Logo' />
-            </div>  
+            </div>
             <div className={styles.leftAlignment}>
                 <div className={styles.containerAlignment}>
                     <div className={styles.mainrelative}>
@@ -222,7 +222,8 @@ export default function Register() {
                                         value={data.password}
                                         onChange={handleChange}
                                         error={errors.password}
-                                        onIconClick={() => setShowPassword(!showPassword)}
+                                        isPassword
+                                        onTogglePassword={() => setShowPassword(!showPassword)}
                                     />
                                 </div>
 
@@ -235,7 +236,8 @@ export default function Register() {
                                     value={data.confirmPassword}
                                     onChange={handleChange}
                                     error={errors.confirmPassword}
-                                    onIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    isPassword
+                                    onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
                                 />
 
                                 {errors.submit && <div className={styles.submitError}>{errors.submit}</div>}

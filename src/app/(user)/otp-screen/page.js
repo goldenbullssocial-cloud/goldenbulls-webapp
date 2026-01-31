@@ -1,10 +1,13 @@
 import OtpScreen from '@/modulers/(user)/otp-screen'
-import React from 'react'
+import React, { Suspense } from 'react'
+import Loader from '@/components/loader'
 
 export default function page() {
     return (
         <div>
-            <OtpScreen />
+            <Suspense fallback={<Loader />}>
+                <OtpScreen />
+            </Suspense>
         </div>
     )
 }

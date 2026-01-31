@@ -22,56 +22,103 @@ const ProfileImage = "/assets/images/profile-upload.png";
 const EditIcon = "/assets/icons/edit.svg";
 
 export default function Profile() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    city: "",
-    state: "",
-    country: "",
-    gender: "",
-  });
-  const [countryId, setCountryId] = useState(0);
-  const [stateId, setStateId] = useState(0);
-  const [cityId, setCityId] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCountryCode, setSelectedCountryCode] = useState("+91");
-  const [phoneError, setPhoneError] = useState("");
-  const [errors, setErrors] = useState({});
-  const countryRef = React.useRef(null);
-  const fileInputRef = React.useRef(null);
-  const [profileImagePreview, setProfileImagePreview] = useState(ProfileImage);
-  const [selectedFile, setSelectedFile] = useState(null);
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        email: '',
+        city: '',
+        state: '',
+        country: '',
+        gender: ''
+    });
+    const [countryId, setCountryId] = useState(0);
+    const [stateId, setStateId] = useState(0);
+    const [cityId, setCityId] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCountryCode, setSelectedCountryCode] = useState('+91');
+    const [phoneError, setPhoneError] = useState('');
+    const countryRef = React.useRef(null);
+    const fileInputRef = React.useRef(null);
+    const [profileImagePreview, setProfileImagePreview] = useState(ProfileImage);
+    const [selectedFile, setSelectedFile] = useState(null);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const user = getCookie("user");
-        if (user) {
-          const parsedUser = JSON.parse(user);
-          const response = await getProfile(parsedUser._id);
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const user = getCookie('user');
+                if (user) {
+                    try {
+                        const parsedUser = JSON.parse(user);
+                        const response = await getProfile(parsedUser._id);
 
-          if (response.success) {
-            const data = response.payload.data[0];
-            setFormData({
-              firstName: data.firstName || "",
-              lastName: data.lastName || "",
-              phoneNumber: data.phone || data.phoneNumber || "",
-              email: data.email || "",
-              city: data.city || "",
-              state: data.state || "",
-              country: data.country || "",
-              gender: data.gender || "",
-            });
-            if (data.countryCode) {
-              setSelectedCountryCode(`+${data.countryCode}`);
-            }
-            if (data.profileImage) {
-              setProfileImagePreview(data.profileImage);
+                        if (response.success) {
+                            const data = response.payload.data[0];
+                            setFormData({
+                                firstName: data.firstName || '',
+                                lastName: data.lastName || '',
+                                phoneNumber: data.phone || data.phoneNumber || '',
+                                email: data.email || '',
+                                city: data.city || '',
+                                state: data.state || '',
+                                country: data.country || '',
+                                gender: data.gender || ''
+                            });
+                            if (data.countryCode) {
+                                setSelectedCountryCode(`+${data.countryCode}`);
+                            }
+                            if (data.profileImage) {
+                                setProfileImagePreview(data.profileImage);
+                            }
+
+                            // Set location IDs from API data
+                            if (data.country) {
+                                const countries = await GetCountries();
+                                console.log('All countries:', countries);
+                                const foundCountry = countries.find(c => c.name === data.country);
+                                console.log('Found country:', foundCountry, 'for', data.country);
+                                if (foundCountry) {
+                                    setCountryId(foundCountry.id);
+                                    console.log('Set countryId to:', foundCountry.id);
+
+                                    // Set state ID if state exists
+                                    if (data.state) {
+                                        const states = await GetState(foundCountry.id);
+                                        console.log('All states for country:', states);
+                                        const foundState = states.find(s => s.name === data.state);
+                                        console.log('Found state:', foundState, 'for', data.state);
+                                        if (foundState) {
+                                            setStateId(foundState.id);
+                                            console.log('Set stateId to:', foundState.id);
+
+                                            // Set city ID if city exists
+                                            if (data.city) {
+                                                const cities = await GetCity(foundCountry.id, foundState.id);
+                                                console.log('All cities for state:', cities);
+                                                const foundCity = cities.find(c => c.name === data.city);
+                                                console.log('Found city:', foundCity, 'for', data.city);
+                                                if (foundCity) {
+                                                    setCityId(foundCity.id);
+                                                    console.log('Set cityId to:', foundCity.id);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error parsing user cookie:", error);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+                toast.error("Failed to load profile data");
+            } finally {
+                setLoading(false);
             }
 
             // Set location IDs from API data
@@ -171,6 +218,7 @@ export default function Profile() {
     setStateId(0);
     setCityId(0);
 
+
     // Clear errors for country and dependent fields
     if (errors.country) {
       setErrors((prev) => ({
@@ -181,6 +229,14 @@ export default function Profile() {
       }));
     }
   };
+            let parsedUser;
+            try {
+                parsedUser = JSON.parse(user);
+            } catch (error) {
+                console.error("Error parsing user cookie:", error);
+                toast.error("Session error. Please log in again.");
+                return;
+            }
 
   const handleStateChange = (e) => {
     setStateId(e.id);

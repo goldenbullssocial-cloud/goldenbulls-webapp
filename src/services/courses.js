@@ -78,17 +78,37 @@ export const getBatches = async (data) => {
   try {
     const params = new URLSearchParams();
     params.append('courseId', data.courseId);
-    
+
     if (data.isMatchBatch !== undefined) {
       params.append('isMatchBatch', data.isMatchBatch);
     }
-    
+
     const response = await api.get(
       `/batch/getBatchByCourse?${params.toString()}`
     );
     return response.data;
   } catch (error) {
     console.error("Error fetching batches:", error);
+    throw error;
+  }
+};
+
+export const downloadCourseCertificate = async (courseId) => {
+  try {
+    const response = await api.post(`/payment/courseCertificate?courseId=${courseId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error downloading certificate:', error);
+    throw error;
+  }
+};
+
+export const downloadStudentID = async (id, batchId) => {
+  try {
+    const response = await api.post(`/payment/createStudentId?courseId=${id}&batchId=${batchId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error downloading student ID:', error);
     throw error;
   }
 };

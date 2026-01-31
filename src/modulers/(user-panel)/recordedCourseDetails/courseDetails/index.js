@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getPaymentUrl } from '@/services/dashboard';
 import toast from 'react-hot-toast';
-import { getCourses, submitReview, updateVideoProgress, getBatches } from '@/services/courses';
+import { getCourses, submitReview, updateVideoProgress, getBatches, downloadCourseCertificate, downloadStudentID } from '@/services/courses';
 import { getChapters, getProfile } from '@/services/dashboard';
 import { useRef } from 'react';
 import CourseContent from '../courseContent';
@@ -50,6 +50,8 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
     const [reviewText, setReviewText] = useState("");
     const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const [isDownloadingCertificate, setIsDownloadingCertificate] = useState(false);
+    const [isDownloadingStudentID, setIsDownloadingStudentID] = useState(false);
 
     // Batch Modal State
     const [showBatchModal, setShowBatchModal] = useState(false);
@@ -306,6 +308,138 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
         }
     };
 
+    const handleDownloadCertificate = async () => {
+        if (isDownloadingCertificate) return;
+
+        setIsDownloadingCertificate(true);
+        try {
+            if (!id) {
+                throw new Error("No course selected");
+            }
+
+            const response = await downloadCourseCertificate(id);
+
+            if (!response) {
+                throw new Error("No response received from the server");
+            }
+
+            const fileUrl = typeof response === "object" ? response.payload : response;
+
+            if (!fileUrl) {
+                throw new Error("Certificate URL is missing in the response");
+            }
+
+            const fileRes = await fetch(fileUrl);
+            if (!fileRes.ok) throw new Error("Failed to fetch certificate");
+
+            const blob = await fileRes.blob();
+
+            const contentType = fileRes.headers.get("content-type") || "application/octet-stream";
+
+            const extensionMap = {
+                "application/pdf": "pdf",
+                "image/jpeg": "jpg",
+                "image/png": "png",
+                "image/webp": "webp",
+                "text/html": "html",
+                "application/json": "json",
+            };
+
+            const extension = extensionMap[contentType] || "bin";
+            const fileName = `certificate-${courseData?.CourseName?.replace(/\s+/g, "-").toLowerCase() || "course"}.${extension}`;
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+            toast.success("Certificate downloaded successfully!");
+        } catch (error) {
+            console.error("Download error:", error);
+            toast.error(error.message || "Failed to download certificate");
+        } finally {
+            setIsDownloadingCertificate(false);
+        }
+    };
+
+    const handleDownloadStudentID = async () => {
+        if (isDownloadingStudentID) return;
+
+        setIsDownloadingStudentID(true);
+        try {
+            if (!id) {
+                throw new Error("No course selected");
+            }
+
+            const batchId = courseData?.payment?.[0]?.batchId?._id;
+            if (!batchId) {
+                throw new Error("No batch selected");
+            }
+
+            const response = await downloadStudentID(id, batchId);
+
+            if (!response) {
+                throw new Error("No response received from the server");
+            }
+
+            const fileUrl = typeof response === "object" ? response.payload : response;
+
+            if (!fileUrl) {
+                throw new Error("Student ID URL is missing in the response");
+            }
+
+            const fileRes = await fetch(fileUrl);
+            if (!fileRes.ok) throw new Error("Failed to fetch student ID");
+
+            const blob = await fileRes.blob();
+
+            const contentType = fileRes.headers.get("content-type") || "application/octet-stream";
+
+            const extensionMap = {
+                "application/pdf": "pdf",
+                "image/jpeg": "jpg",
+                "image/png": "png",
+                "image/webp": "webp",
+                "text/html": "html",
+                "application/json": "json",
+            };
+
+            const extension = extensionMap[contentType] || "bin";
+            const fileName = `student-${Date.now()}.${extension}`;
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+            toast.success("Student ID downloaded successfully!");
+        } catch (error) {
+            console.error("Download error:", error);
+            toast.error(error.message || "Failed to download student ID");
+        } finally {
+            setIsDownloadingStudentID(false);
+        }
+    };
+
+    // Calculate average completion percentage
+    const averageCompletion = chapters && chapters.length > 0
+        ? chapters.reduce((sum, chapter) => sum + parseFloat(chapter?.courseTracking?.percentage || 0), 0) / chapters.length
+        : 0;
+
     return (
         <div className={styles.courseDetails}>
             <div className={styles.grid}>
@@ -483,12 +617,28 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                             <div className={styles.bottomText}>
                                                 <span>{Math.round(displayPercentage)}% Completed</span>
                                             </div>
-                                            <div className={styles.button}>
+                                            {averageCompletion === 100 ? (
+                                                <div className={styles.button} style={{ marginBottom: '12px' }}>
+                                                    <Button
+                                                        text={isDownloadingCertificate ? "Downloading..." : "Download Certificate"}
+                                                        onClick={handleDownloadCertificate}
+                                                        disabled={isDownloadingCertificate}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className={styles.button}>
+                                                    <Button
+                                                        text="Resume Course"
+                                                        onClick={handlePlayVideo}
+                                                    />
+                                                </div>
+                                            )}
+                                            {/* <div className={styles.button}>
                                                 <Button
                                                     text="Resume Course"
                                                     onClick={handlePlayVideo}
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>) : (
                                         type === 'live' ? (
                                             <div className={styles.button}>
@@ -499,8 +649,9 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                             </div>) : (
                                             <div className={styles.button}>
                                                 <Button
-                                                    text="Download Student ID"
-                                                    onClick={handlePlayVideo}
+                                                    text={isDownloadingStudentID ? "Downloading..." : "Download Student ID"}
+                                                    onClick={handleDownloadStudentID}
+                                                    disabled={isDownloadingStudentID}
                                                 />
                                             </div>
                                         )
