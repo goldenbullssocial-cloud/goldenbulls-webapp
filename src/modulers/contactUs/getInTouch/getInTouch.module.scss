@@ -1,301 +1,308 @@
-@use '../../../scss/main.scss' as *;
-@use '../../../scss/breakpoints/breakpoints.scss' as *;
-@use '../../../scss/font/font.scss' as *;
+@use "../../../scss/main.scss" as *;
+@use "../../../scss/breakpoints/breakpoints.scss" as *;
+@use "../../../scss/font/font.scss" as *;
 
 .getInTouch {
-    padding: 120px 0;
+  padding: 120px 0;
 
-    @include respond-to("xl") {
-        padding: 90px 0;
+  @include respond-to("xl") {
+    padding: 90px 0;
+  }
+
+  @include respond-to("sm") {
+    padding: 60px 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 670px 1fr;
+    gap: 40px;
+
+    @include respond-to("md") {
+      grid-template-columns: 1fr;
+      gap: 32px;
     }
 
     @include respond-to("sm") {
-        padding: 60px 0;
+      grid-template-columns: 1fr;
+      gap: 32px;
     }
 
-    .grid {
-        display: grid;
-        grid-template-columns: 670px 1fr;
-        gap: 40px;
+    .blackBox {
+      border-radius: 26.667px;
+      background: #141414;
+      padding: 40px;
 
-        @include respond-to("md") {
-            grid-template-columns: 1fr;
-            gap: 32px;
-        }
+      @include respond-to("sm") {
+        padding: 24px;
+      }
+
+      h4 {
+        @include font-medium;
+        color: #fff;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 42.667px;
+        margin: 0 0 24px 0;
 
         @include respond-to("sm") {
-            grid-template-columns: 1fr;
-            gap: 32px;
+          font-size: 32px;
+          font-weight: 500;
+          line-height: 42.667px;
+        }
+      }
+
+      .checkboxText {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 0 0 26px 0;
+
+        @include respond-to("sm") {
+          padding: 0 0 22px 0;
         }
 
-        .blackBox {
-            border-radius: 26.667px;
-            background: #141414;
-            padding: 40px;
+        input[type="checkbox"] {
+          width: 21px;
+          height: 21px;
+          margin: 0;
+          padding: 0;
+
+          @include respond-to("sm") {
+            width: 18px;
+            height: 18px;
+          }
+        }
+
+        label {
+          display: block;
+          color: var(--Text-Colors-500, #808080);
+          font-size: 18.667px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 26.667px;
+
+          @include respond-to("sm") {
+            font-size: 16px;
+          }
+
+          span {
+            @include gradient-text;
+          }
+        }
+      }
+
+      .formControl {
+        padding: 0 0 21px 0;
+
+        input {
+          width: 100%;
+          border-radius: 10.667px;
+          border: 1.333px solid var(--Text-Colors-200, #d6d6d6);
+          background: var(--Text-Colors-25, #fcfcfc);
+          height: 64px;
+          padding: 0 26px;
+          color: #000;
+          font-size: 21.333px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 32px;
+          @include font-normal;
+          outline: none;
+
+          @include respond-to("sm") {
+            height: 55px;
+            padding: 0 16px;
+            font-size: 16px;
+            line-height: 24px;
+            border-radius: 12px;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        textarea {
+          width: 100%;
+          border-radius: 10.667px;
+          border: 1.333px solid var(--Text-Colors-200, #d6d6d6);
+          background: var(--Text-Colors-25, #fcfcfc);
+          height: 192px;
+          resize: none;
+          padding: 16px 26px;
+          color: #000;
+          font-size: 21.333px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 32px;
+          @include font-normal;
+          outline: none;
+
+          @include respond-to("sm") {
+            border-radius: 12px;
+            padding: 16px;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        ::placeholder {
+          color: var(--Text-Colors-500, #808080);
+          font-size: 21.333px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 32px;
+          @include font-normal;
+
+          @include respond-to("sm") {
+            font-size: 16px;
+            line-height: 24px;
+          }
+        }
+
+        .error {
+          color: #ff4444;
+          font-size: 14px;
+          margin-top: 4px;
+          padding: 0;
+
+          @include respond-to("sm") {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .griditems {
+      h2 {
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 140%;
+        text-transform: uppercase;
+        @include gradient-text;
+        margin: 0 0 50px 0;
+        @include heading-font;
+
+        @include respond-to("sm") {
+          @include heading32;
+          margin: 0 0 32px 0;
+        }
+      }
+
+      .followus {
+        display: flex;
+        align-items: center;
+        padding: 50px 0 0 0;
+        gap: 32px;
+
+        @include respond-to("sm") {
+          padding: 32px 0 0 0;
+          gap: 20px;
+        }
+
+        span {
+          display: block;
+          color: #fff;
+          font-size: 32px;
+          font-style: normal;
+          font-weight: 500;
+          @include font-medium;
+          line-height: 42.667px;
+
+          @include respond-to("sm") {
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 42.667px;
+          }
+        }
+
+        .socialIcon {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+
+          @include respond-to("sm") {
+            gap: 16px;
+          }
+
+          img {
+            display: block;
+            cursor: pointer;
 
             @include respond-to("sm") {
-                padding: 24px;
+              max-width: 40px;
             }
+          }
+        }
+      }
 
-            h4 {
-                @include font-medium;
-                color: #FFF;
-                font-size: 32px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: 42.667px;
-                margin: 0 0 24px 0;
+      .line {
+        border-bottom: 1px solid #fff;
+      }
 
-                @include respond-to("sm") {
-                    font-size: 32px;
-                    font-weight: 500;
-                    line-height: 42.667px;
-                }
-            }
+      .icongrid {
+        display: grid;
+        grid-template-columns: 58px 1fr;
+        gap: 20px;
+        padding: 0 0 50px 0;
 
-            .checkboxText {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                padding: 0 0 26px 0;
-
-                @include respond-to("sm") {
-                    padding: 0 0 22px 0;
-                }
-
-                input[type="checkbox"] {
-                    width: 21px;
-                    height: 21px;
-                    margin: 0;
-                    padding: 0;
-
-                    @include respond-to("sm") {
-                        width: 18px;
-                        height: 18px;
-                    }
-                }
-
-                label {
-                    display: block;
-                    color: var(--Text-Colors-500, #808080);
-                    font-size: 18.667px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 26.667px;
-
-                    @include respond-to("sm") {
-                        font-size: 16px;
-                    }
-
-                    span {
-                        @include gradient-text;
-                    }
-                }
-            }
-
-            .formControl {
-                padding: 0 0 21px 0;
-
-                input {
-                    width: 100%;
-                    border-radius: 10.667px;
-                    border: 1.333px solid var(--Text-Colors-200, #D6D6D6);
-                    background: var(--Text-Colors-25, #FCFCFC);
-                    height: 64px;
-                    padding: 0 26px;
-                    color: #000;
-                    font-size: 21.333px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 32px;
-                    @include font-normal;
-                    outline: none;
-
-                    @include respond-to("sm") {
-                        height: 55px;
-                        padding: 0 16px;
-                        font-size: 16px;
-                        line-height: 24px;
-                        border-radius: 12px;
-                    }
-
-                    &:focus {
-                        outline: none;
-                    }
-                }
-
-                textarea {
-                    width: 100%;
-                    border-radius: 10.667px;
-                    border: 1.333px solid var(--Text-Colors-200, #D6D6D6);
-                    background: var(--Text-Colors-25, #FCFCFC);
-                    height: 192px;
-                    resize: none;
-                    padding: 16px 26px;
-                    color: #000;
-                    font-size: 21.333px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 32px;
-                    @include font-normal;
-                    outline: none;
-
-                    @include respond-to("sm") {
-                        border-radius: 12px;
-                        padding: 16px;
-                    }
-
-                    &:focus {
-                        outline: none;
-                    }
-                }
-
-                ::placeholder {
-                    color: var(--Text-Colors-500, #808080);
-                    font-size: 21.333px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: 32px;
-                    @include font-normal;
-
-                    @include respond-to("sm") {
-                        font-size: 16px;
-                        line-height: 24px;
-                    }
-                }
-            }
+        img {
+          display: block;
         }
 
-        .griditems {
-            h2 {
-                font-size: 40px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 140%;
-                text-transform: uppercase;
-                @include gradient-text;
-                margin: 0 0 50px 0;
-                @include heading-font;
+        p {
+          @include font-normal;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 21.333px;
+          font-style: normal;
+          max-width: 435px;
+          font-weight: 400;
+          line-height: 32px;
 
-                @include respond-to("sm") {
-                    @include heading32;
-                    margin: 0 0 32px 0;
-                }
-            }
-
-            .followus {
-                display: flex;
-                align-items: center;
-                padding: 50px 0 0 0;
-                gap: 32px;
-
-                @include respond-to("sm") {
-                    padding: 32px 0 0 0;
-                    gap: 20px;
-                }
-
-                span {
-                    display: block;
-                    color: #FFF;
-                    font-size: 32px;
-                    font-style: normal;
-                    font-weight: 500;
-                    @include font-medium;
-                    line-height: 42.667px;
-
-                    @include respond-to("sm") {
-                        font-size: 20px;
-                        font-style: normal;
-                        font-weight: 500;
-                        line-height: 42.667px;
-                    }
-                }
-
-                .socialIcon {
-                    display: flex;
-                    align-items: center;
-                    gap: 20px;
-
-                    @include respond-to("sm") {
-                        gap: 16px;
-                    }
-
-                    img {
-                        display: block;
-                        cursor: pointer;
-
-                        @include respond-to("sm") {
-                            max-width: 40px;
-                        }
-                    }
-                }
-            }
-
-
-            .line {
-                border-bottom: 1px solid #fff;
-            }
-
-
-            .icongrid {
-                display: grid;
-                grid-template-columns: 58px 1fr;
-                gap: 20px;
-                padding: 0 0 50px 0;
-
-                img {
-                    display: block;
-                }
-
-                p {
-                    @include font-normal;
-                    color: rgba(255, 255, 255, 0.70);
-                    font-size: 21.333px;
-                    font-style: normal;
-                    max-width: 435px;
-                    font-weight: 400;
-                    line-height: 32px;
-
-                    @include respond-to("sm") {
-                        font-size: 20px;
-                        font-weight: 500;
-                        line-height: 30px;
-                    }
-                }
-
-                a {
-                    display: block;
-                    @include font-normal;
-                    color: rgba(255, 255, 255, 0.70);
-                    font-size: 21.333px;
-                    font-style: normal;
-                    max-width: 435px;
-                    font-weight: 400;
-                    line-height: 32px;
-
-                    @include respond-to("sm") {
-                        font-size: 20px;
-                        font-weight: 400;
-                        line-height: 26px;
-                    }
-                }
-
-
-
-                h3 {
-                    color: #FFF;
-                    font-size: 26.667px;
-                    font-style: normal;
-                    font-weight: 500;
-                    line-height: 40px;
-
-                    @include respond-to("sm") {
-                        font-size: 20px;
-                        font-weight: 400;
-                        line-height: 26px;
-                    }
-                }
-            }
+          @include respond-to("sm") {
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 30px;
+          }
         }
+
+        a {
+          display: block;
+          @include font-normal;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 21.333px;
+          font-style: normal;
+          max-width: 435px;
+          font-weight: 400;
+          line-height: 32px;
+
+          @include respond-to("sm") {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 26px;
+          }
+        }
+
+        h3 {
+          color: #fff;
+          font-size: 26.667px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 40px;
+
+          @include respond-to("sm") {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 26px;
+          }
+        }
+      }
     }
+  }
 }
