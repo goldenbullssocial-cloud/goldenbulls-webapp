@@ -47,10 +47,10 @@ export default function HeroCard() {
                     >
                         <h3>
                             <CountUp end={5000} enableScrollSpy /> +
-                            <p>
-                                Active Learners
-                            </p>
                         </h3>
+                        <p>
+                            Active Learners
+                        </p>
                     </motion.div>
                     <motion.div
 
