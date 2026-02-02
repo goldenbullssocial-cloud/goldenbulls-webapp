@@ -50,6 +50,17 @@
             align-items: center;
         }
 
+        .passwordToggle {
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            position: absolute;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
         input {
             width: 100%;
             border-radius: 16px;

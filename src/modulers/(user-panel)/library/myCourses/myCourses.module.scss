@@ -94,9 +94,15 @@
                     font-size: 20px;
                     font-style: normal;
                     font-weight: 500;
-                    line-height: normal;
+                    line-height: 1.4;
                     @include font-medium;
                     margin: 0 0 10px 0;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    min-height: 2.8em;
                 }
 
                 .bottomText {
