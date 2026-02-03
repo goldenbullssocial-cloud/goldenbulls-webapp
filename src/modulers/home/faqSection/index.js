@@ -16,9 +16,9 @@ const faqData = [
             'Yes, the course is designed for beginners as well as intermediate learners.',
     },
     {
-        question: 'Will I get lifetime access to the course?',
+        question: 'How long will I have access to the course content?',
         answer:
-            'Yes, once enrolled you will get lifetime access to all course materials.',
+            'Access duration depends on the specific course or plan you choose. Detailed information regarding the duration of access is available on each course page.',
     },
     {
         question: 'Do you provide certificates after completion?',

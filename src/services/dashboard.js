@@ -258,3 +258,14 @@ export const getTelegramForDashboard = async (id) => {
     throw error;
   }
 };
+
+export const getUtilityData = async () => {
+  try {
+    const res = await api.get(`/utilitySetting/`);
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching utility data", error);
+    throw error;
+  }
+};

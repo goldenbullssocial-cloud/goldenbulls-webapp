@@ -1,14 +1,14 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './footer.module.scss';
 import Button from '../button';
 import Link from 'next/link';
-import { createNewsLetter } from '@/services/dashboard';
+import { createNewsLetter, getUtilityData } from '@/services/dashboard';
 import toast from 'react-hot-toast';
 
 const FooterLogo = '/assets/logo/footer-logo.svg';
 const FacebookIcon = '/assets/icons/facebook.svg';
-const TwitterIcon = '/assets/icons/twitter.svg';
+const YouTubeIcon = '/assets/icons/youtube.png';
 const InstagramIcon = '/assets/icons/instagram.svg';
 const LinkdinIcon = '/assets/icons/linkdin.svg';
 const FooterBottomText = '/assets/images/footer-bottom-text.svg';
@@ -17,6 +17,22 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
+  const [utilityData, setUtilityData] = useState(null);
+
+  useEffect(() => {
+    const fetchUtilityData = async () => {
+      try {
+        const response = await getUtilityData();
+        if (response?.payload) {
+          setUtilityData(response.payload);
+        }
+      } catch (error) {
+        console.error("Error fetching utility data:", error);
+      }
+    };
+
+    fetchUtilityData();
+  }, []);
 
   const handleSubscribe = async () => {
     if (!email.trim()) {
@@ -62,18 +78,26 @@ export default function Footer() {
                 </p>
               </div>
               <div className={styles.socialIconAlignment}>
-                <div className={styles.icon}>
-                  <img src={FacebookIcon} alt='FacebookIcon' />
-                </div>
-                <div className={styles.icon}>
-                  <img src={TwitterIcon} alt='TwitterIcon' />
-                </div>
-                <div className={styles.icon}>
-                  <img src={InstagramIcon} alt='InstagramIcon' />
-                </div>
-                <div className={styles.icon}>
-                  <img src={LinkdinIcon} alt='LinkdinIcon' />
-                </div>
+                {utilityData?.facebookLink && (
+                  <a href={utilityData.facebookLink} target="_blank" rel="noopener noreferrer" className={styles.icon}>
+                    <img src={FacebookIcon} alt='FacebookIcon' />
+                  </a>
+                )}
+                {utilityData?.youtubeLink && (
+                  <a href={utilityData.youtubeLink} target="_blank" rel="noopener noreferrer" className={styles.icon}>
+                    <img src={YouTubeIcon} alt='YouTubeIcon' className={styles.youtubeIcon} />
+                  </a>
+                )}
+                {utilityData?.instagramLink && (
+                  <a href={utilityData.instagramLink} target="_blank" rel="noopener noreferrer" className={styles.icon}>
+                    <img src={InstagramIcon} alt='InstagramIcon' />
+                  </a>
+                )}
+                {utilityData?.linkedin && (
+                  <a href={utilityData.linkedin} target="_blank" rel="noopener noreferrer" className={styles.icon}>
+                    <img src={LinkdinIcon} alt='LinkdinIcon' />
+                  </a>
+                )}
               </div>
             </div>
             <div className={styles.griditems}>
