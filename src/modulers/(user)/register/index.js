@@ -28,6 +28,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    referredBy: "",
   });
 
   const router = useRouter();
@@ -137,7 +138,7 @@ export default function Register() {
       country: "",
       state: "",
       city: "",
-      referredBy: "",
+      referredBy: data.referredBy,
     })
       .then((response) => {
         if (response.success) {
@@ -156,7 +157,7 @@ export default function Register() {
           setIsSubmitting(false);
           toast.error(
             errorMessages[response?.message] ??
-              "User Signup failed. Please try again.",
+            "User Signup failed. Please try again.",
           );
         }
       })
@@ -254,19 +255,30 @@ export default function Register() {
                   />
                 </div>
 
+                <div className={styles.bottomSpacing}>
+                  <Input
+                    label="Confirm Password"
+                    placeholder="Re-Enter your password"
+                    icon={LockIcon}
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={data.confirmPassword}
+                    onChange={handleChange}
+                    error={errors.confirmPassword}
+                    isPassword
+                    onTogglePassword={() =>
+                      setShowConfirmPassword(!showConfirmPassword)
+                    }
+                  />
+                </div>
+
                 <Input
-                  label="Confirm Password"
-                  placeholder="Re-Enter your password"
-                  icon={LockIcon}
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  value={data.confirmPassword}
+                  label="Referral Code"
+                  placeholder="Enter referral code"
+                  icon={UserIcon}
+                  name="referredBy"
+                  value={data.referredBy}
                   onChange={handleChange}
-                  error={errors.confirmPassword}
-                  isPassword
-                  onTogglePassword={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
                 />
 
                 {errors.submit && (
