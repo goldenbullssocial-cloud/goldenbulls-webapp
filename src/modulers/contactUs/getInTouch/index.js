@@ -5,6 +5,7 @@ import styles from "./getInTouch.module.scss";
 import Button from "@/components/button";
 import { motion } from "framer-motion";
 import { contactUs } from "@/services/contact";
+import { getUtilityData } from "@/services/dashboard";
 import toast from "react-hot-toast";
 
 const AddressIcon = "/assets/icons/Address.svg";
@@ -14,6 +15,7 @@ const FacebookIcon = "/assets/icons/facebook-outline.svg";
 const InstagramIcon = "/assets/icons/instagram-outline.svg";
 const TwitterIcon = "/assets/icons/twitter-outline.svg";
 const LinkdinIcon = "/assets/icons/linkdin-outline.svg";
+const YouTubeIcon = "/assets/icons/youtubeIcon.png";
 
 /* ---------------- Animations ---------------- */
 
@@ -79,7 +81,30 @@ export default function GetInTouch() {
   const [selectedCountryCode, setSelectedCountryCode] = useState("+91");
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [utilityData, setUtilityData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const countryRef = useRef(null);
+
+  // Fetch utility data on mount
+  useEffect(() => {
+    const fetchUtilityData = async () => {
+      try {
+        setLoading(true);
+        const response = await getUtilityData();
+        
+        if (response?.payload) {
+          setUtilityData(response.payload);
+        }
+      } catch (error) {
+        console.error("Error fetching utility data:", error);
+        toast.error("Failed to load contact information");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUtilityData();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -211,18 +236,17 @@ export default function GetInTouch() {
               <div>
                 <h3>Address</h3>
                 <p>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever.
+                  {loading ? "Loading..." : utilityData?.location || "Address not available"}
                 </p>
               </div>
             </motion.div>
-
             <motion.div className={styles.icongrid} variants={fadeUp}>
               <img src={CallIcon} alt="CallIcon" />
               <div>
                 <h3>Contact Details</h3>
-                <a href="callto:+180052554589">+1 800-525-54-589</a>
+                <a href={`tel:${utilityData?.phoneNo || ""}`}>
+                  {loading ? "Loading..." : utilityData?.phoneNo || "Phone not available"}
+                </a>
               </div>
             </motion.div>
 
@@ -230,7 +254,9 @@ export default function GetInTouch() {
               <img src={GmailIcon} alt="GmailIcon" />
               <div>
                 <h3>Email Us</h3>
-                <a href="mailto:test@email.com">test@email.com</a>
+                <a href={`mailto:${utilityData?.email || ""}`}>
+                  {loading ? "Loading..." : utilityData?.email || "Email not available"}
+                </a>
               </div>
             </motion.div>
 
@@ -239,16 +265,55 @@ export default function GetInTouch() {
             <motion.div className={styles.followus} variants={fadeUp}>
               <span>Follow Us :</span>
               <div className={styles.socialIcon}>
-                {[FacebookIcon, InstagramIcon, TwitterIcon, LinkdinIcon].map(
-                  (icon, i) => (
-                    <motion.img
-                      key={i}
-                      src={icon}
-                      alt="social"
-                      whileHover={{ y: -4, scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    />
-                  ),
+                {loading ? (
+                  <span>Loading...</span>
+                ) : (
+                  <>
+                    {utilityData?.facebookLink && (
+                      <motion.a
+                        href={utilityData.facebookLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ y: -4, scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <img src={FacebookIcon} alt="Facebook" />
+                      </motion.a>
+                    )}
+                    {utilityData?.instagramLink && (
+                      <motion.a
+                        href={utilityData.instagramLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ y: -4, scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <img src={InstagramIcon} alt="Instagram" />
+                      </motion.a>
+                    )}
+                    {utilityData?.youtubeLink && (
+                      <motion.a
+                        href={utilityData.youtubeLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ y: -4, scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <img className={styles.youtubeIcon} src={YouTubeIcon} alt="youtubeIcon" />
+                      </motion.a>
+                    )}
+                    {utilityData?.linkedin && (
+                      <motion.a
+                        href={utilityData.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ y: -4, scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        <img src={LinkdinIcon} alt="LinkedIn" />
+                      </motion.a>
+                    )}
+                  </>
                 )}
               </div>
             </motion.div>
