@@ -62,7 +62,7 @@ export default function Header() {
                   Contact Us
                 </Link>
                 <Link href="/register" aria-label="Sign-up">
-                  Sign-up
+                  Sign up
                 </Link>
                 {isAuthenticated ? (
                   <div className={styles.userDropdown}>
@@ -131,7 +131,7 @@ export default function Header() {
             Contact Us
           </Link>
           <Link href="/register" aria-label="Sign-up">
-            Sign-up
+            Sign up
           </Link>
         </div>
         <div className={styles.mobileSidebarfooter} onClick={() => setHeaderOpen(false)}>
