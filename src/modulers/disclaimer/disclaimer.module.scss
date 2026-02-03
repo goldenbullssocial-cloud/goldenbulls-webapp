@@ -1,0 +1,44 @@
+@use '../../scss/main.scss' as *;
+@use '../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../scss/font/font.scss' as *;
+
+.disclaimerAlignment {
+    padding: 260px 0 120px 0;
+
+    @include respond-to("sm") {
+        padding: 180px 0 60px 0;
+    }
+
+    h1 {
+        background: linear-gradient(90deg, #f9f490 0%, #e4ab40 25.48%, #fefba5 75%, #bd894e 100%);
+        -webkit-text-fill-color: #0000;
+        color: #0000;
+        text-transform: uppercase;
+        -webkit-background-clip: text;
+        background-clip: text;
+        font-size: 40px;
+        font-style: normal;
+        margin: 0 0 20px 0;
+        font-weight: 400;
+        @include heading-font;
+        line-height: 140%;
+
+        @include respond-to("sm") {
+            @include heading32;
+        }
+    }
+
+    p {
+        margin: 0 0 20px 0;
+        color: #ffffffb3;
+        @include font-normal;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: normal;
+
+        @include respond-to("sm") {
+            font-size: 18px;
+            line-height: 26px;
+        }
+    }
+}
