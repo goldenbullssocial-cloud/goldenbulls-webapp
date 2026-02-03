@@ -91,7 +91,7 @@ export default function GetInTouch() {
       try {
         setLoading(true);
         const response = await getUtilityData();
-        
+
         if (response?.payload) {
           setUtilityData(response.payload);
         }
@@ -125,11 +125,11 @@ export default function GetInTouch() {
     let isValid = true;
 
     if (!form.firstName.trim()) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = "Name is required";
       isValid = false;
     }
 
-    if (!form.email) {
+    if (!form.email) {  
       newErrors.email = "Email is required";
       isValid = false;
     } else if (!validateEmail(form.email)) {
@@ -236,7 +236,9 @@ export default function GetInTouch() {
               <div>
                 <h3>Address</h3>
                 <p>
-                  {loading ? "Loading..." : utilityData?.location || "Address not available"}
+                  {loading
+                    ? "Loading..."
+                    : utilityData?.location || "Address not available"}
                 </p>
               </div>
             </motion.div>
@@ -245,7 +247,9 @@ export default function GetInTouch() {
               <div>
                 <h3>Contact Details</h3>
                 <a href={`tel:${utilityData?.phoneNo || ""}`}>
-                  {loading ? "Loading..." : utilityData?.phoneNo || "Phone not available"}
+                  {loading
+                    ? "Loading..."
+                    : utilityData?.phoneNo || "Phone not available"}
                 </a>
               </div>
             </motion.div>
@@ -255,7 +259,9 @@ export default function GetInTouch() {
               <div>
                 <h3>Email Us</h3>
                 <a href={`mailto:${utilityData?.email || ""}`}>
-                  {loading ? "Loading..." : utilityData?.email || "Email not available"}
+                  {loading
+                    ? "Loading..."
+                    : utilityData?.email || "Email not available"}
                 </a>
               </div>
             </motion.div>
@@ -299,7 +305,11 @@ export default function GetInTouch() {
                         whileHover={{ y: -4, scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <img className={styles.youtubeIcon} src={YouTubeIcon} alt="youtubeIcon" />
+                        <img
+                          className={styles.youtubeIcon}
+                          src={YouTubeIcon}
+                          alt="youtubeIcon"
+                        />
                       </motion.a>
                     )}
                     {utilityData?.linkedin && (
@@ -381,7 +391,15 @@ export default function GetInTouch() {
                   />
                   <label>
                     You agree to our friendly
-                    <span> Privacy policy. </span>
+                    <span
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = "/privacy-policy";
+                      }}
+                    >
+                      {" "}
+                      Privacy policy.{" "}
+                    </span>
                   </label>
                   {errors.privacy && (
                     <p className={styles.error}>{errors.privacy}</p>

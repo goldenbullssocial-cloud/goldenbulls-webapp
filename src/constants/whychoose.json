@@ -10,7 +10,7 @@
       "Market focused education",
       "Practical examples"
     ],
-    "image": "/assets/images/why-choose-icon-1.png"
+    "image": "/assets/images/why-choose-icon-3.png"
   },
   {
     "id": "4a8e2f9d-1c5b-4f3a-8d7e-9a6c2b1e0f02",
@@ -23,7 +23,7 @@
       "Research driven lessons",
       "Strategy focused approach"
     ],
-    "image": "/assets/images/why-choose-icon-2.png"
+    "image": "/assets/images/why-choose-icon-4.png"
   },
   {
     "id": "d7b3f1a9-5c6e-4a2b-8f0d-3e9a1c4b2d03",
@@ -36,7 +36,7 @@
       "Live doubt clearing",
       "Discussion based support"
     ],
-    "image": "/assets/images/why-choose-icon-3.png"
+    "image": "/assets/images/why-choose-icon-2.png"
   },
   {
     "id": "2f9e4a7b-8d1c-4e5a-9b6f-0a3c7d2e1f04",
@@ -49,6 +49,6 @@
       "Ethical teaching approach",
       "No fake promises"
     ],
-    "image": "/assets/images/why-choose-icon-4.png"
+    "image": "/assets/images/why-choose-icon-1.png"
   }
 ]

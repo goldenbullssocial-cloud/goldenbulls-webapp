@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import styles from './new-password.module.scss';
-import Input from '@/components/input';
-import { useRouter, useSearchParams } from 'next/navigation';
-import toast from 'react-hot-toast';
-import { updatePassword } from '@/services/authService';
-import { errorMessages } from '@/utils/constant';
+import React, { useState, useEffect } from "react";
+import styles from "./new-password.module.scss";
+import Input from "@/components/input";
+import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { updatePassword } from "@/services/authService";
+import { errorMessages } from "@/utils/constant";
 
-const LoginBullImage = '/assets/images/login-bull.png';
-const LockIcon = '/assets/icons/lock.svg';
-const Logo = '/assets/logo/logo.svg';
+const LoginBullImage = "/assets/images/login-bull.png";
+const LockIcon = "/assets/icons/lock.svg";
+const Logo = "/assets/logo/logo.svg";
 
 export default function NewPassword() {
   const router = useRouter();
@@ -30,31 +30,43 @@ export default function NewPassword() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem('reset_email');
+    const storedEmail = localStorage.getItem("reset_email");
     if (storedEmail) {
       setEmail(storedEmail);
     } else {
       toast.error("Email not found. Redirecting to login.");
-      setTimeout(() => router.push('/login'), 2000);
+      setTimeout(() => router.push("/login"), 2000);
     }
   }, [router]);
 
   const validatePassword = (value) => {
     if (!value) return "Password is required.";
-    if (value.length < 6) return "Password must be at least 6 characters.";
+
+    const errors = [];
+    if (value.length < 8) errors.push("at least 8 characters");
+    if (!/[A-Z]/.test(value)) errors.push("at least one uppercase letter");
+    if (!/[a-z]/.test(value)) errors.push("at least one lowercase letter");
+    if (!/[0-9]/.test(value)) errors.push("at least one number");
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value))
+      errors.push("at least one special character");
+
+    if (errors.length > 0) {
+      return `Password must contain ${errors.join(", ")}.`;
+    }
     return "";
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    if (errors.password) setErrors(prev => ({ ...prev, password: "" }));
-    if (errors.submit) setErrors(prev => ({ ...prev, submit: "" }));
+    if (errors.password) setErrors((prev) => ({ ...prev, password: "" }));
+    if (errors.submit) setErrors((prev) => ({ ...prev, submit: "" }));
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
-    if (errors.confirmPassword) setErrors(prev => ({ ...prev, confirmPassword: "" }));
-    if (errors.submit) setErrors(prev => ({ ...prev, submit: "" }));
+    if (errors.confirmPassword)
+      setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+    if (errors.submit) setErrors((prev) => ({ ...prev, submit: "" }));
   };
 
   const handleSubmit = async () => {
@@ -77,29 +89,40 @@ export default function NewPassword() {
     try {
       const data = await updatePassword({
         email: email,
-        password: password
+        password: password,
       });
 
       if (data.success) {
         toast.success("Password updated successfully.");
         setTimeout(() => {
-          router.push('/successfully-password');
+          router.push("/successfully-password");
         }, 1500);
       } else {
         toast.dismiss();
-        toast.error(errorMessages[data?.message] ?? "Failed to update password.");
-        setErrors(prev => ({ ...prev, submit: errorMessages[data?.message] ?? "Failed to update password." }));
+        toast.error(
+          errorMessages[data?.message] ?? "Failed to update password.",
+        );
+        setErrors((prev) => ({
+          ...prev,
+          submit: errorMessages[data?.message] ?? "Failed to update password.",
+        }));
       }
     } catch (error) {
       const serverMessage = error.response?.data?.message;
       if (serverMessage && errorMessages[serverMessage]) {
         toast.dismiss();
         toast.error(errorMessages[serverMessage]);
-        setErrors(prev => ({ ...prev, submit: errorMessages[serverMessage] }));
+        setErrors((prev) => ({
+          ...prev,
+          submit: errorMessages[serverMessage],
+        }));
       } else {
         toast.dismiss();
         toast.error("An error occurred. Please try again.");
-        setErrors(prev => ({ ...prev, submit: "An error occurred. Please try again." }));
+        setErrors((prev) => ({
+          ...prev,
+          submit: "An error occurred. Please try again.",
+        }));
       }
     } finally {
       setIsSubmitting(false);
@@ -109,27 +132,30 @@ export default function NewPassword() {
   return (
     <div className={styles.newpasswordWrapper}>
       <div className={styles.mobileHeader}>
-        <img src={Logo} alt='Logo' />
+        <img src={Logo} alt="Logo" />
       </div>
       <div className={styles.leftAlignment}>
         <div className={styles.containerAlignment}>
           <div className={styles.mainrelative}>
             <div className={styles.image}>
-              <img src={LoginBullImage} alt='LoginBullImage' />
+              <img src={LoginBullImage} alt="LoginBullImage" />
             </div>
           </div>
           <div>
             <div className={styles.box}>
-              <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
                 <div className={styles.contnet}>
-                  <h1>
-                    Create a new password
-                  </h1>
+                  <h1>Create a new password</h1>
                 </div>
                 <div className={styles.bottomSpacing}>
                   <Input
-                    label='New Password'
-                    placeholder='Enter your password'
+                    label="New Password"
+                    placeholder="Enter your password"
                     icon={LockIcon}
                     type={showPassword ? "text" : "password"}
                     value={password}
@@ -140,25 +166,42 @@ export default function NewPassword() {
                   />
                 </div>
                 <Input
-                  label='Confirm New Password'
-                  placeholder='Re-Enter your password'
+                  label="Confirm New Password"
+                  placeholder="Re-Enter your password"
                   icon={LockIcon}
                   type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   error={errors.confirmPassword}
                   isPassword
-                  onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onTogglePassword={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                 />
 
-                {errors.submit && <div className={styles.submitError}>{errors.submit}</div>}
+                {errors.submit && (
+                  <div className={styles.submitError}>{errors.submit}</div>
+                )}
 
                 <div className={styles.loginButton}>
                   <button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Updating...' : 'Set new password'}
-                    {!isSubmitting && <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
-                      <path fillRule="evenodd" clipRule="evenodd" d="M18.8889 6.37387C16.18 6.37387 13.7111 3.87387 13.7111 1.12613V0H11.4889V1.12613C11.4889 3.12387 12.3533 4.99775 13.71 6.37387H0V8.62613H13.71C12.3533 10.0023 11.4889 11.8761 11.4889 13.8739V15H13.7111V13.8739C13.7111 11.1273 16.18 8.62613 18.8889 8.62613H20V6.37387H18.8889Z" fill="black" />
-                    </svg>}
+                    {isSubmitting ? "Updating..." : "Set new password"}
+                    {!isSubmitting && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="15"
+                        viewBox="0 0 20 15"
+                        fill="none"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M18.8889 6.37387C16.18 6.37387 13.7111 3.87387 13.7111 1.12613V0H11.4889V1.12613C11.4889 3.12387 12.3533 4.99775 13.71 6.37387H0V8.62613H13.71C12.3533 10.0023 11.4889 11.8761 11.4889 13.8739V15H13.7111V13.8739C13.7111 11.1273 16.18 8.62613 18.8889 8.62613H20V6.37387H18.8889Z"
+                          fill="black"
+                        />
+                      </svg>
+                    )}
                   </button>
                 </div>
               </form>
@@ -167,5 +210,5 @@ export default function NewPassword() {
         </div>
       </div>
     </div>
-  )
+  );
 }

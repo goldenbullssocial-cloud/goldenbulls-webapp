@@ -89,6 +89,7 @@
 
           span {
             @include gradient-text;
+            cursor: pointer;
           }
         }
       }
