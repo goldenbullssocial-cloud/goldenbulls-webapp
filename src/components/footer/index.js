@@ -118,7 +118,7 @@ export default function Footer() {
                 <div className={styles.line}></div>
                 <Link href="/terms-conditions" aria-label='Terms of Service'>Terms of Service</Link>
                 <Link href="/privacy-policy" aria-label='Privacy Policy'>Privacy Policy</Link>
-                <a aria-label='Telegram Group'>Telegram Group</a>
+                <Link href="/telegram-channel" aria-label='Telegram Group'>Telegram Group</Link>
                 <Link href="/refund-policy" aria-label='Refund Policy'>Refund Policy</Link>
               </div>
               <div className={styles.text}>
