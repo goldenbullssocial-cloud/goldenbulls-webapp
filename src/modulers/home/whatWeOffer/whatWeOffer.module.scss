@@ -174,7 +174,6 @@
       .features {
         flex: 1;
         overflow-y: auto;
-        margin-bottom: 16px;
 
         @include respond-to("xl") {
           margin-bottom: 12px;
@@ -195,15 +194,21 @@
         font-weight: 500;
         color: rgba(255, 255, 255, 0.9);
         text-align: left;
+        height: 32px;
+        min-height: 32px;
 
         @include respond-to("xl") {
           font-size: 14px;
           margin-bottom: 10px;
+          height: 28px;
+          min-height: 28px;
         }
 
         @include respond-to("sm") {
           font-size: 13px;
           margin-bottom: 8px;
+          height: 26px;
+          min-height: 26px;
         }
 
         .checkIcon {
@@ -359,6 +364,10 @@
       position: relative;
       padding: 32px 32px 48px 32px;
       overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       @include respond-to("xl") {
         padding: 30px 30px 40px 30px;
@@ -395,6 +404,10 @@
 
       .details {
         padding: 38px 0 0 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         @include respond-to("sm") {
           padding: 30px 0 0 0;
@@ -409,9 +422,14 @@
           line-height: normal;
           @include font-medium;
           margin: 0 0 13px 0;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           @include respond-to("xl") {
             @include heading24;
+            height: 50px;
           }
 
           @include respond-to("sm") {
@@ -419,6 +437,7 @@
             font-weight: 500;
             line-height: normal;
             margin: 0 0 10px 0;
+            height: 40px;
           }
         }
 
@@ -428,13 +447,17 @@
           font-size: 24px;
           font-style: normal;
           font-weight: 400;
-          max-width: 393px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           margin: 0 auto;
           line-height: normal;
           @include font-normal;
 
           @include respond-to("xl") {
             @include font18;
+            height: 70px;
           }
 
           @include respond-to("sm") {
@@ -442,6 +465,7 @@
             color: rgba(255, 255, 255, 0.7);
             font-size: 20px;
             line-height: normal;
+            height: 60px;
           }
         }
       }
@@ -452,6 +476,7 @@
         position: relative;
         height: 263px;
         align-items: center;
+        flex-shrink: 0;
 
         @include respond-to("xl") {
           height: 200px;

@@ -75,23 +75,23 @@ const offerData = [
     backContent: {
       title: "Personal Mentorship Program",
       features: [
-        "45 DAYS PROGRAM",
-        "DAILY 2 HOUR CLASSES",
-        "SUPER ADVANCE C+ NEW THEORIES",
-        "DAILY LIVE TRADING - LONDON & NEW YORK SESSION",
-        "1 TO 1 Q&A SESSION",
-        "EXCLUSIVE GROUP ACCESS",
-        "DIRECT ACCES TO MENTORS",
-        "GUARANTEED ACCOUNT GROWTH",
-        "PROP FIRM PREPARATION",
-        "FUND MANAGEMENT TRAINING",
-        "10+ NEW STRATEGIES REVEALING & BACKTESTING",
-        "EMERGENCY STRATEGY CALLS",
-        "FUNDAMENTAL TRADING STRATEGIES",
-        "OTHER INCOME OPPORTUNITIES",
-        "SPECIAL PSHYCHOLOGY SESSIONS",
-        "MONEY & RISK MANAGEMENT TRAINING",
-        "24*7 PERSONAL SUPPORT & MANY MORE",
+        "45 Days program",
+        "Daily 2 hour classes",
+        "Super advance c+ new theories",
+        "Daily live trading - london & new york session",
+        "1 to 1 q&a session",
+        "Exclusive group access",
+        "Direct acces to mentors",
+        "Guaranteed account growth",
+        "Prop firm preparation",
+        "Fund management training",
+        "10+ new strategies revealing & backtesting",
+        "Emergency strategy calls",
+        "Fundamental trading strategies",
+        "Other income opportunities",
+        "Special pshychology sessions",
+        "Money & risk management training",
+        "24*7 personal support & many more",
       ],
       duration: "45 Days",
       level: "All Levels",
@@ -214,13 +214,13 @@ export default function WhatWeOffer() {
                         );
                       })}
                     </div>
-                    <hr className={styles.priceDivider} />
+                    {/* <hr className={styles.priceDivider} />
                     <div className={styles.priceItem}>
                       <span className={styles.priceLabel}>Price</span>
                       <span className={styles.priceValue}>
                         {item.backContent.price}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
