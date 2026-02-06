@@ -1,125 +1,123 @@
-@use '../../../scss/main.scss' as *;
-@use '../../../scss/breakpoints/breakpoints.scss' as *;
-@use '../../../scss/font/font.scss' as *;
+@use "../../../scss/main.scss" as *;
+@use "../../../scss/breakpoints/breakpoints.scss" as *;
+@use "../../../scss/font/font.scss" as *;
 
 .whoWeAreAlignment {
-    padding: 120px 0;
+  padding: 120px 0;
 
-    @include respond-to("xl") {
-        padding: 90px 0;
-    }
+  @include respond-to("xl") {
+    padding: 90px 0;
+  }
+
+  @include respond-to("sm") {
+    padding: 60px 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 568px;
+    gap: 24px;
+    align-items: flex-end;
 
     @include respond-to("sm") {
-        padding: 60px 0;
+      grid-template-columns: 1fr;
+      gap: 40px;
     }
 
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 1px 568px;
-        gap: 24px;
-        align-items: flex-end;
+    .box:last-child {
+      margin: 0;
+    }
+
+    .griditems:nth-child(2) {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+
+      @include respond-to("sm") {
+        display: none;
+      }
+    }
+
+    .text {
+      h2 {
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 140%;
+        text-transform: uppercase;
+        @include heading-font;
+        @include gradient-text;
+        margin: 0 0 43px 0;
 
         @include respond-to("sm") {
-            grid-template-columns: 1fr;
-            gap: 40px;
+          @include heading32;
+          text-align: center;
+          margin: 0 0 16px 0;
         }
+      }
 
-        .box:last-child {
-            margin: 0;
+      p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        max-width: 798px;
+        @include font-normal;
+        margin: 0 0 20px 0;
+
+        @include respond-to("sm") {
+          margin: 0 0 16px 0;
+          color: rgba(255, 255, 255, 0.7);
+          text-align: center;
+          font-size: 20px;
+          font-weight: 400;
+          line-height: normal;
         }
+      }
 
-        .griditems:nth-child(2) {
-            width: 100%;
-            height: 100%;
-            background: #fff;
-
-            @include respond-to("sm") {
-                display: none;
-            }
-        }
-
-        .text {
-            h2 {
-                font-size: 40px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 140%;
-                text-transform: uppercase;
-                @include heading-font;
-                @include gradient-text;
-                margin: 0 0 43px 0;
-
-                @include respond-to("sm") {
-                    @include heading32;
-                    text-align: center;
-                    margin: 0 0 16px 0;
-                }
-            }
-
-            p {
-                color: rgba(255, 255, 255, 0.70);
-                font-size: 24px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: normal;
-                max-width: 798px;
-                @include font-normal;
-                margin: 0 0 20px 0;
-
-                @include respond-to("sm") {
-                    margin: 0 0 16px 0;
-                    color: rgba(255, 255, 255, 0.70);
-                    text-align: center;
-                    font-size: 20px;
-                    font-weight: 400;
-                    line-height: normal;
-                }
-            }
-
-            p:last-child {
-                margin: 0;
-            }
-        }
-
-        .box {
-            position: relative;
-            border-radius: 32px;
-            background: #0C0C0C;
-            padding: 40px;
-            margin: 0 0 24px 0;
-
-            &:hover {
-                &::before {
-                    @include border-hover;
-                }
-            }
-
-            &::before {
-                @include border;
-                border-radius: 32px;
-            }
-
-            h3 {
-                font-size: 32px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: 140%;
-                margin: 0 0 16px 0;
-                text-transform: uppercase;
-                @include heading-font;
-                @include gradient-text;
-            }
-
-            p {
-                color: rgba(255, 255, 255, 0.70);
-                font-size: 24px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: normal;
-                @include font-normal;
-            }
-
-
-        }
+      p:last-child {
+        margin: 0;
+      }
     }
+
+    .box {
+      position: relative;
+      border-radius: 32px;
+      background: #0c0c0c;
+      padding: 40px;
+      margin: 0 0 24px 0;
+
+      &:hover {
+        &::before {
+          @include border-hover;
+        }
+      }
+
+      &::before {
+        @include border;
+        border-radius: 32px;
+      }
+
+      h3 {
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 140%;
+        margin: 0 0 16px 0;
+        text-transform: uppercase;
+        @include heading-font;
+        @include gradient-text;
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        @include font-normal;
+      }
+    }
+  }
 }

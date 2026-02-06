@@ -8,93 +8,90 @@ const ImageGallery = () => {
   const galleryImages = [
     {
       id: 1,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage1.jpg",
       alt: "Gallery Image 1",
-      title: "Trading Success",
+      title: "Stock Trading Excellence",
     },
     {
       id: 2,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage2.jpg",
       alt: "Gallery Image 2",
-      title: "Market Analysis",
+      title: "Advanced Technical Analysis",
     },
     {
       id: 3,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage3.jpg",
       alt: "Gallery Image 3",
-      title: "Student Achievement",
+      title: "Trading Success Stories",
     },
     {
       id: 4,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage4.jpg",
       alt: "Gallery Image 4",
-      title: "Expert Guidance",
+      title: "Professional Trading Mentorship",
     },
     {
       id: 5,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage5.jpg",
       alt: "Gallery Image 5",
-      title: "Live Trading",
+      title: "Live Trading Sessions",
     },
     {
       id: 6,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage6.jpg",
       alt: "Gallery Image 6",
-      title: "Course Completion",
+      title: "Trading Certification Program",
     },
     {
       id: 7,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage7.jpg",
       alt: "Gallery Image 7",
-      title: "Community Growth",
+      title: "Trading Community Network",
     },
     {
       id: 8,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage8.jpg",
       alt: "Gallery Image 8",
-      title: "Market Insights",
+      title: "Market Research & Analysis",
     },
     {
       id: 9,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage9.jpg",
       alt: "Gallery Image 9",
-      title: "Professional Training",
+      title: "Elite Trading Training",
     },
     {
       id: 10,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage10.jpg",
       alt: "Gallery Image 10",
-      title: "Success Stories",
+      title: "Trading Achievement Awards",
     },
     {
       id: 11,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage11.jpg",
       alt: "Gallery Image 11",
-      title: "Trading Strategies",
+      title: "Strategic Trading Methods",
     },
     {
       id: 12,
-      src: "/assets/images/about-us.png",
+      src: "/assets/images/GalleryImage12.jpg",
       alt: "Gallery Image 12",
-      title: "Academy Life",
+      title: "Academy Excellence",
     },
   ];
 
   return (
     <section className={styles.imageGallerySection}>
       <div className="container-md">
-        {/* <motion.div
+        <motion.div
           className={styles.titleSection}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h2 className={styles.sectionTitle}>Our Gallery</h2>
-          <p className={styles.sectionSubtitle}>
-            Explore our journey through these captured moments
-          </p>
-        </motion.div> */}
+          <h2 className={styles.sectionTitle}>Trading Success Gallery</h2>
+        </motion.div>
 
         <motion.div
           className={styles.imageGrid}

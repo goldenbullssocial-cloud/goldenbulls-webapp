@@ -1,76 +1,91 @@
-'use client'
-import React from 'react';
-import { motion } from 'framer-motion';
-import styles from './whoWeAre.module.scss';
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
+import styles from "./whoWeAre.module.scss";
 
 const container = {
-    hidden: {},
-    show: {
-        transition: {
-            staggerChildren: 0.15,
-        },
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.15,
     },
+  },
 };
 
 const fadeUp = {
-    hidden: {
-        opacity: 0,
-        y: 30,
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
     },
-    show: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 0.6,
-            ease: 'easeOut',
-        },
-    },
+  },
 };
 
 export default function WhoWeAre() {
-    return (
-        <motion.div
-            className={styles.whoWeAreAlignment}
-            variants={container}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: '-100px' }}
-        >
-            <div className="container-md">
-                <div className={styles.grid}>
+  return (
+    <motion.div
+      className={styles.whoWeAreAlignment}
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-100px" }}
+    >
+      <div className="container-md">
+        <div className={styles.grid}>
+          <motion.div className={styles.griditems} variants={fadeUp}>
+            <div className={styles.text}>
+              <h2>who we are</h2>
 
-                    <motion.div className={styles.griditems} variants={fadeUp}>
-                        <div className={styles.text}>
-                            <h2>who we are</h2>
-
-                            <p>
-                                We are a team of passionate market educators committed to simplifying the world of trading and investing through structured, easy to understand education. Our platform was built with one goal in mind — to make financial knowledge accessible, practical, and honest for learners at every stage of their journey.
-                            </p>
-                            <p>
-                                At our core, we believe that successful trading starts with strong foundations, discipline, and the right mindset. That’s why our courses are designed to focus on skill building rather than shortcuts, speculation, or unrealistic promises. We don’t teach hype — we teach process, clarity, and consistency.
-                            </p>
-                        </div>
-                    </motion.div>
-
-                    {/* Empty grid item stays untouched */}
-                    <div className={styles.griditems}></div>
-
-                    <motion.div className={styles.griditems} variants={container}>
-                        <motion.div className={styles.box} variants={fadeUp}>
-                            <h3>our mission</h3>
-                            <p>
-                                Our mission is to make financial and trading education simple, practical, and accessible for everyone. We aim to break down complex market concepts into easy to understand lessons that help learners build strong foundations.                             </p>
-                        </motion.div>
-
-                        <motion.div className={styles.box} variants={fadeUp}>
-                            <h3>our vision</h3>
-                            <p>
-                                Our vision is to become a trusted global platform for trading education by empowering individuals with high quality learning resources and practical guidance. We strive to build a strong learning community.                            </p>
-                        </motion.div>
-                    </motion.div>
-
-                </div>
+              <p>
+                We are a team of passionate market educators committed to
+                simplifying the world of trading and investing through
+                structured, easy to understand education. Our platform was built
+                with one goal in mind — to make financial knowledge accessible,
+                practical, and honest for learners at every stage of their
+                journey.
+              </p>
+              <p>
+                At our core, we believe that successful trading starts with
+                strong foundations, discipline, and the right mindset. That’s
+                why our courses are designed to focus on skill building rather
+                than shortcuts, speculation, or unrealistic promises. We don’t
+                teach hype — we teach process, clarity, and consistency.
+              </p>
             </div>
-        </motion.div>
-    );
+          </motion.div>
+
+          {/* Empty grid item stays untouched */}
+          <div className={styles.griditems}></div>
+
+          <motion.div className={styles.griditems} variants={container}>
+            <motion.div className={styles.box} variants={fadeUp}>
+              <h3>our mission</h3>
+              <p>
+                Our mission is to make financial and trading education simple,
+                practical, and accessible for everyone. We aim to break down
+                complex market concepts into easy to understand lessons that
+                help learners build strong foundations.{" "}
+              </p>
+            </motion.div>
+
+            <motion.div className={styles.box} variants={fadeUp}>
+              <h3>our vision</h3>
+              <p>
+                Our vision is to become a trusted global platform for trading
+                education by empowering individuals with high quality learning
+                resources and practical guidance. We strive to build a strong
+                learning community.{" "}
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
 }
