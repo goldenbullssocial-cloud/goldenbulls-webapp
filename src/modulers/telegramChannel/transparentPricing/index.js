@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import styles from "./transparentPricing.module.scss";
 import Button from "@/components/button";
 import Input from "@/components/input";
@@ -75,6 +76,7 @@ const CloseIcon = () => (
 );
 
 export default function TransparentPricing() {
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [userTelegramId, setUserTelegramId] = useState("");
@@ -106,6 +108,30 @@ export default function TransparentPricing() {
         console.error("Error fetching telegram plans:", error);
       }
     };
+
+    // Check for plan data from sessionStorage (after login)
+    const storedPlan = sessionStorage.getItem("selectedPlan");
+    if (storedPlan) {
+      try {
+        const plan = JSON.parse(storedPlan);
+        console.log(plan, "restored plan from sessionStorage");
+        setSelectedPlan(plan);
+
+        // Scroll to the selected plan after a short delay
+        setTimeout(() => {
+          const planElement = document.getElementById(`plan-${plan.id}`);
+          if (planElement) {
+            planElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }, 500);
+
+        // Clear sessionStorage
+        sessionStorage.removeItem("selectedPlan");
+      } catch (error) {
+        console.error("Error parsing stored plan:", error);
+      }
+    }
+
     fetchTelegramPlans();
   }, []);
 
@@ -309,9 +335,16 @@ export default function TransparentPricing() {
                     className={styles.buttonWidth}
                     onClick={() => {
                       if (!user) {
-                        toast.error("Please login first");
+                        const planData = encodeURIComponent(
+                          JSON.stringify(planItem),
+                        );
+
+                        router.push(
+                          `/login?callback=/telegram-channel&scroll=pricing&plan=${planData}`,
+                        );
                         return;
                       }
+
                       setSelectedPlan(planItem);
                       setShowModal(true);
                     }}

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import classNames from "classnames";
 const Logo = "/assets/logo/logo.svg";
 import { getCookie, removeCookie } from '../../../cookie';
+import toast from "react-hot-toast";
 
 export default function Header() {
   const [headerOpen, setHeaderOpen] = useState(false);
