@@ -3,6 +3,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import styles from './getCertified.module.scss'
 import CheckIcon from '@/icons/checkIcon'
+import { useRouter } from 'next/navigation'
 
 const Certificate = '/assets/images/certificate.png'
 
@@ -55,6 +56,7 @@ const certificateFloat = {
 }
 
 export default function GetCertified() {
+    const router = useRouter()
     return (
         <div className={styles.getCertified}>
             <div className="container-md">
@@ -111,7 +113,7 @@ export default function GetCertified() {
                             <img src={Certificate} alt="Certificate" />
                         </motion.div>
                         <div className={styles.buttonDesign}>
-                            <button>
+                            <button onClick={() => router.push('/certificates')}>
                                 <span>See all</span> </button>
                         </div>
                     </motion.div>

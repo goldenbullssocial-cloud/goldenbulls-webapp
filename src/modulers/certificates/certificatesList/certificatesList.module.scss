@@ -19,38 +19,81 @@
         }
     }
 
-    .buttonDesign {
+    .paginationAlignment {
         display: flex;
-        padding: 32px 0 0 0;
         justify-content: center;
+        padding: 60px 0 0 0;
 
-        button {
-            border: 1px solid var(--GOLD, #f9f490);
-            padding: 14px 34px;
-            background: transparent;
-            border-radius: 99px;
-            transition: all 0.3s ease-in-out;
-            cursor: pointer;
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 40px;
 
-            &:hover {
-                transform: scale(1.05);
-                transition: all 0.3s ease-in-out;
+            @include respond-to("sm") {
+                gap: 15px;
             }
 
-
-            span {
-                @include font-medium;
-                font-weight: 500;
-                font-style: Medium;
-                background: var(--GOLD, linear-gradient(90deg, #f9f490 0%, #e4ab40 25.48%, #fefba5 75%, #bd894e 100%));
-                -webkit-text-fill-color: #0000;
-                -webkit-background-clip: text;
-                background-clip: text;
+            .prevNext {
+                background: transparent;
+                border: none;
+                color: #fff;
                 font-size: 24px;
-                line-height: 100%;
-                letter-spacing: 0%;
+                font-weight: 500;
+                cursor: pointer;
+                @include font-medium;
 
+                @include respond-to("sm") {
+                    font-size: 18px;
+                }
+            }
 
+            .pageNumbers {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                @include respond-to("sm") {
+                    gap: 8px;
+                }
+
+                .pageItem {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    border: 1px solid rgba(255, 255, 255, 0.40);
+                    background: transparent;
+                    color: #fff;
+                    font-size: 24px;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.3s ease-in-out;
+                    @include font-bold;
+
+                    @include respond-to("md") {
+                        width: 50px;
+                        height: 50px;
+                        font-size: 20px;
+                    }
+
+                    @include respond-to("sm") {
+                        width: 40px;
+                        height: 40px;
+                        font-size: 18px;
+                    }
+
+                    &:hover {
+                        border-color: #f9f490;
+                    }
+
+                    &.active {
+                        border: none;
+                        background: var(--GOLD, linear-gradient(90deg, #f9f490 0%, #e4ab40 25.48%, #fefba5 75%, #bd894e 100%));
+                        color: #000;
+                    }
+                }
             }
         }
     }
