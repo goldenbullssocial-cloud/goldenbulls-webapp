@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import styles from "./whatWeOffer.module.scss";
 
@@ -64,7 +64,7 @@ const offerData = [
       ],
       duration: "8 Weeks",
       level: "Advanced",
-      price: "1UU$",
+      price: "$100",
     },
   },
   {
@@ -95,7 +95,7 @@ const offerData = [
       ],
       duration: "45 Days",
       level: "All Levels",
-      price: "3UU$",
+      price: "$300",
     },
   },
 ];
@@ -126,6 +126,11 @@ const itemVariants = {
 };
 
 export default function WhatWeOffer() {
+  const [flippedCard, setFlippedCard] = useState(null);
+
+  const handleCardFlip = (index) => {
+    setFlippedCard(flippedCard === index ? null : index);
+  };
   return (
     <section className={styles.whatWeOffer}>
       <div className="container-md">
@@ -154,7 +159,13 @@ export default function WhatWeOffer() {
               className={styles.flipCard}
               variants={itemVariants}
             >
-              <div className={styles.cardInner}>
+              <div
+                className={styles.cardInner}
+                style={{
+                  transform:
+                    flippedCard === index ? "rotateY(180deg)" : "rotateY(0deg)",
+                }}
+              >
                 <div className={styles.cardFront}>
                   <div className={styles.griditems}>
                     {/* Rotating line */}
@@ -178,6 +189,52 @@ export default function WhatWeOffer() {
                       <h3>{item.title}</h3>
                       <p>{item.description}</p>
                     </div>
+                    {/* Features Preview */}
+                    <div className={styles.featuresPreview}>
+                      {item.backContent.features
+                        .slice(0, 5)
+                        .map((feature, idx) => {
+                          const isHeading = [
+                            "Introduction of forex",
+                            "Demand & Supply Price Action Strategy",
+                            "Concepts of Fibonacci (Extensions and Retracement)",
+                            "45 Days program",
+                            "Other income opportunities",
+                          ].includes(feature);
+
+                          return (
+                            <div key={idx} className={styles.featureItem}>
+                              {!isHeading && (
+                                <span className={styles.checkIcon}>✓</span>
+                              )}
+                              <span>{feature}</span>
+                            </div>
+                          );
+                        })}
+                      {item.backContent.features.length > 3 && (
+                        <div
+                          className={styles.readMore}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCardFlip(index);
+                          }}
+                        >
+                          Read More →
+                        </div>
+                      )}
+                    </div>
+
+                    <div className={styles.priceItem}>
+                      <span
+                        className={styles.priceValue}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.location.href = "/courses";
+                        }}
+                      >
+                        {item.backContent.price}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -185,7 +242,6 @@ export default function WhatWeOffer() {
                   <motion.div className={styles.lineImage}>
                     <img src={LineImage} alt="Line" />
                   </motion.div>
-
                   <div className={styles.backContent}>
                     <h3>{item.backContent.title}</h3>
                     {/* <hr className={styles.headingDivider} /> */}
@@ -195,8 +251,8 @@ export default function WhatWeOffer() {
                           "Introduction of forex",
                           "Demand & Supply Price Action Strategy",
                           "Concepts of Fibonacci (Extensions and Retracement)",
-                          "45 DAYS PROGRAM",
-                          "OTHER INCOME OPPORTUNITIES",
+                          "45 Days program",
+                          "Other income opportunities",
                         ].includes(feature);
 
                         return (
@@ -214,13 +270,29 @@ export default function WhatWeOffer() {
                         );
                       })}
                     </div>
-                    {/* <hr className={styles.priceDivider} />
+                    <hr className={styles.priceDivider} />
                     <div className={styles.priceItem}>
-                      <span className={styles.priceLabel}>Price</span>
-                      <span className={styles.priceValue}>
+                      <div className={styles.backButton}>
+                        <button
+                          className={styles.backBtn}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCardFlip(index);
+                          }}
+                        >
+                          ←
+                        </button>
+                      </div>
+                      <span
+                        className={styles.priceValue}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.location.href = "/courses";
+                        }}
+                      >
                         {item.backContent.price}
                       </span>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
