@@ -19,6 +19,7 @@ const LogoutIcon = '/assets/icons/logoutIcon.svg';
 import { getCookie, removeCookie } from '../../../cookie';
 import Link from 'next/link';
 import { getSocket } from '@/utils/webSocket';
+import { getProfile } from '@/services/dashboard';
 
 export default function Sidebar({ unreadCount, toogle, setToogle }) {
     const [user, setUser] = useState(null);
@@ -27,18 +28,28 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
     const router = useRouter();
 
     useEffect(() => {
-        const user = getCookie('user');
-        if (user) {
-            try {
-                const parsedUser = JSON.parse(user);
-                const userName = `${parsedUser.firstName} ${parsedUser.lastName}`;
-                setUser(userName);
-            } catch (error) {
-                console.error("Error parsing user cookie:", error);
-                // Fallback to empty user name if parsing fails
-                setUser("");
+        const fetchProfile = async () => {
+            const userCookie = getCookie('user');
+            if (userCookie) {
+                try {
+                    const parsedUser = JSON.parse(userCookie);
+                    if (parsedUser._id) {
+                        const response = await getProfile(parsedUser._id);
+                        if (response.success) {
+                            const data = response.payload.data[0];
+                            const fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+                            setUser(fullName || parsedUser.firstName || 'User');
+                        } else {
+                            setUser(parsedUser.firstName || 'User');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching or parsing profile:', error);
+                }
             }
-        }
+        };
+
+        fetchProfile();
     }, []);
 
     useEffect(() => {

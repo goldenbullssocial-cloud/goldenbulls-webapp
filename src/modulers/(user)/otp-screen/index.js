@@ -23,8 +23,8 @@ function OtpScreenContent() {
 
     useEffect(() => {
         if (!email) {
-            toast.error("Email not found. Redirecting to login.");
-            setTimeout(() => router.push('/login'), 2000);
+            // toast.error("Email not found. Redirecting to login.");
+            setTimeout(() => router.push('/login'), 1000);
         }
     }, [email, router]);
 
