@@ -1,0 +1,221 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.coursesBanner {
+    background-image: url('/assets/images/course-hero.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100dvh;
+
+    @include respond-to("md") {
+        height: auto;
+        background-image: none;
+        background: #000;
+    }
+
+    @include respond-to("sm") {
+        padding: 160px 0 60px 0;
+
+    }
+
+    :global(.container-md) {
+        @include respond-to("sm") {
+            padding: 0;
+        }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 600px;
+        gap: 0;
+        height: 100dvh;
+
+        @include respond-to("xl") {
+            grid-template-columns: 1fr 500px;
+        }
+
+        @include respond-to("md") {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+
+        .griditems:first-child {
+            @include respond-to("sm") {
+                padding: 40px 20px 0 20px;
+                order: 2;
+            }
+        }
+
+        .griditems:last-child {
+            display: flex;
+            align-items: flex-end;
+
+            @include respond-to("sm") {
+                position: relative;
+                justify-content: center;
+                align-items: center;
+            }
+
+            &:before {
+                @include respond-to("sm") {
+                    position: absolute;
+                    content: "";
+                    bottom: 0;
+                    width: 300px;
+                    height: 300px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-radius: 302px;
+                    opacity: 0.8;
+                    background: #FFEEBF;
+                    filter: blur(200px);
+                }
+            }
+        }
+
+        .text {
+            padding: 300px 0 0 0;
+
+            @include respond-to("xl") {
+                padding: 250px 0 0 0;
+            }
+
+            @include respond-to("sm") {
+                padding: 0 0 0 0;
+            }
+
+            p {
+                color: rgba(255, 255, 255, 0.70);
+                font-size: 22.303px;
+                font-style: normal;
+                font-weight: 400;
+                margin: 0 0 24px 0;
+                line-height: normal;
+                max-width: 777px;
+                @include font-normal;
+
+                @include respond-to("xl") {
+                    font-size: 18px;
+                    line-height: 28px;
+                    max-width: 639px;
+                }
+
+                @include respond-to("md") {
+                    text-align: center;
+                    font-size: 20px;
+                    font-weight: 400;
+                    margin: 0 0 16px 0;
+                    line-height: normal;
+                }
+            }
+
+            .buttonAlignment {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+
+                button {
+                    padding: 12px 30px;
+                }
+
+                .outlineButton {
+                    color: #FFF;
+                    font-size: 19px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    @include font-bold;
+                    border-radius: 99px;
+                    border: 1px solid #fff;
+                    background-color: transparent;
+                    transition: .3s ease-in-out;
+                    cursor: pointer;
+
+                    @include respond-to("xl") {
+                        padding: 12px 26px;
+                        font-size: 16px;
+                    }
+
+                    @include respond-to("sm") {
+                        font-size: 20px;
+                        font-weight: 700;
+                        padding: 15px 30px;
+                        line-height: normal;
+                        width: 100%;
+                    }
+
+                    &:hover {
+                        background-color: #fff;
+                        color: #000;
+                    }
+                }
+            }
+
+            h1 {
+                color: #F5F5F5;
+                margin: 0 0 24px 0;
+                font-size: 71px;
+                font-style: normal;
+                max-width: 823px;
+                font-weight: 400;
+                line-height: 140%;
+                text-transform: uppercase;
+                @include heading-font;
+
+                @include respond-to("sm") {
+                    text-align: center;
+                    font-size: 32px;
+                    margin: 0 0 16px 0;
+                    font-weight: 400;
+                    line-height: 140%;
+                }
+
+                span {
+                    @include gradient-text;
+                }
+            }
+        }
+
+        .griditems {
+            height: 100%;
+
+
+            .image {
+
+                display: flex;
+                justify-content: flex-end;
+
+                @include respond-to("sm") {
+                    justify-content: center;
+                }
+
+                img[alt="BullImage"] {
+                    @include respond-to("sm") {
+                        display: none;
+                    }
+                }
+
+                img[alt="BullImage"] {
+                    @include respond-to("sm") {
+                        display: none;
+                    }
+                }
+
+                img[alt="BullImageMobile"] {
+                    display: none;
+
+                    @include respond-to("sm") {
+                        display: block;
+                    }
+                }
+
+                img {
+                    display: block;
+                    width: 85%;
+                }
+            }
+        }
+    }
+}

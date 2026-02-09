@@ -110,6 +110,10 @@ export default function GetCertified() {
                         >
                             <img src={Certificate} alt="Certificate" />
                         </motion.div>
+                        <div className={styles.buttonDesign}>
+                            <button>
+                                <span>See all</span> </button>
+                        </div>
                     </motion.div>
                 </div>
             </div>
