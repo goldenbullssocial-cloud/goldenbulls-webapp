@@ -1,0 +1,124 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.calculatorData {
+  padding: 70px 0 50px 0;
+
+  @include respond-to("sm") {
+    padding: 80px 0 0 0;
+  }
+
+  .tabAlignment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+    gap: 12px;
+
+    @include respond-to("md") {
+      justify-content: flex-start;
+      scrollbar-width: none;
+    }
+
+    @include respond-to("sm") {
+      padding-left: 16px;
+    }
+
+    .buttonUi {
+      position: relative;
+      padding: 10px;
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      backdrop-filter: blur(100px);
+      justify-content: center;
+      border-radius: 99px;
+      gap: 10px;
+      color: #FFF;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 130%;
+      @include font-normal;
+      overflow: hidden;
+      min-width: 140px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: #1A1A1A;
+      transition: 0.3s ease-in-out;
+
+      @include respond-to("sm") {
+        font-size: 12px;
+        line-height: 15px;
+      }
+
+      &::after,
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: 99px;
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+        transition: 0.4s ease-in-out;
+      }
+
+      &::after {
+        background: linear-gradient(271.5deg, #0084FF -35%, #0084FF00 37%);
+      }
+
+      &::before {
+        background: linear-gradient(267.5deg, #f7541c00 68.57%, #f7541c 102.63%);
+      }
+
+      &:hover {
+        box-shadow: 0 0 12px 0 rgba(60, 117, 254, 0.44);
+
+        &::after {
+          background-position: 200% 0;
+          opacity: 1;
+        }
+
+        &::before {
+          background-position: -200% 0;
+          opacity: 1;
+        }
+      }
+
+      &.active {
+        box-shadow: 0 0 12px 0 rgba(60, 117, 254, 0.44);
+
+        &::after {
+          background-position: 200% 0;
+          opacity: 1;
+        }
+
+        &::before {
+          background-position: -200% 0;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .boxCenter {
+    display: flex;
+    justify-content: center;
+    padding: 47px 0 0 0;
+
+    @include respond-to("sm") {
+      padding: 24px 16px 0 16px;
+    }
+
+    .box {
+      max-width: 900px;
+      width: 100%;
+    }
+  }
+}

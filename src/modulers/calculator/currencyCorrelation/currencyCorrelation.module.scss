@@ -1,0 +1,242 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+@use '../../../scss/font/font.scss' as *;
+
+.currencyCorrelation {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 1000px;
+  margin: 60px auto 0;
+  padding: 0 20px;
+
+  @include respond-to("md") {
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .controlsSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    @include respond-to("sm") {
+      grid-template-columns: 1fr;
+    }
+
+    .formGroup {
+      label {
+        display: block;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        font-weight: 400;
+        margin-bottom: 6px;
+        @include font-normal;
+      }
+
+      .select {
+        width: 100%;
+        padding: 10px 14px;
+        background: #2A2A2A;
+        border: 1px solid #393939;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 16px;
+        @include font-normal;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 40px;
+
+        &:focus {
+          outline: none;
+          border-color: #E4AB40;
+        }
+      }
+    }
+  }
+
+  .correlationSection {
+    padding: 24px;
+    background: rgba(228, 171, 64, 0.05);
+    border: 1px solid rgba(228, 171, 64, 0.2);
+    border-radius: 12px;
+    position: relative;
+
+    @include respond-to("sm") {
+      padding: 16px;
+    }
+
+    .loadingState {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      @include font-normal;
+    }
+
+    .correlationHeader {
+      margin-bottom: 24px;
+
+      h3 {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 0 8px 0;
+        @include font-medium;
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 13px;
+        margin: 0;
+        @include font-normal;
+      }
+    }
+
+    .axisLabels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-left: 120px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 500;
+      @include font-normal;
+
+      @include respond-to("sm") {
+        padding-left: 80px;
+        font-size: 10px;
+      }
+    }
+
+    .correlationBars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .centerLine {
+      position: absolute;
+      left: calc(24px + 120px + 50%);
+      top: 90px;
+      bottom: 24px;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+      z-index: 1;
+
+      @include respond-to("sm") {
+        left: calc(16px + 80px + 50%);
+        top: 80px;
+      }
+    }
+  }
+
+  .correlationBarWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 2;
+
+    &:hover {
+      transform: translateX(4px);
+
+      .pairLabel {
+        color: #E4AB40;
+      }
+    }
+
+    .pairLabel {
+      width: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
+      text-align: right;
+      @include font-medium;
+      transition: color 0.2s ease;
+
+      @include respond-to("sm") {
+        width: 70px;
+        font-size: 11px;
+      }
+    }
+
+    .barContainer {
+      flex: 1;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      display: flex;
+      overflow: hidden;
+
+      @include respond-to("sm") {
+        height: 28px;
+      }
+
+      .barLeft,
+      .barRight {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .barLeft {
+        justify-content: flex-end;
+      }
+
+      .barRight {
+        justify-content: flex-start;
+      }
+
+      .barFill {
+        height: 100%;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+      }
+    }
+
+    .correlationValue {
+      width: 60px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      @include font-medium;
+
+      @include respond-to("sm") {
+        width: 50px;
+        font-size: 11px;
+      }
+    }
+  }
+
+  .infoBox {
+    padding: 16px;
+    background: rgba(228, 171, 64, 0.1);
+    border: 1px solid rgba(228, 171, 64, 0.3);
+    border-radius: 8px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    @include font-normal;
+
+    @include respond-to("sm") {
+      font-size: 12px;
+    }
+
+    strong {
+      color: #E4AB40;
+      font-weight: 500;
+      @include font-medium;
+    }
+  }
+}

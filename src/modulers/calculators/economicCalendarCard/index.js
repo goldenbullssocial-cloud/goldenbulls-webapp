@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import styles from './economicCalendarCard.module.scss';
 const LineImage = "/assets/images/line.png";
 const Currency = "/assets/icons/Currency.svg";
@@ -11,7 +12,7 @@ export default function EconomicCalendarCard() {
         <div className={styles.economicCalendarCardAlignment}>
             <div className='container-md'>
                 <div className={styles.grid}>
-                    <div className={styles.griditems}>
+                    <Link href="/calculators/currency-correlation" className={styles.griditems}>
                         <div className={styles.lineImage}>
                             <img src={LineImage} alt="Line" />
                         </div>
@@ -27,8 +28,8 @@ export default function EconomicCalendarCard() {
                                 to each other.
                             </p>
                         </div>
-                    </div>
-                    <div className={styles.griditems}>
+                    </Link>
+                    <Link href="/calculators/forex-market-hours" className={styles.griditems}>
                         <div className={styles.lineImage}>
                             <img src={LineImage} alt="Line" />
                         </div>
@@ -43,8 +44,8 @@ export default function EconomicCalendarCard() {
                                 Convert global forex market sessions to your local time zone easily.
                             </p>
                         </div>
-                    </div>
-                    <div className={styles.griditems}>
+                    </Link>
+                    <Link href="/calculators/risk-meter" className={styles.griditems}>
                         <div className={styles.lineImage}>
                             <img src={LineImage} alt="Line" />
                         </div>
@@ -59,10 +60,10 @@ export default function EconomicCalendarCard() {
                                 Gauge overall market sentiment to understand risk appetite across assets.
                             </p>
                         </div>
-                    </div>
+                    </Link>
                     </div>
                     <div className={styles.twoCol}>
-                    <div className={styles.griditems}>
+                    <Link href="/calculators/pip-value" className={styles.griditems}>
                         <div className={styles.lineImage}>
                             <img src={LineImage} alt="Line" />
                         </div>
@@ -77,8 +78,8 @@ export default function EconomicCalendarCard() {
                                 Calculate the monetary value of each pip for any trade setup.
                             </p>
                         </div>
-                    </div>
-                    <div className={styles.griditems}>
+                    </Link>
+                    <Link href="/calculators/position-size" className={styles.griditems}>
                         <div className={styles.lineImage}>
                             <img src={LineImage} alt="Line" />
                         </div>
@@ -93,7 +94,7 @@ export default function EconomicCalendarCard() {
                                 Determine the correct trade size based on risk and account balance.
                             </p>
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>
