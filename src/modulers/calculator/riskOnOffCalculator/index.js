@@ -8,6 +8,8 @@ export default function RiskOnOffCalculator() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [timestamp, setTimestamp] = useState("");
+  const [globalScore, setGlobalScore] = useState(50);
+  const [globalZone, setGlobalZone] = useState("NEUTRAL");
 
   // Symbol display mapping
   const symbolConfig = {
@@ -50,6 +52,25 @@ export default function RiskOnOffCalculator() {
 
         if (response.data?.success && response.data?.data) {
           const apiData = response.data.data;
+
+          // Calculate global score as average of all normalizedRisk values
+          const totalScore = apiData.reduce((sum, item) => sum + item.normalizedRisk, 0);
+          const avgScore = Math.round(totalScore / apiData.length);
+          
+          // Determine global zone based on average score
+          let zone = "NEUTRAL";
+          if (avgScore >= 0 && avgScore < 25) {
+            zone = "STRONG RISK-OFF";
+          } else if (avgScore >= 25 && avgScore < 50) {
+            zone = "WEAK RISK-OFF";
+          } else if (avgScore >= 50 && avgScore < 75) {
+            zone = "WEAK RISK-ON";
+          } else if (avgScore >= 75) {
+            zone = "STRONG RISK-ON";
+          }
+
+          setGlobalScore(avgScore);
+          setGlobalZone(zone);
 
           // Transform API data to indicator format
           const transformedIndicators = apiData.map((item) => {
@@ -136,6 +157,12 @@ export default function RiskOnOffCalculator() {
       <div className={styles.container}>
         <div className={styles.header}>
           <h1 className={styles.title}>Risk-On / Risk-Off Indicators</h1>
+        </div>
+
+        {/* Global Score Display */}
+        <div className={styles.globalScoreDisplay}>
+          <div className={styles.scoreNumber}>{globalScore}</div>
+          <div className={styles.scoreLabel}>{globalZone}</div>
         </div>
 
         <div className={styles.mainCard}>
