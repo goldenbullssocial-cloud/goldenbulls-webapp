@@ -3,17 +3,47 @@ import React, { useState, useEffect } from "react";
 import styles from "./pipValueCalculator.module.scss";
 import marketDataService from "@/services/marketpricedata";
 
-const currencyPairs = [
+const currencyPairs =  [
   "EUR/USD",
   "GBP/USD",
-  "USD/JPY",
   "USD/CHF",
-  "AUD/USD",
   "USD/CAD",
+  "USD/JPY",
   "NZD/USD",
+  "AUD/USD",
+  "EUR/AUD",
+  "EUR/GBP",
+  "EUR/JPY",
+  "EUR/CAD",
+  "EUR/CHF",
+  "EUR/NZD",
+  "GBP/CAD",
+  "GBP/CHF",
+  "GBP/JPY",
+  "GBP/AUD",
+  "GBP/NZD",
+  "AUD/CAD",
+  "AUD/JPY",
+  "AUD/CHF",
+  "AUD/NZD",
+  "CHF/JPY",
+  "CAD/CHF",
+  "CAD/JPY",
+  "NZD/CHF",
+  "NZD/JPY",
+  "NZD/CAD"
 ];
 
-const accountCurrencies = ["USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "NZD"];
+const accountCurrencies = [
+  "USD",
+  "EUR",
+  "JPY",
+  "GBP",
+  "CHF",
+  "AUD",
+  "CAD",
+  "NZD"
+];
 
 export default function PipValueCalculator() {
   const [formData, setFormData] = useState({
@@ -63,8 +93,11 @@ export default function PipValueCalculator() {
 
   // Check if conversion field is needed and fetch conversion price
   useEffect(() => {
-    const quoteCurrency = formData.currencyPair.split("/")[1];
-    const needsConversion = quoteCurrency !== formData.accountCurrency;
+    const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
+    // No conversion needed if account currency matches either base or quote currency
+    const needsConversion = 
+      quoteCurrency !== formData.accountCurrency && 
+      baseCurrency !== formData.accountCurrency;
     
     setShowConversionField(needsConversion);
 
@@ -150,7 +183,9 @@ export default function PipValueCalculator() {
     }
 
     const [baseCurrency, quoteCurrency] = currencyPair.split("/");
-    const needsConversion = quoteCurrency !== accountCurrency;
+    const needsConversion = 
+      quoteCurrency !== accountCurrency && 
+      baseCurrency !== accountCurrency;
 
     if (needsConversion && (!conversionPrice || conversionPrice === "0" || isNaN(parseFloat(conversionPrice)))) {
       newErrors.conversionPrice = "Conversion price is required";
@@ -176,7 +211,16 @@ export default function PipValueCalculator() {
       // Convert to account currency if needed
       let pipValueInAccount = pipValueInQuote;
 
-      if (quoteCurrency !== accountCurrency) {
+      if (quoteCurrency === accountCurrency) {
+        // Account currency matches quote currency - no conversion needed
+        pipValueInAccount = pipValueInQuote;
+      } else if (baseCurrency === accountCurrency) {
+        // Account currency matches base currency
+        // Convert using the exchange rate directly
+        // For USD/CHF with USD account: CHF value / (USD/CHF rate) = USD value
+        pipValueInAccount = pipValueInQuote / price;
+      } else {
+        // Account currency is different from both base and quote
         const conversion = parseFloat(conversionPrice);
 
         // If conversion pair is AccountCurrency/QuoteCurrency (e.g., USD/JPY)

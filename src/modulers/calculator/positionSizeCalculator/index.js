@@ -2,26 +2,48 @@
 import React, { useState } from "react";
 import styles from "./positionSizeCalculator.module.scss";
 
-const currencyPairs = [
+const currencyPairs =  [
   "EUR/USD",
   "GBP/USD",
-  "USD/JPY",
   "USD/CHF",
-  "AUD/USD",
   "USD/CAD",
+  "USD/JPY",
   "NZD/USD",
+  "AUD/USD",
+  "EUR/AUD",
+  "EUR/GBP",
+  "EUR/JPY",
+  "EUR/CAD",
+  "EUR/CHF",
+  "EUR/NZD",
+  "GBP/CAD",
+  "GBP/CHF",
+  "GBP/JPY",
+  "GBP/AUD",
+  "GBP/NZD",
+  "AUD/CAD",
+  "AUD/JPY",
+  "AUD/CHF",
+  "AUD/NZD",
+  "CHF/JPY",
+  "CAD/CHF",
+  "CAD/JPY",
+  "NZD/CHF",
+  "NZD/JPY",
+  "NZD/CAD"
 ];
 
 const accountCurrencies = [
   "USD",
   "EUR",
-  "GBP",
   "JPY",
+  "GBP",
+  "CHF",
   "AUD",
   "CAD",
-  "CHF",
-  "NZD",
+  "NZD"
 ];
+
 
 export default function PositionSizeCalculator() {
   const [formData, setFormData] = useState({
@@ -62,8 +84,8 @@ export default function PositionSizeCalculator() {
   // Check if ask price is needed
   const isAskPriceNeeded = () => {
     const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
-    // Ask price is NOT needed when account currency matches the quote currency
-    return formData.accountCurrency !== quoteCurrency;
+    // Ask price is NOT needed when account currency matches either base or quote currency
+    return formData.accountCurrency !== quoteCurrency && formData.accountCurrency !== baseCurrency;
   };
 
   const handleCalculate = () => {
@@ -114,7 +136,7 @@ export default function PositionSizeCalculator() {
 
     // Check if ask price is required
     const [baseCurrency, quoteCurrency] = currencyPair.split("/");
-    const needsAskPrice = accountCurrency !== quoteCurrency;
+    const needsAskPrice = accountCurrency !== quoteCurrency && accountCurrency !== baseCurrency;
 
     if (
       needsAskPrice &&
@@ -154,8 +176,24 @@ export default function PositionSizeCalculator() {
       // Convert pip value to account currency if needed
       let pipValueInAccount = pipValuePerUnit;
 
-      if (quoteCurrency !== accountCurrency) {
-        // If quote currency doesn't match account currency, we need conversion
+      if (quoteCurrency === accountCurrency) {
+        // Account currency matches quote currency - no conversion needed
+        pipValueInAccount = pipValuePerUnit;
+      } else if (baseCurrency === accountCurrency) {
+        // Account currency matches base currency
+        // Convert using the exchange rate directly
+        // For USD/CHF with USD account: CHF value / (USD/CHF rate) = USD value
+        if (!price || isNaN(price)) {
+          setErrors((prev) => ({
+            ...prev,
+            askPrice: "Ask price is required for currency conversion",
+          }));
+          setLoading(false);
+          return;
+        }
+        pipValueInAccount = pipValuePerUnit / price;
+      } else {
+        // Account currency is different from both base and quote
         if (!price || isNaN(price)) {
           setErrors((prev) => ({
             ...prev,
