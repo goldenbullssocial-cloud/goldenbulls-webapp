@@ -7,6 +7,7 @@ import PipValueCalculator from "../calculator/pipValueCalculator";
 import PositionSizeCalculator from "../calculator/positionSizeCalculator";
 import CurrencyCorrelation from "../calculator/currencyCorrelation";
 import RiskOnOffCalculator from "../calculator/riskOnOffCalculator";
+import ForexMarketHours from "../calculator/forexMarketHours";
 
 const calculatorConfig = {
   "currency-correlation": {
@@ -21,7 +22,7 @@ const calculatorConfig = {
     highlightWord: "Market Hours",
     description:
       "Convert global forex market sessions to your local time zone easily.",
-    component: null, // No component available yet
+    component: ForexMarketHours,
   },
   "risk-meter": {
     title: "Risk-on/Risk-off",
