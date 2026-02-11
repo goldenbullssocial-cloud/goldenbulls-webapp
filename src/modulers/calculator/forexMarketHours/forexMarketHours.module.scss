@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Theme variables matching your design system
 $gold: #e4ab40;
 $gold-light: #f9f490;
@@ -145,7 +147,7 @@ $border-color: rgba(255, 255, 255, 0.1);
 
       &:hover {
         border-color: rgba($gold, 0.5);
-        background: lighten($card-bg, 5%);
+        background: color.adjust($card-bg, $lightness: 5%);
       }
 
       &:focus {

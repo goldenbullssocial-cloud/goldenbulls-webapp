@@ -12,14 +12,14 @@ export default function RiskOnOffCalculator() {
   // Symbol display mapping
   const symbolConfig = {
     "AUD/USD": { name: "AUD/USD", flag: "🇦🇺🇺🇸" },
-    "BTC/USD": { name: "BTC/USD", icon: "₿", flag: "🇺🇸" },
+    "BTC/USD": { name: "BTC/USD", icon: "", flag: "🇺🇸" },
     "EUR/USD": { name: "EUR/USD", flag: "🇪🇺🇺🇸" },
     "GBP/USD": { name: "GBP/USD", flag: "��🇺🇸" },
     "NZD/USD": { name: "NZD/USD", flag: "🇳🇿🇺🇸" },
     "USD/CAD": { name: "USD/CAD", flag: "🇺🇸🇨🇦" },
     "USD/CHF": { name: "USD/CHF", flag: "🇺🇸🇨🇭" },
     "USD/JPY": { name: "USD/JPY", flag: "🇺🇸🇯🇵" },
-    "XAU/USD": { name: "XAU/USD", icon: "🥇", flag: "🇺🇸" },
+    "XAU/USD": { name: "XAU/USD", icon: "", flag: "🇺🇸" },
   };
 
   // Get color based on zone
