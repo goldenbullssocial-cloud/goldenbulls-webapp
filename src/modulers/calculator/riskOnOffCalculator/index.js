@@ -157,6 +157,24 @@ export default function RiskOnOffCalculator() {
             </div>
 
             <div className={styles.chartArea}>
+              {/* Render all dots with absolute positioning relative to entire chart */}
+              {indicators.map((item, index) => {
+                // Position based on 0-100 scale across entire chart area
+                const leftPosition = item.position;
+                
+                return (
+                  <div
+                    key={index}
+                    className={styles.indicatorDot}
+                    style={{ 
+                      top: `${indicators.indexOf(item) * (100 / (indicators.length + 1)) + (100 / (indicators.length + 1))}%`,
+                      left: `${leftPosition}%`,
+                      backgroundColor: item.color
+                    }}
+                  ></div>
+                );
+              })}
+
               <div className={`${styles.scaleSlider} ${styles.leftSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
                 <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>0</div>
@@ -167,28 +185,6 @@ export default function RiskOnOffCalculator() {
                 <div className={styles.columnLabel}>RISK</div>
                 <div className={styles.riskColumn}>
                   <div className={styles.stripesPattern}></div>
-                  {indicators.map((item, index) => {
-                    // Calculate position within the RISK column (0-50 range)
-                    // Map the value proportionally within the column
-                    // 0 should be at left edge (0%), 50 should be at right edge (100%)
-                    const leftPosition = (item.position / 50) * 100;
-                    
-                    // Only render if in RISK-OFF zone (< 50)
-                    if (item.position < 50) {
-                      return (
-                        <div
-                          key={index}
-                          className={styles.indicatorDot}
-                          style={{ 
-                            top: `${indicators.indexOf(item) * (100 / (indicators.length + 1)) + (100 / (indicators.length + 1))}%`,
-                            left: `${leftPosition}%`,
-                            backgroundColor: item.color
-                          }}
-                        ></div>
-                      );
-                    }
-                    return null;
-                  })}
                 </div>
               </div>
 
@@ -215,28 +211,6 @@ export default function RiskOnOffCalculator() {
                 <div className={styles.columnLabel}>RISK-ON</div>
                 <div className={styles.riskOnColumn}>
                   <div className={styles.stripesPatternReverse}></div>
-                  {indicators.map((item, index) => {
-                    // Position based on 0-100 scale across entire chart
-                    // But we need to adjust for the RISK-ON column starting at 50
-                    // So we map 50-100 to 0-100% of this column
-                    const leftPosition = ((item.position - 50) / 50) * 100;
-                    
-                    // Only render if in RISK-ON zone (>= 50)
-                    if (item.position >= 50) {
-                      return (
-                        <div
-                          key={index}
-                          className={styles.indicatorDot}
-                          style={{ 
-                            top: `${indicators.indexOf(item) * (100 / (indicators.length + 1)) + (100 / (indicators.length + 1))}%`,
-                            left: `${leftPosition}%`,
-                            backgroundColor: item.color
-                          }}
-                        ></div>
-                      );
-                    }
-                    return null;
-                  })}
                 </div>
               </div>
 
