@@ -45,6 +45,13 @@ export default function PositionSizeCalculator() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Check if ask price is needed
+  const isAskPriceNeeded = () => {
+    const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
+    // Ask price is NOT needed when account currency matches the quote currency
+    return formData.accountCurrency !== quoteCurrency;
+  };
+
   const getPipValue = (pair, askPrice) => {
     // Determine pip size based on pair
     const pipSize = pair.includes("JPY") ? 0.01 : 0.0001;
@@ -64,8 +71,17 @@ export default function PositionSizeCalculator() {
       askPrice,
     } = formData;
 
-    if (!accountBalance || !riskPercentage || !stopLoss || !askPrice) {
-      alert("Please fill in all fields");
+    // Check if ask price is required
+    const [baseCurrency, quoteCurrency] = currencyPair.split("/");
+    const needsAskPrice = accountCurrency !== quoteCurrency;
+
+    if (!accountBalance || !riskPercentage || !stopLoss) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    if (needsAskPrice && !askPrice) {
+      alert("Please enter the ask price");
       return;
     }
 
@@ -202,17 +218,19 @@ export default function PositionSizeCalculator() {
           </select>
         </div>
 
-        <div className={styles.formGroup}>
-          <label>Current {formData.currencyPair} Ask Price</label>
-          <input
-            type="number"
-            step="0.00001"
-            value={formData.askPrice}
-            onChange={(e) => handleInputChange("askPrice", e.target.value)}
-            placeholder="0.00000"
-            className={styles.input}
-          />
-        </div>
+        {isAskPriceNeeded() && (
+          <div className={styles.formGroup}>
+            <label>Current {formData.currencyPair} Ask Price</label>
+            <input
+              type="number"
+              step="0.00001"
+              value={formData.askPrice}
+              onChange={(e) => handleInputChange("askPrice", e.target.value)}
+              placeholder="0.00000"
+              className={styles.input}
+            />
+          </div>
+        )}
 
         <button
           onClick={handleCalculate}
