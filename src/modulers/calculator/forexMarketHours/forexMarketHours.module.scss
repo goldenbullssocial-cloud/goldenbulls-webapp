@@ -1,0 +1,673 @@
+// Theme variables matching your design system
+$gold: #e4ab40;
+$gold-light: #f9f490;
+$gold-gradient: linear-gradient(
+  90deg,
+  #f9f490 0%,
+  #e4ab40 25.48%,
+  #fefba5 75%,
+  #bd894e 100%
+);
+$bg-main: #000;
+$card-bg: #1a1a1a;
+$text-primary: #fff;
+$text-muted: rgba(255, 255, 255, 0.7);
+$border-color: rgba(255, 255, 255, 0.1);
+
+.forex-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family:
+    "SFPRODISPLAYREGULAR",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.forex-card {
+  background: $card-bg;
+  border-radius: 16px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid $border-color;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: $gold-gradient;
+  }
+}
+
+.forex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin-top: 4px;
+  }
+}
+
+// Toggle switch
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $text-primary;
+  white-space: nowrap;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background: $border-color;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &.active {
+    background: $gold;
+  }
+
+  &__knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+
+    .active & {
+      transform: translateX(24px);
+    }
+  }
+}
+
+// Timezone selector
+.timezone-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  &__dropdown {
+    position: relative;
+
+    select {
+      appearance: none;
+      background: $card-bg;
+      color: $text-primary;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      padding: 10px 40px 10px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-width: 220px;
+      transition: all 0.2s ease;
+      font-family: "SFPRODISPLAYREGULAR";
+
+      &:hover {
+        border-color: rgba($gold, 0.5);
+        background: lighten($card-bg, 5%);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $gold;
+        box-shadow: 0 0 0 2px rgba($gold, 0.2);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      // Custom scrollbar for dropdown options
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: rgba($border-color, 0.3);
+        border-radius: 3px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba($gold, 0.5);
+        border-radius: 3px;
+
+        &:hover {
+          background: rgba($gold, 0.7);
+        }
+      }
+
+      // Option styling
+      option {
+        background: $card-bg;
+        color: $text-primary;
+        padding: 4px 12px;
+        border: none;
+        font-size: 0.8125rem;
+        line-height: 1.3;
+
+        &:hover {
+          background: rgba($gold, 0.1);
+        }
+
+        &:checked {
+          background: rgba($gold, 0.2);
+          color: $gold;
+          font-weight: 700;
+        }
+      }
+    }
+
+    &::after {
+      content: "▼";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $gold;
+      font-size: 0.625rem;
+      pointer-events: none;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover::after {
+      transform: translateY(-50%) scale(1.1);
+    }
+  }
+}
+
+// Timeline
+.timeline-area {
+  position: relative;
+  margin-top: 8px;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  padding-left: 200px;
+  position: relative;
+  margin-bottom: 4px;
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+  }
+
+  &__hours {
+    display: flex;
+    width: 100%;
+    position: relative;
+  }
+
+  &__hour {
+    flex: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: $text-muted;
+    user-select: none;
+  }
+
+  &__icons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    top: -18px;
+    pointer-events: none;
+  }
+}
+
+// Session rows
+.session-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid $border-color;
+  min-height: 72px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.session-info {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 16px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  &__flag {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__details {
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.2;
+  }
+
+  &__time {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-muted;
+  }
+
+  &__date {
+    font-size: 0.75rem;
+    color: $text-muted;
+    opacity: 0.8;
+  }
+}
+
+.session-timeline {
+  flex: 1;
+  position: relative;
+  height: 40px;
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.session-bar {
+  position: absolute;
+  top: 8px;
+  height: 28px;
+  border-radius: 6px;
+  transition:
+    left 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+
+  &--open {
+    opacity: 1;
+  }
+
+  &--closed {
+    opacity: 0.65;
+  }
+}
+
+.session-status {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: absolute;
+  top: -4px;
+  white-space: nowrap;
+}
+
+// Current time indicator
+.current-time-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: $gold;
+  z-index: 10;
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+  cursor: grab;
+
+  &--dragging {
+    transition: none;
+    z-index: 15;
+    width: 4px;
+  }
+
+  &:hover {
+    width: 4px;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -2px;
+    right: -2px;
+    background: rgba($gold, 0.2);
+  }
+}
+
+.time-bubble {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $gold-gradient;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba($gold, 0.4);
+  z-index: 20;
+  transition: transform 0.2s ease;
+
+  .current-time-line--dragging & {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba($gold, 0.6);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: $gold;
+  }
+
+  &__time {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  &__day {
+    font-size: 0.6875rem;
+    opacity: 0.85;
+    font-weight: 500;
+  }
+
+  .time-bubble__clock {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 4px;
+  }
+
+  .clock-face {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+}
+
+// Volume section - BabyPips style
+.volume-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $border-color;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.volume-info {
+  width: 192px;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid $border-color;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: $text-primary;
+    background: rgba($gold, 0.1);
+
+    &-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+  }
+}
+
+.volume-chart {
+  flex: 1;
+  height: 100px;
+  position: relative;
+  min-width: 0;
+  border: 1px solid $border-color;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.volume-marker {
+  position: absolute;
+  top: 0;
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+
+  &__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translate(-50%, -50%);
+  }
+
+  &__line {
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      rgba(150, 150, 150, 0.6),
+      transparent
+    );
+    transform: translateX(-50%);
+    height: 100px;
+    position: absolute;
+    top: 0;
+  }
+}
+
+// Traffic lights - BabyPips style (vertical)
+.traffic-lights {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 20;
+  padding: 8px 6px;
+  background: rgba(22, 17, 17, 0.829);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.traffic-light {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  &--red {
+    background: #ef4444;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  &--yellow {
+    background: #f59e0b;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  &--green {
+    background: #22c55e;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  &--active {
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+
+    .traffic-light__glow {
+      opacity: 1;
+      animation: pulse 2s infinite;
+    }
+  }
+
+  &:not(.traffic-light--active) {
+    opacity: 0.2;
+    filter: grayscale(0.9);
+  }
+}
+
+.traffic-light__glow {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.traffic-light--red .traffic-light__glow {
+  background: radial-gradient(
+    circle,
+    rgba(236, 72, 153, 0.6) 0%,
+    transparent 70%
+  );
+}
+
+.traffic-light--yellow .traffic-light__glow {
+  background: radial-gradient(
+    circle,
+    rgba(245, 158, 11, 0.6) 0%,
+    transparent 70%
+  );
+}
+
+.traffic-light--green .traffic-light__glow {
+  background: radial-gradient(
+    circle,
+    rgba(34, 197, 94, 0.6) 0%,
+    transparent 70%
+  );
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+// Weekend overlay
+.weekend-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  border-radius: 12px;
+  backdrop-filter: blur(2px);
+  border: 1px solid $border-color;
+
+  &__text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $text-muted;
+    text-align: center;
+    padding: 24px;
+  }
+}
