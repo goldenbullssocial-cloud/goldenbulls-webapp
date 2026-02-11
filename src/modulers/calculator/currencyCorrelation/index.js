@@ -4,7 +4,7 @@ import styles from "./currencyCorrelation.module.scss";
 import axios from "axios";
 
 // Correlation Bar Component
-const CorrelationBar = ({ pair, correlation, onClick }) => {
+const CorrelationBar = ({ pair, correlation }) => {
   const getBarColor = (corr) => {
     if (corr > 0.7) return "#22c55e";
     if (corr > 0.3) return "#84cc16";
@@ -18,7 +18,7 @@ const CorrelationBar = ({ pair, correlation, onClick }) => {
   const isPositive = correlation >= 0;
 
   return (
-    <div className={styles.correlationBarWrapper} onClick={onClick}>
+    <div className={styles.correlationBarWrapper}>
       <div className={styles.pairLabel}>{pair}</div>
 
       <div className={styles.barContainer}>
@@ -261,7 +261,6 @@ export default function CurrencyCorrelation() {
           <>
             <div className={styles.correlationHeader}>
               <h3>Correlation with {selectedPair}</h3>
-              <p>Click on any pair to view its correlations</p>
             </div>
 
             <div className={styles.axisLabels}>
@@ -281,7 +280,6 @@ export default function CurrencyCorrelation() {
                     key={pair}
                     pair={pair}
                     correlation={pairCorr}
-                    onClick={() => setSelectedPair(pair)}
                   />
                 );
               })}
@@ -290,13 +288,6 @@ export default function CurrencyCorrelation() {
             <div className={styles.centerLine} />
           </>
         )}
-      </div>
-
-      <div className={styles.infoBox}>
-        <strong>Note:</strong> Correlation data is calculated using real-time
-        market data from your backend API. The correlation coefficient ranges
-        from -1 to +1, where +1 indicates perfect positive correlation, -1
-        indicates perfect negative correlation, and 0 indicates no correlation.
       </div>
     </div>
   );
