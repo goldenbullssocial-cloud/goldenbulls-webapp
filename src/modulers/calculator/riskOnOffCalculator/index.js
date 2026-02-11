@@ -1,61 +1,139 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./riskOnOffCalculator.module.scss";
+import axios from "axios";
 
 export default function RiskOnOffCalculator() {
-  const [indicators] = useState([
-    { name: "AUD/JPY", flag: "🇦🇺🇯🇵", position: 8, color: "#E91E63" },
-    {
-      name: "BTC/USD",
-      icon: "₿",
-      flag: "🇺🇸",
-      position: 15,
-      color: "#FF9800",
-    },
-    { name: "Copper", icon: "🔶", position: 82, color: "#9E9E9E" },
-    {
-      name: "JPN225",
-      flag: "🇯🇵",
-      position: 68,
-      color: "#BC0000",
-      textColor: "#4CAF50",
-    },
-    {
-      name: "NAS100",
-      flag: "🇺🇸",
-      position: 62,
-      color: "#1565C0",
-      textColor: "#4CAF50",
-    },
-    {
-      name: "SPX500",
-      flag: "🇺🇸",
-      position: 57,
-      color: "#1565C0",
-      textColor: "#4CAF50",
-    },
-    {
-      name: "USD",
-      flag: "🇺🇸",
-      position: 48,
-      color: "#1565C0",
-      textColor: "#4CAF50",
-    },
-    {
-      name: "VOLX",
-      icon: "📊",
-      position: 42,
-      color: "#616161",
-      textColor: "#4CAF50",
-    },
-    {
-      name: "XAU/USD",
-      icon: "🥇",
-      flag: "🇺🇸",
-      position: 88,
-      color: "#C0C0C0",
-    },
-  ]);
+  const [indicators, setIndicators] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [timestamp, setTimestamp] = useState("");
+
+  // Symbol display mapping
+  const symbolConfig = {
+    "AUD/USD": { name: "AUD/USD", flag: "🇦🇺🇺🇸" },
+    "BTC/USD": { name: "BTC/USD", icon: "₿", flag: "🇺🇸" },
+    "EUR/USD": { name: "EUR/USD", flag: "🇪🇺🇺🇸" },
+    "GBP/USD": { name: "GBP/USD", flag: "��🇺🇸" },
+    "NZD/USD": { name: "NZD/USD", flag: "🇳🇿🇺🇸" },
+    "USD/CAD": { name: "USD/CAD", flag: "🇺🇸🇨🇦" },
+    "USD/CHF": { name: "USD/CHF", flag: "🇺🇸🇨🇭" },
+    "USD/JPY": { name: "USD/JPY", flag: "🇺🇸🇯🇵" },
+    "XAU/USD": { name: "XAU/USD", icon: "🥇", flag: "🇺🇸" },
+  };
+
+  // Get color based on zone
+  const getColorByZone = (zone) => {
+    switch (zone) {
+      case "STRONG_RISK_OFF":
+        return { color: "#E91E63", textColor: "#E91E63" };
+      case "WEAK_RISK_OFF":
+        return { color: "#FF9800", textColor: "#FF9800" };
+      case "WEAK_RISK_ON":
+        return { color: "#8BC34A", textColor: "#8BC34A" };
+      case "STRONG_RISK_ON":
+        return { color: "#4CAF50", textColor: "#4CAF50" };
+      default:
+        return { color: "#9E9E9E", textColor: "#9E9E9E" };
+    }
+  };
+
+  /* COMMENTED OUT - API Call for Risk Meter Data
+  useEffect(() => {
+    const fetchRiskMeterData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await axios.get(
+          "https://qs3jxn86-4000.inc1.devtunnels.ms/riskmeter",
+        );
+
+        if (response.data?.success && response.data?.data) {
+          const apiData = response.data.data;
+
+          // Transform API data to indicator format
+          const transformedIndicators = apiData.map((item) => {
+            const config = symbolConfig[item.symbol] || {
+              name: item.symbol,
+              flag: "🌐",
+            };
+            const colors = getColorByZone(item.zone);
+
+            return {
+              name: config.name,
+              flag: config.flag,
+              icon: config.icon,
+              position: item.normalizedRisk,
+              color: colors.color,
+              textColor: colors.textColor,
+              zone: item.zone,
+              percentChange: item.percentChange,
+            };
+          });
+
+          setIndicators(transformedIndicators);
+
+          // Set timestamp
+          if (apiData.length > 0) {
+            const date = new Date(apiData[0].datetime);
+            setTimestamp(
+              `As of ${date.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}, at ${new Date().toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              })}`,
+            );
+          }
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        console.error("Failed to fetch risk meter data:", err);
+        setError(err.message || "Failed to load risk meter data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRiskMeterData();
+  }, []);
+  */
+
+  /* COMMENTED OUT - Loading and Error States
+  if (loading) {
+    return (
+      <div className={styles.riskOnOffCalculator}>
+        <div className={styles.container}>
+          <div className={styles.mainCard}>
+            <div className={styles.loadingState}>
+              Loading risk meter data...
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.riskOnOffCalculator}>
+        <div className={styles.container}>
+          <div className={styles.mainCard}>
+            <div className={styles.errorState}>
+              <p>⚠️ {error}</p>
+              <button onClick={() => window.location.reload()}>Retry</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  */
 
   return (
     <div className={styles.riskOnOffCalculator}>
@@ -67,12 +145,37 @@ export default function RiskOnOffCalculator() {
 
         <div className={styles.mainCard}>
           <div className={styles.contentWrapper}>
-            {/* Asset List */}
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '60px 20px',
+              color: '#7a7d82',
+              fontSize: '18px'
+            }}>
+              <p>Risk-On / Risk-Off Calculator Coming Soon</p>
+              <p style={{ fontSize: '14px', marginTop: '10px' }}>
+                We're working on bringing you risk indicators.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  /* COMMENTED OUT - Original Risk-On/Off Calculator Implementation
+  return (
+    <div className={styles.riskOnOffCalculator}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Risk-On / Risk-Off Indicators</h1>
+        </div>
+
+        <div className={styles.mainCard}>
+          <div className={styles.contentWrapper}>
             <div className={styles.assetList}>
               {indicators.map((item, index) => (
                 <div key={index} className={styles.assetItem}>
                   <div className={styles.assetIcons}>
-                    {item.flag && <span>{item.flag}</span>}
                     {item.icon && <span>{item.icon}</span>}
                   </div>
                   <span
@@ -85,149 +188,88 @@ export default function RiskOnOffCalculator() {
               ))}
             </div>
 
-            {/* Chart Area */}
             <div className={styles.chartArea}>
-              {/* Left Scale Slider (0-35) */}
               <div className={`${styles.scaleSlider} ${styles.leftSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
-                  0
-                </div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
-                  35
-                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>0</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>0</div>
               </div>
 
-              {/* Risk Column */}
               <div className={styles.columnWrapper}>
                 <div className={styles.columnLabel}>RISK</div>
                 <div className={styles.riskColumn}>
-                  {/* Diagonal stripes pattern */}
                   <div className={styles.stripesPattern}></div>
-
-                  {/* Scale markers */}
-                  <div className={`${styles.scaleMarker} ${styles.topLeft}`}>
-                    0
-                  </div>
-                  <div
-                    className={`${styles.scaleMarker} ${styles.bottomLeft}`}
-                  >
-                    35
-                  </div>
-                  <div className={`${styles.scaleMarker} ${styles.topRight}`}>
-                    0
-                  </div>
-                  <div
-                    className={`${styles.scaleMarker} ${styles.bottomRight}`}
-                  >
-                    35
-                  </div>
-
-                  {/* Indicator dots */}
                   {indicators
                     .filter((item) => item.position < 50)
-                    .map((item, index) => (
-                      <div
-                        key={index}
-                        className={styles.indicatorDot}
-                        style={{ top: `${item.position}%` }}
-                      ></div>
-                    ))}
+                    .map((item, index) => {
+                      const leftPosition = (item.position / 50) * 100;
+                      return (
+                        <div
+                          key={index}
+                          className={styles.indicatorDot}
+                          style={{ 
+                            top: `${(index + 1) * (100 / (indicators.filter(i => i.position < 50).length + 1))}%`,
+                            left: `${leftPosition}%`
+                          }}
+                        ></div>
+                      );
+                    })}
                 </div>
               </div>
 
-              {/* Right Scale Slider for Risk (0-35) */}
               <div className={`${styles.scaleSlider} ${styles.leftSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
-                  0
-                </div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
-                  35
-                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>35</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>35</div>
               </div>
 
-              {/* Center slider */}
               <div className={styles.centerSlider}>
                 <div className={styles.sliderLine}></div>
                 <div className={styles.sliderHandle}></div>
-                <div className={`${styles.sliderLabel} ${styles.top}`}>0</div>
-                <div className={`${styles.sliderLabel} ${styles.middle}`}>
-                  50
-                </div>
-                <div className={`${styles.sliderLabel} ${styles.bottom}`}>
-                  100
-                </div>
+                <div className={`${styles.sliderLabel} ${styles.top}`}>50</div>
+                <div className={`${styles.sliderLabel} ${styles.bottom}`}>50</div>
               </div>
 
-              {/* Left Scale Slider for Risk-On (65-100) */}
               <div className={`${styles.scaleSlider} ${styles.rightSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
-                  65
-                </div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
-                  100
-                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>65</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>65</div>
               </div>
 
-              {/* Risk-On Column */}
               <div className={styles.columnWrapper}>
                 <div className={styles.columnLabel}>RISK-ON</div>
                 <div className={styles.riskOnColumn}>
-                  {/* Diagonal stripes pattern */}
                   <div className={styles.stripesPatternReverse}></div>
-
-                  {/* Scale markers */}
-                  <div className={`${styles.scaleMarker} ${styles.topLeft}`}>
-                    65
-                  </div>
-                  <div
-                    className={`${styles.scaleMarker} ${styles.bottomLeft}`}
-                  >
-                    100
-                  </div>
-                  <div className={`${styles.scaleMarker} ${styles.topRight}`}>
-                    65
-                  </div>
-                  <div
-                    className={`${styles.scaleMarker} ${styles.bottomRight}`}
-                  >
-                    100
-                  </div>
-
-                  {/* Indicator dots */}
                   {indicators
                     .filter((item) => item.position >= 50)
-                    .map((item, index) => (
-                      <div
-                        key={index}
-                        className={styles.indicatorDot}
-                        style={{ top: `${item.position}%` }}
-                      ></div>
-                    ))}
+                    .map((item, index) => {
+                      const leftPosition = ((item.position - 50) / 50) * 100;
+                      return (
+                        <div
+                          key={index}
+                          className={styles.indicatorDot}
+                          style={{ 
+                            top: `${(index + 1) * (100 / (indicators.filter(i => i.position >= 50).length + 1))}%`,
+                            left: `${leftPosition}%`
+                          }}
+                        ></div>
+                      );
+                    })}
                 </div>
               </div>
 
-              {/* Right Scale Slider for Risk-On (65-100) */}
               <div className={`${styles.scaleSlider} ${styles.rightSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
-                  65
-                </div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
-                  100
-                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>100</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>100</div>
               </div>
             </div>
           </div>
 
-          {/* Timestamp */}
-          <div className={styles.timestamp}>
-            As of February 10 2026, at 3:18 PM
-          </div>
+          <div className={styles.timestamp}>{timestamp}</div>
         </div>
       </div>
     </div>
   );
+  */
 }
