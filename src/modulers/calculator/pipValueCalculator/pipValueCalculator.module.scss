@@ -60,6 +60,14 @@
       }
     }
 
+    .errorMessage {
+      display: block;
+      color: #ff6b6b;
+      font-size: 12px;
+      margin-top: 4px;
+      @include font-normal;
+    }
+
     .select {
       cursor: pointer;
       appearance: none;
@@ -94,6 +102,18 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
+  }
+
+  .calculationError {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 8px;
+    color: #ff6b6b;
+    font-size: 14px;
+    text-align: center;
+    @include font-normal;
   }
 
   .resultsSection {

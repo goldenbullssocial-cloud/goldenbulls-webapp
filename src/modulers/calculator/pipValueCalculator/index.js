@@ -27,12 +27,19 @@ export default function PipValueCalculator() {
   const [loading, setLoading] = useState(false);
   const [showConversionField, setShowConversionField] = useState(false);
   const [conversionPairLabel, setConversionPairLabel] = useState("");
+  const [errors, setErrors] = useState({
+    askPrice: "",
+    positionSize: "",
+    conversionPrice: "",
+    calculation: "",
+  });
 
   // Fetch price when currency pair changes
   useEffect(() => {
     const fetchPrice = async () => {
       try {
         setLoading(true);
+        setErrors((prev) => ({ ...prev, askPrice: "" }));
         const priceData = await marketDataService.fetchPrice(
           formData.currencyPair
         );
@@ -41,8 +48,11 @@ export default function PipValueCalculator() {
           askPrice: priceData.price.toFixed(5),
         }));
       } catch (error) {
-        console.error("Failed to fetch price:", error);
         setFormData((prev) => ({ ...prev, askPrice: "" }));
+        setErrors((prev) => ({ 
+          ...prev, 
+          askPrice: "Failed to fetch price. Please enter manually." 
+        }));
       } finally {
         setLoading(false);
       }
@@ -65,6 +75,7 @@ export default function PipValueCalculator() {
       // Fetch conversion price
       const fetchConversionPrice = async () => {
         try {
+          setErrors((prev) => ({ ...prev, conversionPrice: "" }));
           const priceData = await marketDataService.fetchPrice(conversionPair);
           setFormData((prev) => ({
             ...prev,
@@ -81,8 +92,11 @@ export default function PipValueCalculator() {
               conversionPrice: priceData.price.toFixed(5),
             }));
           } catch (err) {
-            console.error("Failed to fetch conversion price:", err);
             setFormData((prev) => ({ ...prev, conversionPrice: "" }));
+            setErrors((prev) => ({ 
+              ...prev, 
+              conversionPrice: "Failed to fetch conversion price. Please enter manually." 
+            }));
           }
         }
       };
@@ -90,6 +104,7 @@ export default function PipValueCalculator() {
       fetchConversionPrice();
     } else {
       setFormData((prev) => ({ ...prev, conversionPrice: "" }));
+      setErrors((prev) => ({ ...prev, conversionPrice: "" }));
     }
   }, [formData.currencyPair, formData.accountCurrency]);
 
@@ -105,8 +120,38 @@ export default function PipValueCalculator() {
   const handleCalculate = async () => {
     const { currencyPair, askPrice, positionSize, accountCurrency, conversionPrice } = formData;
 
-    if (!askPrice || !positionSize) {
-      alert("Please fill in all fields");
+    // Clear previous errors
+    setErrors({
+      askPrice: "",
+      positionSize: "",
+      conversionPrice: "",
+      calculation: "",
+    });
+
+    // Validation
+    let hasError = false;
+    const newErrors = {};
+
+    if (!askPrice || askPrice === "0" || isNaN(parseFloat(askPrice))) {
+      newErrors.askPrice = "Ask price is required";
+      hasError = true;
+    }
+
+    if (!positionSize || positionSize === "0" || isNaN(parseFloat(positionSize))) {
+      newErrors.positionSize = "Position size is required";
+      hasError = true;
+    }
+
+    const [baseCurrency, quoteCurrency] = currencyPair.split("/");
+    const needsConversion = quoteCurrency !== accountCurrency;
+
+    if (needsConversion && (!conversionPrice || conversionPrice === "0" || isNaN(parseFloat(conversionPrice)))) {
+      newErrors.conversionPrice = "Conversion price is required";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors((prev) => ({ ...prev, ...newErrors }));
       return;
     }
 
@@ -116,52 +161,35 @@ export default function PipValueCalculator() {
       const position = parseFloat(positionSize);
       const price = parseFloat(askPrice);
 
-      // Get base and quote currency
-      const [baseCurrency, quoteCurrency] = currencyPair.split("/");
-
       // Calculate pip value in quote currency
-      // Standard formula: Pip Value = (Pip Size / Exchange Rate) × Position Size
-      let pipValueInQuote;
-      
-      if (quoteCurrency === "JPY") {
-        // For JPY pairs: Pip Value = Pip Size × Position Size
-        pipValueInQuote = pipSize * position;
-      } else {
-        // For non-JPY pairs: Pip Value = (Pip Size / Exchange Rate) × Position Size
-        pipValueInQuote = (pipSize / price) * position;
-      }
-
-      console.log("Pip value in quote currency:", pipValueInQuote, quoteCurrency);
+      // For all pairs: Pip Value = Pip Size × Position Size
+      // This gives us the value in the quote currency (second currency in pair)
+      let pipValueInQuote = pipSize * position;
 
       // Convert to account currency if needed
       let pipValueInAccount = pipValueInQuote;
 
       if (quoteCurrency !== accountCurrency) {
-        if (!conversionPrice) {
-          alert("Conversion price not available");
-          setLoading(false);
-          return;
-        }
-
         const conversion = parseFloat(conversionPrice);
-        
-        // If conversion pair is AccountCurrency/QuoteCurrency (e.g., NZD/JPY)
-        // We multiply: JPY value × (NZD/JPY rate) = NZD value
+
+        // If conversion pair is AccountCurrency/QuoteCurrency (e.g., USD/JPY)
+        // We multiply: JPY value × (USD/JPY rate) = USD value
         if (conversionPairLabel.includes(`${accountCurrency}/${quoteCurrency}`)) {
           pipValueInAccount = pipValueInQuote * conversion;
         } 
-        // If conversion pair is QuoteCurrency/AccountCurrency (e.g., JPY/NZD)
-        // We divide: JPY value / (JPY/NZD rate) = NZD value
+        // If conversion pair is QuoteCurrency/AccountCurrency (e.g., JPY/USD)
+        // We divide: JPY value / (JPY/USD rate) = USD value
         else {
           pipValueInAccount = pipValueInQuote / conversion;
         }
       }
 
-      //console.log("Pip value in account currency:", pipValueInAccount, accountCurrency);
-      setResult(pipValueInAccount.toFixed(2));
+      setResult(pipValueInAccount.toFixed(5));
     } catch (error) {
-      console.error("Calculation error:", error);
-      alert("Failed to calculate pip value");
+      setErrors((prev) => ({ 
+        ...prev, 
+        calculation: "Failed to calculate pip value. Please check your inputs." 
+      }));
     } finally {
       setLoading(false);
     }
@@ -196,6 +224,9 @@ export default function PipValueCalculator() {
             className={styles.input}
             readOnly
           />
+          {errors.askPrice && (
+            <span className={styles.errorMessage}>{errors.askPrice}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -207,6 +238,9 @@ export default function PipValueCalculator() {
             placeholder="0"
             className={styles.input}
           />
+          {errors.positionSize && (
+            <span className={styles.errorMessage}>{errors.positionSize}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -238,6 +272,9 @@ export default function PipValueCalculator() {
               className={styles.input}
               readOnly
             />
+            {errors.conversionPrice && (
+              <span className={styles.errorMessage}>{errors.conversionPrice}</span>
+            )}
           </div>
         )}
 
@@ -248,6 +285,10 @@ export default function PipValueCalculator() {
         >
           {loading ? "Calculating..." : "Calculate"}
         </button>
+
+        {errors.calculation && (
+          <div className={styles.calculationError}>{errors.calculation}</div>
+        )}
       </div>
 
       <div className={styles.resultsSection}>

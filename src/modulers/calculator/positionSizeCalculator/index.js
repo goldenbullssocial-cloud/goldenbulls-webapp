@@ -40,6 +40,13 @@ export default function PositionSizeCalculator() {
     microLots: "0",
   });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    accountBalance: "",
+    riskPercentage: "",
+    stopLoss: "",
+    askPrice: "",
+    calculation: "",
+  });
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -52,15 +59,6 @@ export default function PositionSizeCalculator() {
     return formData.accountCurrency !== quoteCurrency;
   };
 
-  const getPipValue = (pair, askPrice) => {
-    // Determine pip size based on pair
-    const pipSize = pair.includes("JPY") ? 0.01 : 0.0001;
-
-    // For most pairs: pip value = pip size
-    // For JPY pairs: pip value = pip size
-    return pipSize;
-  };
-
   const handleCalculate = () => {
     const {
       accountBalance,
@@ -71,17 +69,56 @@ export default function PositionSizeCalculator() {
       askPrice,
     } = formData;
 
+    // Clear previous errors
+    setErrors({
+      accountBalance: "",
+      riskPercentage: "",
+      stopLoss: "",
+      askPrice: "",
+      calculation: "",
+    });
+
+    // Validation
+    let hasError = false;
+    const newErrors = {};
+
+    if (
+      !accountBalance ||
+      accountBalance === "0" ||
+      isNaN(parseFloat(accountBalance))
+    ) {
+      newErrors.accountBalance = "Account balance is required";
+      hasError = true;
+    }
+
+    if (
+      !riskPercentage ||
+      riskPercentage === "0" ||
+      isNaN(parseFloat(riskPercentage))
+    ) {
+      newErrors.riskPercentage = "Risk percentage is required";
+      hasError = true;
+    }
+
+    if (!stopLoss || stopLoss === "0" || isNaN(parseFloat(stopLoss))) {
+      newErrors.stopLoss = "Stop loss is required";
+      hasError = true;
+    }
+
     // Check if ask price is required
     const [baseCurrency, quoteCurrency] = currencyPair.split("/");
     const needsAskPrice = accountCurrency !== quoteCurrency;
 
-    if (!accountBalance || !riskPercentage || !stopLoss) {
-      alert("Please fill in all required fields");
-      return;
+    if (
+      needsAskPrice &&
+      (!askPrice || askPrice === "0" || isNaN(parseFloat(askPrice)))
+    ) {
+      newErrors.askPrice = "Ask price is required";
+      hasError = true;
     }
 
-    if (needsAskPrice && !askPrice) {
-      alert("Please enter the ask price");
+    if (hasError) {
+      setErrors((prev) => ({ ...prev, ...newErrors }));
       return;
     }
 
@@ -91,7 +128,7 @@ export default function PositionSizeCalculator() {
       const balance = parseFloat(accountBalance);
       const risk = parseFloat(riskPercentage);
       const stopLossPips = parseFloat(stopLoss);
-      const price = parseFloat(askPrice);
+      const price = parseFloat(askPrice) || 0;
 
       // Calculate amount at risk
       const amountAtRisk = balance * (risk / 100);
@@ -99,29 +136,35 @@ export default function PositionSizeCalculator() {
       // Get base and quote currency
       const [baseCurrency, quoteCurrency] = currencyPair.split("/");
 
-      // Calculate pip value in quote currency
+      // Calculate pip value per unit in quote currency
       const pipSize = currencyPair.includes("JPY") ? 0.01 : 0.0001;
 
-      let pipValueInQuote;
-      if (quoteCurrency === "JPY") {
-        // For JPY pairs: pip value = pip size
-        pipValueInQuote = pipSize;
-      } else {
-        // For non-JPY pairs: pip value = (pip size / exchange rate)
-        pipValueInQuote = pipSize / price;
-      }
+      // Pip value per unit is simply the pip size
+      // For EUR/USD: 1 unit = 0.0001 USD per pip
+      // For USD/JPY: 1 unit = 0.01 JPY per pip
+      let pipValuePerUnit = pipSize;
 
       // Convert pip value to account currency if needed
-      let pipValueInAccount = pipValueInQuote;
+      let pipValueInAccount = pipValuePerUnit;
 
       if (quoteCurrency !== accountCurrency) {
-        // Simplified: assume 1:1 conversion for now
-        // In real scenario, you'd need conversion rates
-        pipValueInAccount = pipValueInQuote;
+        // If quote currency doesn't match account currency, we need conversion
+        if (!price || isNaN(price)) {
+          setErrors((prev) => ({
+            ...prev,
+            askPrice: "Ask price is required for currency conversion",
+          }));
+          setLoading(false);
+          return;
+        }
+
+        // Convert using the exchange rate
+        // This is a simplified conversion - in production you'd need proper conversion rates
+        pipValueInAccount = pipValuePerUnit / price;
       }
 
       // Calculate position size in units
-      // Position Size = Amount at Risk / (Stop Loss in Pips × Pip Value)
+      // Position Size = Amount at Risk / (Stop Loss in Pips × Pip Value per Unit)
       const positionSizeUnits =
         amountAtRisk / (stopLossPips * pipValueInAccount);
 
@@ -138,8 +181,11 @@ export default function PositionSizeCalculator() {
         microLots: microLots.toFixed(2),
       });
     } catch (error) {
-      console.error("Calculation error:", error);
-      alert("Failed to calculate position size");
+      setErrors((prev) => ({
+        ...prev,
+        calculation:
+          "Failed to calculate position size. Please check your inputs.",
+      }));
     } finally {
       setLoading(false);
     }
@@ -176,6 +222,9 @@ export default function PositionSizeCalculator() {
             placeholder="0"
             className={styles.input}
           />
+          {errors.accountBalance && (
+            <span className={styles.errorMessage}>{errors.accountBalance}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -190,6 +239,9 @@ export default function PositionSizeCalculator() {
             placeholder="0"
             className={styles.input}
           />
+          {errors.riskPercentage && (
+            <span className={styles.errorMessage}>{errors.riskPercentage}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -201,6 +253,9 @@ export default function PositionSizeCalculator() {
             placeholder="0"
             className={styles.input}
           />
+          {errors.stopLoss && (
+            <span className={styles.errorMessage}>{errors.stopLoss}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -229,6 +284,9 @@ export default function PositionSizeCalculator() {
               placeholder="0.00000"
               className={styles.input}
             />
+            {errors.askPrice && (
+              <span className={styles.errorMessage}>{errors.askPrice}</span>
+            )}
           </div>
         )}
 
@@ -239,6 +297,10 @@ export default function PositionSizeCalculator() {
         >
           {loading ? "Calculating..." : "Calculate"}
         </button>
+
+        {errors.calculation && (
+          <div className={styles.calculationError}>{errors.calculation}</div>
+        )}
       </div>
 
       <div className={styles.resultsSection}>
