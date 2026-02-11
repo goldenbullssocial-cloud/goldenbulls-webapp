@@ -38,7 +38,6 @@ export default function RiskOnOffCalculator() {
     }
   };
 
-  /* COMMENTED OUT - API Call for Risk Meter Data
   useEffect(() => {
     const fetchRiskMeterData = async () => {
       try {
@@ -46,7 +45,7 @@ export default function RiskOnOffCalculator() {
         setError(null);
 
         const response = await axios.get(
-          "https://qs3jxn86-4000.inc1.devtunnels.ms/riskmeter",
+          `${process.env.NEXT_PUBLIC_CALCULATOR_API_URL}/riskmeter`,
         );
 
         if (response.data?.success && response.data?.data) {
@@ -102,9 +101,7 @@ export default function RiskOnOffCalculator() {
 
     fetchRiskMeterData();
   }, []);
-  */
 
-  /* COMMENTED OUT - Loading and Error States
   if (loading) {
     return (
       <div className={styles.riskOnOffCalculator}>
@@ -133,36 +130,7 @@ export default function RiskOnOffCalculator() {
       </div>
     );
   }
-  */
 
-  return (
-    <div className={styles.riskOnOffCalculator}>
-      <div className={styles.container}>
-        {/* Header */}
-        <div className={styles.header}>
-          <h1 className={styles.title}>Risk-On / Risk-Off Indicators</h1>
-        </div>
-
-        <div className={styles.mainCard}>
-          <div className={styles.contentWrapper}>
-            <div style={{ 
-              textAlign: 'center', 
-              padding: '60px 20px',
-              color: '#7a7d82',
-              fontSize: '18px'
-            }}>
-              <p>Risk-On / Risk-Off Calculator Coming Soon</p>
-              <p style={{ fontSize: '14px', marginTop: '10px' }}>
-                We're working on bringing you risk indicators.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  /* COMMENTED OUT - Original Risk-On/Off Calculator Implementation
   return (
     <div className={styles.riskOnOffCalculator}>
       <div className={styles.container}>
@@ -199,21 +167,28 @@ export default function RiskOnOffCalculator() {
                 <div className={styles.columnLabel}>RISK</div>
                 <div className={styles.riskColumn}>
                   <div className={styles.stripesPattern}></div>
-                  {indicators
-                    .filter((item) => item.position < 50)
-                    .map((item, index) => {
-                      const leftPosition = (item.position / 50) * 100;
+                  {indicators.map((item, index) => {
+                    // Calculate position within the RISK column (0-50 range)
+                    // Map the value proportionally within the column
+                    // 0 should be at left edge (0%), 50 should be at right edge (100%)
+                    const leftPosition = (item.position / 50) * 100;
+                    
+                    // Only render if in RISK-OFF zone (< 50)
+                    if (item.position < 50) {
                       return (
                         <div
                           key={index}
                           className={styles.indicatorDot}
                           style={{ 
-                            top: `${(index + 1) * (100 / (indicators.filter(i => i.position < 50).length + 1))}%`,
-                            left: `${leftPosition}%`
+                            top: `${indicators.indexOf(item) * (100 / (indicators.length + 1)) + (100 / (indicators.length + 1))}%`,
+                            left: `${leftPosition}%`,
+                            backgroundColor: item.color
                           }}
                         ></div>
                       );
-                    })}
+                    }
+                    return null;
+                  })}
                 </div>
               </div>
 
@@ -240,21 +215,28 @@ export default function RiskOnOffCalculator() {
                 <div className={styles.columnLabel}>RISK-ON</div>
                 <div className={styles.riskOnColumn}>
                   <div className={styles.stripesPatternReverse}></div>
-                  {indicators
-                    .filter((item) => item.position >= 50)
-                    .map((item, index) => {
-                      const leftPosition = ((item.position - 50) / 50) * 100;
+                  {indicators.map((item, index) => {
+                    // Position based on 0-100 scale across entire chart
+                    // But we need to adjust for the RISK-ON column starting at 50
+                    // So we map 50-100 to 0-100% of this column
+                    const leftPosition = ((item.position - 50) / 50) * 100;
+                    
+                    // Only render if in RISK-ON zone (>= 50)
+                    if (item.position >= 50) {
                       return (
                         <div
                           key={index}
                           className={styles.indicatorDot}
                           style={{ 
-                            top: `${(index + 1) * (100 / (indicators.filter(i => i.position >= 50).length + 1))}%`,
-                            left: `${leftPosition}%`
+                            top: `${indicators.indexOf(item) * (100 / (indicators.length + 1)) + (100 / (indicators.length + 1))}%`,
+                            left: `${leftPosition}%`,
+                            backgroundColor: item.color
                           }}
                         ></div>
                       );
-                    })}
+                    }
+                    return null;
+                  })}
                 </div>
               </div>
 
@@ -271,5 +253,4 @@ export default function RiskOnOffCalculator() {
       </div>
     </div>
   );
-  */
 }

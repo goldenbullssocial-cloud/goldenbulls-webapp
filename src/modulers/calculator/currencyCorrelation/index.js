@@ -126,7 +126,7 @@ export default function CurrencyCorrelation() {
 
         // Fetch all currency data from your backend - ONE API CALL ONLY
         const response = await axios.get(
-          "https://qs3jxn86-4000.inc1.devtunnels.ms/getData",
+          `${process.env.NEXT_PUBLIC_CALCULATOR_API_URL}/getData`,
           {
             params: {
               days: timeRange,
