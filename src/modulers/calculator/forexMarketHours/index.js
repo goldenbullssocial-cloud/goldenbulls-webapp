@@ -27,6 +27,82 @@ const ForexMarketHours = () => {
   const [manualTime, setManualTime] = useState(null);
   const timelineRef = React.useRef(null);
 
+  // BabyPips-style sun reference mapping - uses major trading hubs, not exact city coordinates
+  const SUN_REFERENCE = {
+    "America/New_York": { lat: 40.7128, lng: -74.006 },
+    "Europe/London": { lat: 51.5074, lng: -0.1278 },
+    "Asia/Tokyo": { lat: 35.6762, lng: 139.6503 },
+    "Australia/Sydney": { lat: -33.8688, lng: 151.2093 },
+  };
+
+  // Map each timezone to closest major trading hub for consistent sun positioning
+  const getSunReference = (tz) => {
+    // Americas - map to New York
+    if (
+      tz.includes("New_York") ||
+      tz.includes("Chicago") ||
+      tz.includes("Denver") ||
+      tz.includes("Los_Angeles") ||
+      tz.includes("Anchorage") ||
+      tz.includes("Puerto_Rico") ||
+      tz.includes("Buenos_Aires") ||
+      tz.includes("Sao_Paulo")
+    ) {
+      return SUN_REFERENCE["America/New_York"];
+    }
+
+    // Europe/Africa - map to London
+    if (
+      tz.includes("London") ||
+      tz.includes("Berlin") ||
+      tz.includes("Moscow") ||
+      tz.includes("Cairo") ||
+      tz.includes("Lagos") ||
+      tz.includes("Johannesburg") ||
+      tz.includes("Nairobi") ||
+      tz.includes("Kampala") ||
+      tz.includes("Accra") ||
+      tz.includes("Tehran") ||
+      tz.includes("Dubai") ||
+      tz.includes("Kabul")
+    ) {
+      return SUN_REFERENCE["Europe/London"];
+    }
+
+    // Asia - map to Tokyo
+    if (
+      tz.includes("Tokyo") ||
+      tz.includes("Singapore") ||
+      tz.includes("Bangkok") ||
+      tz.includes("Kolkata") ||
+      tz.includes("Karachi") ||
+      tz.includes("Dhaka") ||
+      tz.includes("Yangon") ||
+      tz.includes("Colombo") ||
+      tz.includes("Kabul")
+    ) {
+      return SUN_REFERENCE["Asia/Tokyo"];
+    }
+
+    // Pacific - map to Sydney
+    if (
+      tz.includes("Sydney") ||
+      tz.includes("Brisbane") ||
+      tz.includes("Adelaide") ||
+      tz.includes("Darwin") ||
+      tz.includes("Auckland") ||
+      tz.includes("Fiji") ||
+      tz.includes("Midway") ||
+      tz.includes("Honolulu") ||
+      tz.includes("Aleutian")
+    ) {
+      return SUN_REFERENCE["Australia/Sydney"];
+    }
+
+    // Default fallback
+    return SUN_REFERENCE["Europe/London"];
+  };
+
   useEffect(() => {
     if (!isDragging) {
       const interval = setInterval(() => setNow(new Date()), 1000);
@@ -39,11 +115,47 @@ const ForexMarketHours = () => {
   const currentTimezone = TIMEZONES.find((t) => t.value === selectedTz);
   const utcHour = now.getUTCHours();
   const utcMinute = now.getUTCMinutes();
-  const sunriseLocalHour = 4;
-  const sunsetLocalHour = 15;
 
-  const sunriseHour = (((sunriseLocalHour - tzOffset) % 24) + 24) % 24;
-  const sunsetHour = (((sunsetLocalHour - tzOffset) % 24) + 24) % 24;
+  // Real sun calculation using BabyPips-style reference locations with stable UTC date
+  const sunTimes = useMemo(() => {
+    const ref = getSunReference(selectedTz);
+    if (!ref?.lat || !ref?.lng) return null;
+
+    // ALWAYS use today's UTC date (not timezone date or dragged time)
+    const utcNow = new Date();
+    const baseDate = new Date(
+      Date.UTC(
+        utcNow.getUTCFullYear(),
+        utcNow.getUTCMonth(),
+        utcNow.getUTCDate(),
+      ),
+    );
+
+    return SunCalc.getTimes(baseDate, ref.lat, ref.lng);
+  }, [selectedTz]);
+
+  // Helper to convert SunCalc Date to decimal hour in timezone
+  const getDecimalHourInTz = (date, tz) => {
+    if (!date) return 6;
+
+    const tzDate = new Date(date.toLocaleString("en-US", { timeZone: tz }));
+
+    return tzDate.getHours() + tzDate.getMinutes() / 60;
+  };
+
+  const sunriseHour = sunTimes
+    ? Math.max(
+        4,
+        Math.min(8, getDecimalHourInTz(sunTimes.sunriseEnd, selectedTz)),
+      )
+    : 6;
+
+  const sunsetHour = sunTimes
+    ? Math.max(
+        16,
+        Math.min(22, getDecimalHourInTz(sunTimes.sunsetStart, selectedTz)),
+      )
+    : 18;
 
   const displayTime = manualTime || currentTimeInTz;
   const localHour = displayTime.getHours();
@@ -413,7 +525,7 @@ const ForexMarketHours = () => {
               <span
                 style={{
                   position: "absolute",
-                  left: `${sunriseHour * (100 / 24)}%`,
+                  left: `${(sunriseHour / 24) * 100}%`,
                   top: "-16px",
                   fontSize: "1rem",
                   opacity: 0.5,
@@ -426,7 +538,7 @@ const ForexMarketHours = () => {
               <span
                 style={{
                   position: "absolute",
-                  left: `${sunsetHour * (100 / 24)}%`,
+                  left: `${(sunsetHour / 24) * 100}%`,
                   top: "-16px",
                   fontSize: "1rem",
                   opacity: 0.5,
