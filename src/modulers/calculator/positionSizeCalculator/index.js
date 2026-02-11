@@ -52,6 +52,13 @@ export default function PositionSizeCalculator() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleKeyDown = (e) => {
+    // Prevent 'e', 'E', '+', '-' from being entered in number inputs
+    if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+      e.preventDefault();
+    }
+  };
+
   // Check if ask price is needed
   const isAskPriceNeeded = () => {
     const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
@@ -219,6 +226,7 @@ export default function PositionSizeCalculator() {
             onChange={(e) =>
               handleInputChange("accountBalance", e.target.value)
             }
+            onKeyDown={handleKeyDown}
             placeholder="0"
             className={styles.input}
           />
@@ -236,6 +244,7 @@ export default function PositionSizeCalculator() {
             onChange={(e) =>
               handleInputChange("riskPercentage", e.target.value)
             }
+            onKeyDown={handleKeyDown}
             placeholder="0"
             className={styles.input}
           />
@@ -250,6 +259,7 @@ export default function PositionSizeCalculator() {
             type="number"
             value={formData.stopLoss}
             onChange={(e) => handleInputChange("stopLoss", e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="0"
             className={styles.input}
           />
@@ -281,6 +291,7 @@ export default function PositionSizeCalculator() {
               step="0.00001"
               value={formData.askPrice}
               onChange={(e) => handleInputChange("askPrice", e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="0.00000"
               className={styles.input}
             />

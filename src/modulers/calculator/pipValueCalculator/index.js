@@ -112,6 +112,13 @@ export default function PipValueCalculator() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleKeyDown = (e) => {
+    // Prevent 'e', 'E', '+', '-' from being entered in number inputs
+    if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+      e.preventDefault();
+    }
+  };
+
   const getPipSize = (pair) => {
     // JPY pairs have pip size of 0.01, others 0.0001
     return pair.includes("JPY") ? 0.01 : 0.0001;
@@ -220,6 +227,7 @@ export default function PipValueCalculator() {
             step="0.00001"
             value={formData.askPrice}
             onChange={(e) => handleInputChange("askPrice", e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="0.00000"
             className={styles.input}
             readOnly
@@ -235,6 +243,7 @@ export default function PipValueCalculator() {
             type="number"
             value={formData.positionSize}
             onChange={(e) => handleInputChange("positionSize", e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="0"
             className={styles.input}
           />
@@ -268,6 +277,7 @@ export default function PipValueCalculator() {
               step="0.00001"
               value={formData.conversionPrice}
               onChange={(e) => handleInputChange("conversionPrice", e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="0.00000"
               className={styles.input}
               readOnly
