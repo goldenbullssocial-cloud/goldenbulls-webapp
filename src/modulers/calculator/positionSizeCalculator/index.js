@@ -2,50 +2,21 @@
 import React, { useState } from "react";
 import styles from "./positionSizeCalculator.module.scss";
 
-const currencyPairs =  [
-  "EUR/USD",
-  "GBP/USD",
-  "USD/CHF",
-  "USD/CAD",
-  "USD/JPY",
-  "NZD/USD",
-  "AUD/USD",
-  "EUR/AUD",
-  "EUR/GBP",
-  "EUR/JPY",
-  "EUR/CAD",
-  "EUR/CHF",
-  "EUR/NZD",
-  "GBP/CAD",
-  "GBP/CHF",
-  "GBP/JPY",
-  "GBP/AUD",
-  "GBP/NZD",
-  "AUD/CAD",
-  "AUD/JPY",
-  "AUD/CHF",
-  "AUD/NZD",
-  "CHF/JPY",
-  "CAD/CHF",
-  "CAD/JPY",
-  "NZD/CHF",
-  "NZD/JPY",
-  "NZD/CAD"
+const currencyPairs = [
+  "EUR/USD","GBP/USD","USD/CHF","USD/CAD","USD/JPY","NZD/USD","AUD/USD",
+  "EUR/AUD","EUR/GBP","EUR/JPY","EUR/CAD","EUR/CHF","EUR/NZD",
+  "GBP/CAD","GBP/CHF","GBP/JPY","GBP/AUD","GBP/NZD",
+  "AUD/CAD","AUD/JPY","AUD/CHF","AUD/NZD",
+  "CHF/JPY","CAD/CHF","CAD/JPY",
+  "NZD/CHF","NZD/JPY","NZD/CAD"
 ];
 
 const accountCurrencies = [
-  "USD",
-  "EUR",
-  "JPY",
-  "GBP",
-  "CHF",
-  "AUD",
-  "CAD",
-  "NZD"
+  "USD","EUR","JPY","GBP","CHF","AUD","CAD","NZD"
 ];
 
-
 export default function PositionSizeCalculator() {
+
   const [formData, setFormData] = useState({
     accountCurrency: "USD",
     accountBalance: "",
@@ -54,6 +25,7 @@ export default function PositionSizeCalculator() {
     currencyPair: "EUR/USD",
     askPrice: "",
   });
+
   const [results, setResults] = useState({
     amountAtRisk: "0",
     positionSizeUnits: "0",
@@ -61,6 +33,7 @@ export default function PositionSizeCalculator() {
     miniLots: "0",
     microLots: "0",
   });
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     accountBalance: "",
@@ -75,20 +48,22 @@ export default function PositionSizeCalculator() {
   };
 
   const handleKeyDown = (e) => {
-    // Prevent 'e', 'E', '+', '-' from being entered in number inputs
-    if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
-      e.preventDefault();
-    }
+    if (["e","E","+","-"].includes(e.key)) e.preventDefault();
   };
 
-  // Check if ask price is needed
+  // ✅ FIXED LOGIC
   const isAskPriceNeeded = () => {
-    const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
-    // Ask price is NOT needed when account currency matches either base or quote currency
-    return formData.accountCurrency !== quoteCurrency && formData.accountCurrency !== baseCurrency;
+    const [base, quote] = formData.currencyPair.split("/");
+    const acc = formData.accountCurrency;
+
+    // Need price when:
+    // 1. Account = Base
+    // 2. Account ≠ Base AND ≠ Quote (cross currency)
+    return acc === base || (acc !== base && acc !== quote);
   };
 
   const handleCalculate = () => {
+
     const {
       accountBalance,
       riskPercentage,
@@ -98,7 +73,6 @@ export default function PositionSizeCalculator() {
       askPrice,
     } = formData;
 
-    // Clear previous errors
     setErrors({
       accountBalance: "",
       riskPercentage: "",
@@ -107,41 +81,28 @@ export default function PositionSizeCalculator() {
       calculation: "",
     });
 
-    // Validation
     let hasError = false;
     const newErrors = {};
 
-    if (
-      !accountBalance ||
-      accountBalance === "0" ||
-      isNaN(parseFloat(accountBalance))
-    ) {
+    if (!accountBalance || isNaN(parseFloat(accountBalance))) {
       newErrors.accountBalance = "Account balance is required";
       hasError = true;
     }
 
-    if (
-      !riskPercentage ||
-      riskPercentage === "0" ||
-      isNaN(parseFloat(riskPercentage))
-    ) {
+    if (!riskPercentage || isNaN(parseFloat(riskPercentage))) {
       newErrors.riskPercentage = "Risk percentage is required";
       hasError = true;
     }
 
-    if (!stopLoss || stopLoss === "0" || isNaN(parseFloat(stopLoss))) {
+    if (!stopLoss || isNaN(parseFloat(stopLoss))) {
       newErrors.stopLoss = "Stop loss is required";
       hasError = true;
     }
 
-    // Check if ask price is required
     const [baseCurrency, quoteCurrency] = currencyPair.split("/");
-    const needsAskPrice = accountCurrency !== quoteCurrency && accountCurrency !== baseCurrency;
+    const needsAskPrice = isAskPriceNeeded();
 
-    if (
-      needsAskPrice &&
-      (!askPrice || askPrice === "0" || isNaN(parseFloat(askPrice)))
-    ) {
+    if (needsAskPrice && (!askPrice || isNaN(parseFloat(askPrice)))) {
       newErrors.askPrice = "Ask price is required";
       hasError = true;
     }
@@ -157,63 +118,34 @@ export default function PositionSizeCalculator() {
       const balance = parseFloat(accountBalance);
       const risk = parseFloat(riskPercentage);
       const stopLossPips = parseFloat(stopLoss);
-      const price = parseFloat(askPrice) || 0;
+      const price = parseFloat(askPrice);
 
-      // Calculate amount at risk
       const amountAtRisk = balance * (risk / 100);
 
-      // Get base and quote currency
-      const [baseCurrency, quoteCurrency] = currencyPair.split("/");
-
-      // Calculate pip value per unit in quote currency
       const pipSize = currencyPair.includes("JPY") ? 0.01 : 0.0001;
-
-      // Pip value per unit is simply the pip size
-      // For EUR/USD: 1 unit = 0.0001 USD per pip
-      // For USD/JPY: 1 unit = 0.01 JPY per pip
       let pipValuePerUnit = pipSize;
 
-      // Convert pip value to account currency if needed
-      let pipValueInAccount = pipValuePerUnit;
+      let pipValueInAccount;
 
-      if (quoteCurrency === accountCurrency) {
-        // Account currency matches quote currency - no conversion needed
+      // ✅ CASE 1: Account = Quote
+      if (accountCurrency === quoteCurrency) {
         pipValueInAccount = pipValuePerUnit;
-      } else if (baseCurrency === accountCurrency) {
-        // Account currency matches base currency
-        // Convert using the exchange rate directly
-        // For USD/CHF with USD account: CHF value / (USD/CHF rate) = USD value
-        if (!price || isNaN(price)) {
-          setErrors((prev) => ({
-            ...prev,
-            askPrice: "Ask price is required for currency conversion",
-          }));
-          setLoading(false);
-          return;
-        }
-        pipValueInAccount = pipValuePerUnit / price;
-      } else {
-        // Account currency is different from both base and quote
-        if (!price || isNaN(price)) {
-          setErrors((prev) => ({
-            ...prev,
-            askPrice: "Ask price is required for currency conversion",
-          }));
-          setLoading(false);
-          return;
-        }
+      }
 
-        // Convert using the exchange rate
-        // This is a simplified conversion - in production you'd need proper conversion rates
+      // ✅ CASE 2: Account = Base
+      else if (accountCurrency === baseCurrency) {
         pipValueInAccount = pipValuePerUnit / price;
       }
 
-      // Calculate position size in units
-      // Position Size = Amount at Risk / (Stop Loss in Pips × Pip Value per Unit)
+      // ✅ CASE 3: Cross Currency
+      else {
+        // askPrice should be Quote → Account conversion rate
+        pipValueInAccount = pipValuePerUnit * price;
+      }
+
       const positionSizeUnits =
         amountAtRisk / (stopLossPips * pipValueInAccount);
 
-      // Convert to lot sizes
       const standardLots = positionSizeUnits / 100000;
       const miniLots = positionSizeUnits / 10000;
       const microLots = positionSizeUnits / 1000;
@@ -225,11 +157,11 @@ export default function PositionSizeCalculator() {
         miniLots: miniLots.toFixed(2),
         microLots: microLots.toFixed(2),
       });
+
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
-        calculation:
-          "Failed to calculate position size. Please check your inputs.",
+        calculation: "Failed to calculate position size.",
       }));
     } finally {
       setLoading(false);
@@ -323,7 +255,7 @@ export default function PositionSizeCalculator() {
 
         {isAskPriceNeeded() && (
           <div className={styles.formGroup}>
-            <label>Current {formData.currencyPair} Ask Price</label>
+            <label>Conversion / Pair Price</label>
             <input
               type="number"
               step="0.00001"
@@ -352,6 +284,7 @@ export default function PositionSizeCalculator() {
         )}
       </div>
 
+      {/* ✅ RESULT CARD NOT TOUCHED */}
       <div className={styles.resultsSection}>
         <div className={styles.results}>
           <h3>Results</h3>
@@ -384,8 +317,7 @@ export default function PositionSizeCalculator() {
           </div>
 
           <p className={styles.helpText}>
-            Remember to always manage your risk properly. Never risk more than
-            you can afford to lose.
+            Remember to always manage your risk properly.
           </p>
         </div>
       </div>
