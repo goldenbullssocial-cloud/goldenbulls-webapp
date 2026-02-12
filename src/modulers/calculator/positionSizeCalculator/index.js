@@ -3,20 +3,48 @@ import React, { useState } from "react";
 import styles from "./positionSizeCalculator.module.scss";
 
 const currencyPairs = [
-  "EUR/USD","GBP/USD","USD/CHF","USD/CAD","USD/JPY","NZD/USD","AUD/USD",
-  "EUR/AUD","EUR/GBP","EUR/JPY","EUR/CAD","EUR/CHF","EUR/NZD",
-  "GBP/CAD","GBP/CHF","GBP/JPY","GBP/AUD","GBP/NZD",
-  "AUD/CAD","AUD/JPY","AUD/CHF","AUD/NZD",
-  "CHF/JPY","CAD/CHF","CAD/JPY",
-  "NZD/CHF","NZD/JPY","NZD/CAD"
+  "EUR/USD",
+  "GBP/USD",
+  "USD/CHF",
+  "USD/CAD",
+  "USD/JPY",
+  "NZD/USD",
+  "AUD/USD",
+  "EUR/AUD",
+  "EUR/GBP",
+  "EUR/JPY",
+  "EUR/CAD",
+  "EUR/CHF",
+  "EUR/NZD",
+  "GBP/CAD",
+  "GBP/CHF",
+  "GBP/JPY",
+  "GBP/AUD",
+  "GBP/NZD",
+  "AUD/CAD",
+  "AUD/JPY",
+  "AUD/CHF",
+  "AUD/NZD",
+  "CHF/JPY",
+  "CAD/CHF",
+  "CAD/JPY",
+  "NZD/CHF",
+  "NZD/JPY",
+  "NZD/CAD",
 ];
 
 const accountCurrencies = [
-  "USD","EUR","JPY","GBP","CHF","AUD","CAD","NZD"
+  "USD",
+  "EUR",
+  "JPY",
+  "GBP",
+  "CHF",
+  "AUD",
+  "CAD",
+  "NZD",
 ];
 
 export default function PositionSizeCalculator() {
-
   const [formData, setFormData] = useState({
     accountCurrency: "USD",
     accountBalance: "",
@@ -48,7 +76,7 @@ export default function PositionSizeCalculator() {
   };
 
   const handleKeyDown = (e) => {
-    if (["e","E","+","-"].includes(e.key)) e.preventDefault();
+    if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
   };
 
   // ✅ FIXED LOGIC
@@ -63,7 +91,6 @@ export default function PositionSizeCalculator() {
   };
 
   const handleCalculate = () => {
-
     const {
       accountBalance,
       riskPercentage,
@@ -157,7 +184,6 @@ export default function PositionSizeCalculator() {
         miniLots: miniLots.toFixed(2),
         microLots: microLots.toFixed(2),
       });
-
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
@@ -255,7 +281,10 @@ export default function PositionSizeCalculator() {
 
         {isAskPriceNeeded() && (
           <div className={styles.formGroup}>
-            <label>Conversion / Pair Price</label>
+            <label>
+              Conversion / Pair Price{" "}
+              <span className={styles.pairName}>({formData.currencyPair})</span>
+            </label>
             <input
               type="number"
               step="0.00001"
