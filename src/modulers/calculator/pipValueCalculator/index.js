@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./pipValueCalculator.module.scss";
 import marketDataService from "@/services/marketpricedata";
 
-const currencyPairs =  [
+const currencyPairs = [
   "EUR/USD",
   "GBP/USD",
   "USD/CHF",
@@ -31,7 +31,7 @@ const currencyPairs =  [
   "CAD/JPY",
   "NZD/CHF",
   "NZD/JPY",
-  "NZD/CAD"
+  "NZD/CAD",
 ];
 
 const accountCurrencies = [
@@ -42,7 +42,7 @@ const accountCurrencies = [
   "CHF",
   "AUD",
   "CAD",
-  "NZD"
+  "NZD",
 ];
 
 export default function PipValueCalculator() {
@@ -71,7 +71,7 @@ export default function PipValueCalculator() {
         setLoading(true);
         setErrors((prev) => ({ ...prev, askPrice: "" }));
         const priceData = await marketDataService.fetchPrice(
-          formData.currencyPair
+          formData.currencyPair,
         );
         setFormData((prev) => ({
           ...prev,
@@ -79,9 +79,9 @@ export default function PipValueCalculator() {
         }));
       } catch (error) {
         setFormData((prev) => ({ ...prev, askPrice: "" }));
-        setErrors((prev) => ({ 
-          ...prev, 
-          askPrice: "Failed to fetch price. Please enter manually." 
+        setErrors((prev) => ({
+          ...prev,
+          askPrice: "Failed to fetch price. Please enter manually.",
         }));
       } finally {
         setLoading(false);
@@ -92,33 +92,85 @@ export default function PipValueCalculator() {
   }, [formData.currencyPair]);
 
   // Check if conversion field is needed and fetch conversion price
+  // useEffect(() => {
+  //   const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
+  //   // No conversion needed if account currency matches either base or quote currency
+  //   const needsConversion =
+  //     quoteCurrency !== formData.accountCurrency &&
+  //     baseCurrency !== formData.accountCurrency;
+
+  //   setShowConversionField(needsConversion);
+
+  //   if (needsConversion) {
+  //     const conversionPair = `${formData.accountCurrency}/${quoteCurrency}`;
+  //     setConversionPairLabel(`Price for ${conversionPair}`);
+
+  //     // Fetch conversion price
+  //     const fetchConversionPrice = async () => {
+  //       try {
+  //         setErrors((prev) => ({ ...prev, conversionPrice: "" }));
+  //         const priceData = await marketDataService.fetchPrice(conversionPair);
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           conversionPrice: priceData.price.toFixed(5),
+  //         }));
+  //       } catch (error) {
+  //         // Try reverse pair
+  //         const reversePair = `${quoteCurrency}/${formData.accountCurrency}`;
+  //         try {
+  //           const priceData = await marketDataService.fetchPrice(reversePair);
+  //           setConversionPairLabel(`Price for ${reversePair}`);
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             conversionPrice: priceData.price.toFixed(5),
+  //           }));
+  //         } catch (err) {
+  //           setFormData((prev) => ({ ...prev, conversionPrice: "" }));
+  //           setErrors((prev) => ({
+  //             ...prev,
+  //             conversionPrice: "Failed to fetch conversion price. Please enter manually."
+  //           }));
+  //         }
+  //       }
+  //     };
+
+  //     fetchConversionPrice();
+  //   } else {
+  //     setFormData((prev) => ({ ...prev, conversionPrice: "" }));
+  //     setErrors((prev) => ({ ...prev, conversionPrice: "" }));
+  //   }
+  // }, [formData.currencyPair, formData.accountCurrency]);
   useEffect(() => {
     const [baseCurrency, quoteCurrency] = formData.currencyPair.split("/");
-    // No conversion needed if account currency matches either base or quote currency
-    const needsConversion = 
-      quoteCurrency !== formData.accountCurrency && 
+
+    const needsConversion =
+      quoteCurrency !== formData.accountCurrency &&
       baseCurrency !== formData.accountCurrency;
-    
+
     setShowConversionField(needsConversion);
 
     if (needsConversion) {
-      const conversionPair = `${formData.accountCurrency}/${quoteCurrency}`;
-      setConversionPairLabel(`Price for ${conversionPair}`);
-      
-      // Fetch conversion price
+      // FIRST try: Quote/Account  (Correct direction)
+      const directPair = `${quoteCurrency}/${formData.accountCurrency}`;
+      const reversePair = `${formData.accountCurrency}/${quoteCurrency}`;
+
       const fetchConversionPrice = async () => {
         try {
           setErrors((prev) => ({ ...prev, conversionPrice: "" }));
-          const priceData = await marketDataService.fetchPrice(conversionPair);
+
+          // Try direct pair first (USD/JPY)
+          const priceData = await marketDataService.fetchPrice(directPair);
+
+          setConversionPairLabel(`Price for ${directPair}`);
           setFormData((prev) => ({
             ...prev,
             conversionPrice: priceData.price.toFixed(5),
           }));
         } catch (error) {
-          // Try reverse pair
-          const reversePair = `${quoteCurrency}/${formData.accountCurrency}`;
           try {
+            // Try reverse pair if direct not available
             const priceData = await marketDataService.fetchPrice(reversePair);
+
             setConversionPairLabel(`Price for ${reversePair}`);
             setFormData((prev) => ({
               ...prev,
@@ -126,9 +178,10 @@ export default function PipValueCalculator() {
             }));
           } catch (err) {
             setFormData((prev) => ({ ...prev, conversionPrice: "" }));
-            setErrors((prev) => ({ 
-              ...prev, 
-              conversionPrice: "Failed to fetch conversion price. Please enter manually." 
+            setErrors((prev) => ({
+              ...prev,
+              conversionPrice:
+                "Failed to fetch conversion price. Please enter manually.",
             }));
           }
         }
@@ -147,7 +200,7 @@ export default function PipValueCalculator() {
 
   const handleKeyDown = (e) => {
     // Prevent 'e', 'E', '+', '-' from being entered in number inputs
-    if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+    if (e.key === "e" || e.key === "E" || e.key === "+" || e.key === "-") {
       e.preventDefault();
     }
   };
@@ -158,7 +211,13 @@ export default function PipValueCalculator() {
   };
 
   const handleCalculate = async () => {
-    const { currencyPair, askPrice, positionSize, accountCurrency, conversionPrice } = formData;
+    const {
+      currencyPair,
+      askPrice,
+      positionSize,
+      accountCurrency,
+      conversionPrice,
+    } = formData;
 
     // Clear previous errors
     setErrors({
@@ -177,17 +236,25 @@ export default function PipValueCalculator() {
       hasError = true;
     }
 
-    if (!positionSize || positionSize === "0" || isNaN(parseFloat(positionSize))) {
+    if (
+      !positionSize ||
+      positionSize === "0" ||
+      isNaN(parseFloat(positionSize))
+    ) {
       newErrors.positionSize = "Position size is required";
       hasError = true;
     }
 
     const [baseCurrency, quoteCurrency] = currencyPair.split("/");
-    const needsConversion = 
-      quoteCurrency !== accountCurrency && 
-      baseCurrency !== accountCurrency;
+    const needsConversion =
+      quoteCurrency !== accountCurrency && baseCurrency !== accountCurrency;
 
-    if (needsConversion && (!conversionPrice || conversionPrice === "0" || isNaN(parseFloat(conversionPrice)))) {
+    if (
+      needsConversion &&
+      (!conversionPrice ||
+        conversionPrice === "0" ||
+        isNaN(parseFloat(conversionPrice)))
+    ) {
       newErrors.conversionPrice = "Conversion price is required";
       hasError = true;
     }
@@ -225,9 +292,11 @@ export default function PipValueCalculator() {
 
         // If conversion pair is AccountCurrency/QuoteCurrency (e.g., USD/JPY)
         // We multiply: JPY value × (USD/JPY rate) = USD value
-        if (conversionPairLabel.includes(`${accountCurrency}/${quoteCurrency}`)) {
+        if (
+          conversionPairLabel.includes(`${accountCurrency}/${quoteCurrency}`)
+        ) {
           pipValueInAccount = pipValueInQuote * conversion;
-        } 
+        }
         // If conversion pair is QuoteCurrency/AccountCurrency (e.g., JPY/USD)
         // We divide: JPY value / (JPY/USD rate) = USD value
         else {
@@ -237,9 +306,9 @@ export default function PipValueCalculator() {
 
       setResult(pipValueInAccount.toFixed(5));
     } catch (error) {
-      setErrors((prev) => ({ 
-        ...prev, 
-        calculation: "Failed to calculate pip value. Please check your inputs." 
+      setErrors((prev) => ({
+        ...prev,
+        calculation: "Failed to calculate pip value. Please check your inputs.",
       }));
     } finally {
       setLoading(false);
@@ -320,14 +389,18 @@ export default function PipValueCalculator() {
               type="number"
               step="0.00001"
               value={formData.conversionPrice}
-              onChange={(e) => handleInputChange("conversionPrice", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("conversionPrice", e.target.value)
+              }
               onKeyDown={handleKeyDown}
               placeholder="0.00000"
               className={styles.input}
               readOnly
             />
             {errors.conversionPrice && (
-              <span className={styles.errorMessage}>{errors.conversionPrice}</span>
+              <span className={styles.errorMessage}>
+                {errors.conversionPrice}
+              </span>
             )}
           </div>
         )}
@@ -356,7 +429,8 @@ export default function PipValueCalculator() {
           </div>
           <p className={styles.helpText}>
             Planning your next trade? Don't forget to calculate your optimal{" "}
-            <span className={styles.highlight}>position size</span> to manage risk effectively.
+            <span className={styles.highlight}>position size</span> to manage
+            risk effectively.
           </p>
         </div>
       </div>
