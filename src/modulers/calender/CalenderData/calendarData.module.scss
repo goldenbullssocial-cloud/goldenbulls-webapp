@@ -1,0 +1,207 @@
+@use "../../../scss/main.scss" as *;
+@use "../../../scss/breakpoints/breakpoints.scss" as *;
+@use "../../../scss/font/font.scss" as *;
+
+.calendarDataAlignment {
+  padding: 80px 0 20px 0;
+
+  @include respond-to("sm") {
+    padding: 58px 0 0 0;
+  }
+
+  .widgetWrapper {
+    width: 100%;
+    border: 1px solid #393939;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    padding: 20px;
+
+    @include respond-to("sm") {
+      padding: 16px;
+    }
+
+    :global(.tradingview-widget-container) {
+      width: 100%;
+      height: auto;
+      min-height: 600px;
+      margin: 0;
+      padding: 0;
+
+      :global(.tradingview-widget-container__widget) {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+
+        iframe {
+          display: block;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      :global(.tradingview-widget-copyright) {
+        display: none !important;
+      }
+    }
+
+    @include respond-to("sm") {
+      border-radius: 4px;
+    }
+  }
+
+  .tableData {
+    width: 100%;
+    overflow: auto;
+    border: 1px solid #393939;
+    border-radius: 8px;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      white-space: nowrap;
+
+      thead {
+        tr:first-child {
+          background: #000;
+
+          th {
+            border: none;
+          }
+        }
+
+        tr:last-child {
+          background-color: #101010;
+        }
+
+        tr {
+          border-bottom: 1px solid #393939;
+
+          th:last-child {
+            border: none;
+          }
+
+          th {
+            padding: 14px 16px;
+            border-right: 1px solid #393939;
+            text-align: left;
+
+            span {
+              display: block;
+              color: #7a7d82;
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 140%;
+              letter-spacing: 0.2px;
+              @include font-normal;
+            }
+
+            .twoIconAlignment {
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 8px;
+
+              img {
+                display: block;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+
+      tbody {
+        tr:last-child {
+          border: none;
+        }
+
+        tr:nth-child(2n + 2) {
+          background-color: #010c15;
+        }
+
+        tr {
+          background-color: #000;
+
+          td:last-child {
+            border: none;
+          }
+
+          td {
+            padding: 14px 16px;
+            border-right: 1px solid #393939;
+            text-align: left;
+
+            .subtext {
+              span {
+                display: block;
+                color: #fff;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 140%;
+                letter-spacing: 0.2px;
+                @include font-normal;
+              }
+            }
+
+            .firstColumnAlignment {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+
+              p {
+                min-width: 80px;
+                width: 80px;
+                color: #7a7d82;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 140%;
+                letter-spacing: 0.2px;
+                @include font-normal;
+              }
+
+              .countryIcon {
+                display: flex;
+                align-items: center;
+
+                img {
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 50%;
+                  display: block;
+                  object-fit: cover;
+                }
+              }
+
+              .dataIconText {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                span {
+                  display: block;
+                  color: #fff;
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 140%;
+                  letter-spacing: 0.2px;
+                  @include font-normal;
+                }
+
+                img {
+                  display: block;
+                  min-width: 20px;
+                  max-width: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import classNames from "classnames";
 const Logo = "/assets/logo/logo.svg";
 import { getCookie, removeCookie } from '../../../cookie';
+import toast from "react-hot-toast";
 
 export default function Header() {
   const [headerOpen, setHeaderOpen] = useState(false);
@@ -57,6 +58,12 @@ export default function Header() {
                 </Link>
                 <Link href="/blog" aria-label="Blogs">
                   Blogs
+                </Link>
+                <Link href="/calender" aria-label="Calendar">
+                  Calendar
+                </Link>
+                <Link href="/calculators" aria-label="Calculators">
+                  Calculators
                 </Link>
                 <Link href="/contact-us" aria-label="Contact Us">
                   Contact Us
@@ -128,6 +135,12 @@ export default function Header() {
           </Link>
           <Link href="/blog" aria-label="Blogs">
             Blogs
+          </Link>
+          <Link href="/calender" aria-label="Calendar">
+            Calendar
+          </Link>
+          <Link href="/calculators" aria-label="Calculators">
+            Calculators
           </Link>
           <Link href="/contact-us" aria-label="Contact Us">
             Contact Us
