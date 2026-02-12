@@ -289,7 +289,10 @@ export default function PositionSizeCalculator() {
 
         {isAskPriceNeeded() && (
           <div className={styles.formGroup}>
-            <label>Conversion / Pair Price</label>
+            <label>
+              Conversion / Pair Price{" "}
+              <span className={styles.pairName}>({formData.currencyPair})</span>
+            </label>
             <input
               type="number"
               step="0.00001"
