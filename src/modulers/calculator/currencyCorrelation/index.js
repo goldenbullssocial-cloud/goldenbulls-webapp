@@ -14,7 +14,8 @@ const CorrelationBar = ({ pair, correlation }) => {
   };
 
   const barColor = getBarColor(correlation);
-  const barWidth = Math.abs(correlation) * 50;
+  const barWidth = Math.abs(correlation) * 100;
+  
   const isPositive = correlation >= 0;
 
   return (
@@ -275,6 +276,7 @@ export default function CurrencyCorrelation() {
               {currencyOptions.map((pair) => {
                 if (pair === selectedPair) return null;
                 const pairCorr = correlationData[pair] || 0;
+               
                 return (
                   <CorrelationBar
                     key={pair}
@@ -285,7 +287,6 @@ export default function CurrencyCorrelation() {
               })}
             </div>
 
-            <div className={styles.centerLine} />
           </>
         )}
       </div>
