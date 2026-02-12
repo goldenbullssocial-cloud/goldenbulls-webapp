@@ -4,20 +4,48 @@ import styles from "./pipValueCalculator.module.scss";
 import marketDataService from "@/services/marketpricedata";
 
 const currencyPairs = [
-  "EUR/USD","GBP/USD","USD/CHF","USD/CAD","USD/JPY",
-  "NZD/USD","AUD/USD","EUR/AUD","EUR/GBP","EUR/JPY",
-  "EUR/CAD","EUR/CHF","EUR/NZD","GBP/CAD","GBP/CHF",
-  "GBP/JPY","GBP/AUD","GBP/NZD","AUD/CAD","AUD/JPY",
-  "AUD/CHF","AUD/NZD","CHF/JPY","CAD/CHF","CAD/JPY",
-  "NZD/CHF","NZD/JPY","NZD/CAD",
+  "EUR/USD",
+  "GBP/USD",
+  "USD/CHF",
+  "USD/CAD",
+  "USD/JPY",
+  "NZD/USD",
+  "AUD/USD",
+  "EUR/AUD",
+  "EUR/GBP",
+  "EUR/JPY",
+  "EUR/CAD",
+  "EUR/CHF",
+  "EUR/NZD",
+  "GBP/CAD",
+  "GBP/CHF",
+  "GBP/JPY",
+  "GBP/AUD",
+  "GBP/NZD",
+  "AUD/CAD",
+  "AUD/JPY",
+  "AUD/CHF",
+  "AUD/NZD",
+  "CHF/JPY",
+  "CAD/CHF",
+  "CAD/JPY",
+  "NZD/CHF",
+  "NZD/JPY",
+  "NZD/CAD",
 ];
 
 const accountCurrencies = [
-  "USD","EUR","JPY","GBP","CHF","AUD","CAD","NZD"
+  "USD",
+  "EUR",
+  "JPY",
+  "GBP",
+  "CHF",
+  "AUD",
+  "CAD",
+  "NZD",
 ];
 
 export default function PipValueCalculator() {
-
   const [formData, setFormData] = useState({
     currencyPair: "EUR/USD",
     askPrice: "",
@@ -30,7 +58,7 @@ export default function PipValueCalculator() {
   const [loading, setLoading] = useState(false);
   const [showConversionField, setShowConversionField] = useState(false);
   const [conversionPairLabel, setConversionPairLabel] = useState("");
-  const [conversionType, setConversionType] = useState(null); 
+  const [conversionType, setConversionType] = useState(null);
   // DIRECT = Quote/Account
   // REVERSE = Account/Quote
 
@@ -49,16 +77,15 @@ export default function PipValueCalculator() {
       try {
         setLoading(true);
         const priceData = await marketDataService.fetchPrice(
-          formData.currencyPair
+          formData.currencyPair,
         );
 
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           askPrice: priceData.price.toFixed(5),
         }));
-
       } catch {
-        setFormData(prev => ({ ...prev, askPrice: "" }));
+        setFormData((prev) => ({ ...prev, askPrice: "" }));
       } finally {
         setLoading(false);
       }
@@ -74,13 +101,12 @@ export default function PipValueCalculator() {
     const [base, quote] = formData.currencyPair.split("/");
 
     const needsConversion =
-      quote !== formData.accountCurrency &&
-      base !== formData.accountCurrency;
+      quote !== formData.accountCurrency && base !== formData.accountCurrency;
 
     setShowConversionField(needsConversion);
 
     if (!needsConversion) {
-      setFormData(prev => ({ ...prev, conversionPrice: "" }));
+      setFormData((prev) => ({ ...prev, conversionPrice: "" }));
       return;
     }
 
@@ -94,11 +120,10 @@ export default function PipValueCalculator() {
         setConversionPairLabel(`Price for ${directPair}`);
         setConversionType("DIRECT");
 
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           conversionPrice: data.price.toFixed(5),
         }));
-
       } catch {
         try {
           const data = await marketDataService.fetchPrice(reversePair);
@@ -106,40 +131,41 @@ export default function PipValueCalculator() {
           setConversionPairLabel(`Price for ${reversePair}`);
           setConversionType("REVERSE");
 
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             conversionPrice: data.price.toFixed(5),
           }));
-
         } catch {
-          setFormData(prev => ({ ...prev, conversionPrice: "" }));
+          setFormData((prev) => ({ ...prev, conversionPrice: "" }));
         }
       }
     };
 
     fetchConversion();
-
   }, [formData.currencyPair, formData.accountCurrency]);
 
   // -------------------------
   // Helpers
   // -------------------------
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleKeyDown = (e) => {
-    if (["e","E","+","-"].includes(e.key)) e.preventDefault();
+    if (["e", "E", "+", "-"].includes(e.key)) e.preventDefault();
   };
 
-  const getPipSize = (pair) =>
-    pair.includes("JPY") ? 0.01 : 0.0001;
+  const handleWheel = (e) => {
+    e.target.blur();
+    e.preventDefault();
+  };
+
+  const getPipSize = (pair) => (pair.includes("JPY") ? 0.01 : 0.0001);
 
   // -------------------------
   // Calculation
   // -------------------------
   const handleCalculate = () => {
-
     const {
       currencyPair,
       askPrice,
@@ -193,9 +219,8 @@ export default function PipValueCalculator() {
       }
 
       setResult(pipValueInAccount.toFixed(5));
-
     } catch {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         calculation: "Calculation failed.",
       }));
@@ -210,18 +235,17 @@ export default function PipValueCalculator() {
   return (
     <div className={styles.pipValueCalculator}>
       <div className={styles.formSection}>
-
         <div className={styles.formGroup}>
           <label>Currency Pair</label>
           <select
             value={formData.currencyPair}
-            onChange={(e) =>
-              handleInputChange("currencyPair", e.target.value)
-            }
+            onChange={(e) => handleInputChange("currencyPair", e.target.value)}
             className={styles.select}
           >
-            {currencyPairs.map(pair => (
-              <option key={pair} value={pair}>{pair}</option>
+            {currencyPairs.map((pair) => (
+              <option key={pair} value={pair}>
+                {pair}
+              </option>
             ))}
           </select>
         </div>
@@ -241,10 +265,9 @@ export default function PipValueCalculator() {
           <input
             type="number"
             value={formData.positionSize}
-            onChange={(e) =>
-              handleInputChange("positionSize", e.target.value)
-            }
+            onChange={(e) => handleInputChange("positionSize", e.target.value)}
             onKeyDown={handleKeyDown}
+            onWheel={handleWheel}
             className={styles.input}
           />
         </div>
@@ -258,8 +281,10 @@ export default function PipValueCalculator() {
             }
             className={styles.select}
           >
-            {accountCurrencies.map(cur => (
-              <option key={cur} value={cur}>{cur}</option>
+            {accountCurrencies.map((cur) => (
+              <option key={cur} value={cur}>
+                {cur}
+              </option>
             ))}
           </select>
         </div>
@@ -283,7 +308,6 @@ export default function PipValueCalculator() {
         >
           {loading ? "Calculating..." : "Calculate"}
         </button>
-
       </div>
 
       <div className={styles.resultsSection}>
