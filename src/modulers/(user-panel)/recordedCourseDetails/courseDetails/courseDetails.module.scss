@@ -394,6 +394,59 @@
         }
     }
 
+    .successModalContent {
+        background: #0C0C0C;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 500px;
+        padding: 40px;
+        position: relative;
+        border: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .iconWrapper {
+            margin-bottom: 24px;
+
+            svg {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        h2 {
+            color: #FFF;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            @include font-bold;
+
+            @include respond-to("sm") {
+                font-size: 24px;
+            }
+        }
+
+        p {
+            color: #B6B6B6;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 360px;
+            @include font-normal;
+        }
+
+        .successButton {
+            width: 100%;
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    }
+
     .modalOverlay {
         position: fixed;
         top: 0;

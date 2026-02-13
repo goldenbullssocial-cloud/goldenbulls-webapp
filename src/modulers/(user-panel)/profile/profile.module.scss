@@ -72,7 +72,7 @@
   }
 
   .profileInformation {
-    padding: 32px 0 0 0;
+    padding: 15px 0 0 0;
     max-width: 824px;
 
     @include respond-to("sm") {
@@ -272,36 +272,7 @@
         margin-top: 4px;
       }
 
-      .customSelect {
-        background: #1a1a1a;
-        border: 1px solid #66666693;
-        border-radius: 12px;
-        padding: 16px 20px;
-        color: #fff;
-        font-size: 16px;
-        @include font-normal;
-        outline: none;
-        cursor: pointer;
-        width: 100%;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 20px center;
-        background-size: 20px;
-        padding-right: 50px;
 
-        &:focus {
-          border-color: #e4ab40;
-        }
-
-        option {
-          background: #1a1a1a;
-          color: #fff;
-          padding: 12px 20px;
-        }
-      }
 
       :global(.rcs-select-container) {
         width: 100%;
@@ -328,6 +299,72 @@
           &:hover {
             background: #272727;
           }
+        }
+      }
+
+      .customSelect {
+        :global(.react-select__control) {
+          background-color: #1a1a1a !important;
+          border: 1px solid #66666693;
+          border-radius: 12px;
+          min-height: 56px;
+          box-shadow: none;
+          color: #fff;
+          cursor: pointer;
+
+          &:hover {
+            border-color: #66666693;
+          }
+
+          &:global(.react-select__control--is-focused) {
+            border-color: #e4ab40 !important;
+            box-shadow: 0 0 0 1px #e4ab40 !important;
+
+            &:hover {
+              border-color: #e4ab40 !important;
+            }
+          }
+        }
+
+        :global(.react-select__menu) {
+          background-color: #1a1a1a;
+          border: 1px solid #66666693;
+          border-radius: 12px;
+          z-index: 100;
+          margin-top: 4px;
+        }
+
+        :global(.react-select__option) {
+          background-color: transparent;
+          color: #fff;
+          cursor: pointer;
+
+          &:active {
+            background-color: #e4ab40;
+          }
+
+          // &:global(.react-select__option--is-focused) {
+          //   background-color: transparent;
+          //   color: #e4ab40;
+          // }
+
+          &:global(.react-select__option--is-selected) {
+            background-color: #e4ab40;
+            color: #000;
+          }
+        }
+
+        :global(.react-select__single-value) {
+          color: #fff;
+        }
+
+        :global(.react-select__placeholder) {
+          color: #666;
+          font-weight: 300;
+        }
+
+        :global(.react-select__input-container) {
+          color: #fff;
         }
       }
     }

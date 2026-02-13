@@ -67,6 +67,18 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
     const [selectedBatch, setSelectedBatch] = useState(null);
 
     const type = searchParams.get('type');
+    const isPaymentSuccess = searchParams.get('isPayment');
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+    useEffect(() => {
+        if (isPaymentSuccess === 'true') {
+            setShowSuccessModal(true);
+            // Clean up the URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('isPayment');
+            window.history.replaceState({}, '', url);
+        }
+    }, [isPaymentSuccess]);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -235,6 +247,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                 walletAmount: walletAmount,
                 actualAmount: actualAmount,
                 price: courseData?.price || 0,
+                isPayment: true
             };
 
             // Only add batchId if it's provided (for live/physical courses)
@@ -244,16 +257,19 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
 
             const response = await getPaymentUrl(paymentData);
 
-            if (response?.payload?.code !== "00000") {
-                toast.error(
-                    "A payment session is already active and will expire in 10 minutes. Please complete the current payment or try again after it expires."
-                );
-            } else if (response?.payload?.data?.checkout_url) {
-                toast.success("Redirecting to payment...");
-                router.replace(response.payload.data.checkout_url);
-            } else {
-                toast.error(response?.message || "Failed to process payment. Please try again.");
-            }
+            console.log(response,"======response");
+            
+
+            // if (response?.payload?.code !== "00000") {
+            //     toast.error(
+            //         "A payment session is already active and will expire in 10 minutes. Please complete the current payment or try again after it expires."
+            //     );
+            // } else if (response?.payload?.data?.checkout_url) {
+            //     toast.success("Redirecting to payment...");
+            //     router.replace(response.payload.data.checkout_url);
+            // } else {
+            //     toast.error(response?.message || "Failed to process payment. Please try again.");
+            // }
         } catch (error) {
             console.error("Payment error:", error);
             toast.error("Failed to process payment. Please try again.");
@@ -262,8 +278,20 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
         }
     };
 
-    const handleEnrollClick = () => {
-        if (type === 'live' || type === 'physical') {
+    const handleEnrollClick = async () => {
+        if (courseData?.isFree) {
+            try {
+                const response = await getPaymentUrl({ courseId: id });
+                if (response?.payload?.code === "11111") {
+                    setShowSuccessModal(true);
+                } else {
+                    toast.error(response?.message || "Enrollment failed. Please try again.");
+                }
+            } catch (error) {
+                console.error("Free enrollment error:", error);
+                toast.error("Enrollment failed. Please try again.");
+            }
+        } else if (type === 'live' || type === 'physical') {
             setShowBatchModal(true);
         } else {
             setShowBeforeProceedModal(true);
@@ -920,6 +948,31 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                             height="100%"
                             style={{ borderRadius: '12px' }}
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.successModalContent}>
+                        <div className={styles.iconWrapper}>
+                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="40" cy="40" r="40" fill="#E8F5E9" />
+                                <path d="M54.6667 29.3333L34.6667 49.3333L25.3334 40" stroke="#4CAF50" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                        <h2>Enrollment Successful!</h2>
+                        <p>You’ve been successfully enrolled in this course. You now have full access to all course content.</p>
+                        <div className={styles.successButton}>
+                            <Button
+                                text="Start Learning"
+                                onClick={() => {
+                                    setShowSuccessModal(false);
+                                    window.location.reload();
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
             )}

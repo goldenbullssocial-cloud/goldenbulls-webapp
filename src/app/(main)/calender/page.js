@@ -1,4 +1,4 @@
-import EconomicCalendarBanner from '@/modulers/calculators/economicCalendarBanner'
+import CalculatorBanner from '@/modulers/calculators/calculatorBanner'
 import CalenderData from '@/modulers/calender/CalenderData'
 import FaqSection from '@/modulers/home/faqSection'
 import React from 'react'
@@ -6,7 +6,7 @@ import React from 'react'
 const Calender = () => {
   return (
     <>
-      <EconomicCalendarBanner />
+      <CalculatorBanner />
       <CalenderData />
       <FaqSection />
     </>
