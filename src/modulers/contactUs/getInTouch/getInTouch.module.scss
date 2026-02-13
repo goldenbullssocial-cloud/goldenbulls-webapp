@@ -17,6 +17,7 @@
     display: grid;
     grid-template-columns: 670px 1fr;
     gap: 40px;
+    align-items: stretch;
 
     @include respond-to("md") {
       grid-template-columns: 1fr;
@@ -28,10 +29,17 @@
       gap: 32px;
     }
 
+    .contentWrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
     .blackBox {
       border-radius: 26.667px;
       background: #141414;
       padding: 40px;
+      height: 100%;
 
       @include respond-to("sm") {
         padding: 24px;
@@ -68,6 +76,8 @@
           height: 21px;
           margin: 0;
           padding: 0;
+          accent-color: #EEB92B;
+          cursor: pointer;
 
           @include respond-to("sm") {
             width: 18px;
@@ -82,6 +92,7 @@
           font-style: normal;
           font-weight: 400;
           line-height: 26.667px;
+          cursor: pointer;
 
           @include respond-to("sm") {
             font-size: 16px;
@@ -198,7 +209,7 @@
       .followus {
         display: flex;
         align-items: center;
-        padding: 50px 0 0 0;
+        padding: 30px 0 20px 0;
         gap: 32px;
 
         @include respond-to("sm") {
@@ -244,6 +255,7 @@
       }
 
       .line {
+        margin-top: auto;
         border-bottom: 1px solid #fff;
       }
 
@@ -308,7 +320,7 @@
   }
 }
 
-.youtubeIcon{
-  width : 47px;
-  height : 47px;
+.youtubeIcon {
+  width: 47px;
+  height: 47px;
 }

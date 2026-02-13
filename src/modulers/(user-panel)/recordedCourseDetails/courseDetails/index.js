@@ -659,8 +659,11 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                 ) : (
                                     <>
                                         <div className={styles.twoText}>
+                                            <div className={`${styles.typeBadge} ${courseData?.isFree ? styles.free : styles.paid}`}>
+                                                {courseData?.isFree ? "Free" : "Paid"}
+                                            </div>
                                             <h4>
-                                                ${courseData?.price}
+                                                {courseData?.isFree !== true && ("$" + courseData?.price)}
                                             </h4>
                                             <ul>
                                                 <li>

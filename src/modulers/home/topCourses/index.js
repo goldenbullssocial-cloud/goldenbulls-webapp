@@ -157,11 +157,12 @@ export default function TopCourses() {
                   author={item?.instructor}
                   duration={item?.hours}
                   level={item?.courseLevel}
-                  rating={item?.averageRating ? Number(item.averageRating).toFixed(1) : "0.0"}
+                  rating={item?.averageRating ? item?.averageRating : "0.0"}
                   image={item?.courseVideo}
                   location={item?.location || ""}
                   btnLink={`/courses/${item._id}?courseType=${activeTab}`}
                   btnTitle={item?.isPayment ? `Enrolled` : `Enroll Now`}
+                  isFree={item?.isFree}
                 />
               ))
             ) : (

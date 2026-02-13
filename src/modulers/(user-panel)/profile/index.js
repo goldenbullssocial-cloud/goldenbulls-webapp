@@ -525,9 +525,9 @@ export default function Profile() {
                         placeholder="Select your gender"
                         error={errors.gender}
                         options={[
-                            { value: "Male", label: "Male" },
-                            { value: "Female", label: "Female" },
-                            { value: "Other", label: "Other" },
+                            { value: "male", label: "Male" },
+                            { value: "female", label: "Female" },
+                            { value: "other", label: "Other" },
                         ]}
                     />
                 </div>

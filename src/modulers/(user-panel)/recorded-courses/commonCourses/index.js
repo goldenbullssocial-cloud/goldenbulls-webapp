@@ -120,8 +120,11 @@ export default function CommonCourses({ title, activeType, excludeCourseId }) {
                                         {course?.CourseName}
                                     </h3>
                                     <div className={styles.secContent}>
+                                        <div className={`${styles.typeBadge} ${course?.isFree ? styles.free : styles.paid}`}>
+                                            {course?.isFree ? "Free" : "Paid"}
+                                        </div>
                                         <h4>
-                                            ${course?.price}
+                                            {course?.isFree !== true && ("$" + course?.price)}
                                         </h4>
                                         <ul>
                                             <li>{course?.instructor}</li>
