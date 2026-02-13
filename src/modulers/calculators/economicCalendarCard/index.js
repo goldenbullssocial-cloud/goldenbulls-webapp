@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import styles from './economicCalendarCard.module.scss';
 const LineImage = "/assets/images/line.png";
+const Riskonoff = "/assets/images/RiskOnOff.png"
 const Currency = "/assets/icons/Currency.svg";
 const Value = "/assets/icons/Value.svg";
 const Forex = "/assets/icons/Forex.svg";
@@ -50,7 +51,7 @@ export default function EconomicCalendarCard() {
                             <img src={LineImage} alt="Line" />
                         </div>
                         <div className={styles.iconCenter}>
-                            <img src={Forex} alt='Forex' />
+                            <img src={Riskonoff} alt='Forex' />
                         </div>
                         <div className={styles.details}>
                             <h3>
