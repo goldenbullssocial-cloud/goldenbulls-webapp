@@ -15,6 +15,7 @@ const FooterBottomText = '/assets/images/footer-bottom-text.svg';
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
   const [utilityData, setUtilityData] = useState(null);
@@ -36,14 +37,15 @@ export default function Footer() {
 
   const handleSubscribe = async () => {
     if (!email.trim()) {
-      toast.error("Please enter your email.");
+      setError("Please enter your email.");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address.");
+      setError("Please enter a valid email address.");
       return;
     }
+    setError("");
 
     setLoading(true);
     try {
@@ -142,25 +144,31 @@ export default function Footer() {
                     type='text'
                     placeholder='Enter your Email'
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\s/g, "");
+                      setEmail(value);
+                      if (error) setError("");
+                    }}
                   />
                   <div className={styles.rightAlignment}>
                     <Button
                       text={loading ? "Submitting..." : "Submit"}
                       className={styles.buttonDesign}
                       onClick={handleSubscribe}
-                      disabled={loading}
+                      disabled={loading || !isAgreed}
                     />
                   </div>
                 </div>
+                {error && <p className={styles.errorText}>{error}</p>}
                 <div className={styles.checkboxText}>
                   <input
                     type='checkbox'
+                    id="privacy-agreement"
                     checked={isAgreed}
                     onChange={(e) => setIsAgreed(e.target.checked)}
                   />
-                  <label>
-                    I agree to the Privacy Policy
+                  <label htmlFor="privacy-agreement">
+                    I agree to the <Link href="/privacy-policy" aria-label='Privacy Policy'>Privacy Policy</Link>
                   </label>
                 </div>
               </div>

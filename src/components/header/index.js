@@ -59,6 +59,12 @@ export default function Header() {
                 <Link href="/blog" aria-label="Blogs">
                   Blogs
                 </Link>
+                <Link href="/calender" aria-label="Tools">
+                  Tools
+                </Link>
+                <Link href="/calculators" aria-label="Economic Calender">
+                  Economic Calender
+                </Link>
                 <Link href="/contact-us" aria-label="Contact Us">
                   Contact Us
                 </Link>
@@ -129,6 +135,12 @@ export default function Header() {
           </Link>
           <Link href="/blog" aria-label="Blogs">
             Blogs
+          </Link>
+          <Link href="/calender" aria-label="Calendar">
+            Calendar
+          </Link>
+          <Link href="/calculators" aria-label="Calculators">
+            Calculators
           </Link>
           <Link href="/contact-us" aria-label="Contact Us">
             Contact Us

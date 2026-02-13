@@ -162,8 +162,6 @@ export default function OnDemandCourses({ title, activeType, bgColor = "#0C0C0C"
 
               <motion.div key={item._id} variants={itemVariants}>
                 <Link href={`/courses/${item._id}`}>
-                  {console.log(item, "22222item")
-                  }
                   <CoursesCard
                     title={item?.CourseName}
                     price={item?.price}
@@ -175,6 +173,7 @@ export default function OnDemandCourses({ title, activeType, bgColor = "#0C0C0C"
                     location={item?.location || ""}
                     btnLink={`/courses/${item._id}?courseType=${activeType}`}
                     btnTitle={item?.isPayment ? "Enrolled" : "Enroll Now"}
+                    isFree={item?.isFree}
                   />
                 </Link>
               </motion.div>

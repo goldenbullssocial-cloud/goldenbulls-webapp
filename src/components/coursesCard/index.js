@@ -11,12 +11,11 @@ const CourseImage = '/assets/images/course.png'
 const ClockIcon = "/assets/icons/calender-icon.png";
 const Location = "/assets/icons/location-icon.png";
 
-export default function CoursesCard({ title, price, author, duration, level, rating, image, location, btnLink, btnTitle}) {
+export default function CoursesCard({ title, price, isFree, author, duration, level, rating, image, location, btnLink, btnTitle }) {
     const router = useRouter();
     return (
         <motion.div
             className={styles.courseCard}
-
 
             onMouseMove={(e) => {
                 const card = e.currentTarget;
@@ -64,7 +63,10 @@ export default function CoursesCard({ title, price, author, duration, level, rat
                 </h3>
 
                 <div className={styles.secContent}>
-                    <h4>${price}</h4>
+                    <div className={`${styles.typeBadge} ${isFree ? styles.free : styles.paid}`}>
+                        {isFree ? "Free" : "Paid"}
+                    </div>
+                    <h4>{isFree !== true && ("$" + price)}</h4>
                     <ul>
                         <li>{author}</li>
                     </ul>

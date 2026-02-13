@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
+import Select from "react-select";
 import styles from "./profile.module.scss";
 import Input from "@/components/input";
 import Button from "@/components/button";
-import CustomDropdown from "@/components/customDropdown";
+
 import { getProfile, editProfile, uploadImage } from "@/services/dashboard";
 import { getCookie } from "../../../../cookie";
 import toast from "react-hot-toast";
@@ -518,18 +519,42 @@ export default function Profile() {
                         />
                         {errors.city && <span className={styles.errorMessage}>{errors.city}</span>}
                     </div>
-                    <CustomDropdown
-                        label="Gender"
-                        value={formData.gender}
-                        onChange={handleChange}
-                        placeholder="Select your gender"
-                        error={errors.gender}
-                        options={[
-                            { value: "Male", label: "Male" },
-                            { value: "Female", label: "Female" },
-                            { value: "Other", label: "Other" },
-                        ]}
-                    />
+                    <div className={styles.selectWrapper}>
+                        <label>Gender</label>
+                        <Select
+                            options={[
+                                { value: "male", label: "Male" },
+                                { value: "female", label: "Female" },
+                                { value: "other", label: "Other" },
+                            ]}
+                            value={
+                                formData.gender
+                                    ? {
+                                        value: formData.gender,
+                                        label: formData.gender.charAt(0).toUpperCase() + formData.gender.slice(1),
+                                    }
+                                    : null
+                            }
+                            onChange={(option) => {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    gender: option ? option.value : "",
+                                }));
+                                if (errors.gender) {
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        gender: "",
+                                    }));
+                                }
+                            }}
+                            placeholder="Select your gender"
+                            className={styles.customSelect}
+                            classNamePrefix="react-select"
+                        />
+                        {errors.gender && (
+                            <span className={styles.errorMessage}>{errors.gender}</span>
+                        )}
+                    </div>
                 </div>
                 <div className={styles.saveButton}>
                     <Button

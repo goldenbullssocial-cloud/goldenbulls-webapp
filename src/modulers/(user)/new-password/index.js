@@ -34,8 +34,8 @@ export default function NewPassword() {
     if (storedEmail) {
       setEmail(storedEmail);
     } else {
-      toast.error("Email not found. Redirecting to login.");
-      setTimeout(() => router.push("/login"), 2000);
+      // toast.error("Email not found. Redirecting to login.");
+      setTimeout(() => router.push("/login"), 1000);
     }
   }, [router]);
 

@@ -1,10 +1,12 @@
 import CalculatorDetails from '@/modulers/calculatorDetails'
 import React from 'react'
 
-export default function page() {
+export default async function page({ params }) {
+    const { id } = await params
+    
     return (
         <div>
-            <CalculatorDetails />
+            <CalculatorDetails calculatorId={id} />
         </div>
     )
 }

@@ -1,0 +1,246 @@
+@use "../../../scss/main.scss" as *;
+@use "../../../scss/breakpoints/breakpoints.scss" as *;
+@use "../../../scss/font/font.scss" as *;
+
+// Theme variables matching your design system
+$gold: #e4ab40;
+$gold-light: #f9f490;
+$gold-gradient: linear-gradient(
+  90deg,
+  #f9f490 0%,
+  #e4ab40 25.48%,
+  #fefba5 75%,
+  #bd894e 100%
+);
+$bg-main: #000;
+$card-bg: #1a1a1a;
+$text-primary: #fff;
+$text-muted: rgba(255, 255, 255, 0.7);
+$text-dim: rgba(255, 255, 255, 0.6);
+$text-faint: rgba(255, 255, 255, 0.5);
+$text-placeholder: rgba(255, 255, 255, 0.3);
+$border-color: rgba(255, 255, 255, 0.1);
+$border-light: rgba(255, 255, 255, 0.05);
+$bg-subtle: rgba(255, 255, 255, 0.02);
+
+.positionSizeCalculator {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  max-width: 900px;
+  margin: 60px auto 0;
+  padding: 0 20px;
+
+  @include respond-to("md") {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .formSection {
+    width: 100%;
+  }
+
+  .formGroup {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      color: $text-muted;
+      font-size: 14px;
+      font-weight: 400;
+      margin-bottom: 6px;
+      @include font-normal;
+    }
+
+    .input,
+    .select {
+      width: 100%;
+      padding: 10px 14px;
+      background: $card-bg;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      color: $text-primary;
+      font-size: 16px;
+      @include font-normal;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $gold;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &::placeholder {
+        color: $text-placeholder;
+      }
+    }
+
+    .input[type="number"] {
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+      }
+
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+
+    .errorMessage {
+      display: block;
+      color: #ff6b6b;
+      font-size: 12px;
+      margin-top: 4px;
+      @include font-normal;
+    }
+
+    .select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+  }
+
+  .calculateBtn {
+    width: 100%;
+    padding: 12px;
+    background: $gold-gradient;
+    border: none;
+    border-radius: 99px;
+    color: $bg-main;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    @include font-medium;
+    margin-top: 4px;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(228, 171, 64, 0.4);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .calculationError {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 8px;
+    color: #ff6b6b;
+    font-size: 14px;
+    text-align: center;
+    @include font-normal;
+  }
+
+  .resultsSection {
+    width: 100%;
+    position: sticky;
+    top: 20px;
+
+    @include respond-to("md") {
+      position: static;
+    }
+  }
+
+  .results {
+    padding: 16px;
+    background: rgba(228, 171, 64, 0.05);
+    border: 1px solid rgba(228, 171, 64, 0.2);
+    border-radius: 12px;
+
+    h3 {
+      color: $text-primary;
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 16px 0;
+      @include font-medium;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: "↓";
+        display: inline-flex;
+        width: 20px;
+        height: 20px;
+        background: $gold-gradient;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        color: $bg-main;
+        font-size: 14px;
+      }
+    }
+
+    .resultItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid $border-light;
+
+      &:last-of-type {
+        border-bottom: none;
+      }
+
+      span {
+        color: $text-dim;
+        font-size: 14px;
+        @include font-normal;
+      }
+
+      strong {
+        background: $gold-gradient;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        font-size: 18px;
+        font-weight: 600;
+        @include font-medium;
+      }
+    }
+
+    .helpText {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid $border-color;
+      color: $text-faint;
+      font-size: 12px;
+      line-height: 1.5;
+      @include font-normal;
+      font-style: italic;
+    }
+  }
+
+  .emptyState {
+    padding: 32px 16px;
+    background: $bg-subtle;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    text-align: center;
+
+    p {
+      color: $text-faint;
+      font-size: 14px;
+      margin: 0;
+      @include font-normal;
+    }
+  }
+}

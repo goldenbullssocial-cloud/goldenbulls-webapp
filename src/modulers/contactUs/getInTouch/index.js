@@ -129,7 +129,7 @@ export default function GetInTouch() {
       isValid = false;
     }
 
-    if (!form.email) {  
+    if (!form.email) {
       newErrors.email = "Email is required";
       isValid = false;
     } else if (!validateEmail(form.email)) {
@@ -164,9 +164,13 @@ export default function GetInTouch() {
   };
 
   const handleChange = (field, value) => {
+    let finalValue = value;
+    if (field === "email") {
+      finalValue = value.replace(/\s/g, "");
+    }
     setForm((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: finalValue,
     }));
 
     // Clear error when user starts typing
@@ -205,7 +209,13 @@ export default function GetInTouch() {
     setIsSubmitting(true);
 
     try {
-      const response = await contactUs(form);
+      const trimmedForm = {
+        ...form,
+        firstName: form.firstName.trim(),
+        email: form.email.trim(),
+        description: form.description.trim(),
+      };
+      const response = await contactUs(trimmedForm);
       toast.success("Message sent successfully! We will get back to you soon.");
       resetForm();
       return response;
@@ -229,198 +239,203 @@ export default function GetInTouch() {
         >
           {/* Left Content */}
           <motion.div className={styles.griditems} variants={fadeLeft}>
-            <motion.h2 variants={fadeUp}>get in touch</motion.h2>
+            <div className={styles.contentWrapper}>
+              <motion.h2 variants={fadeUp}>get in touch</motion.h2>
 
-            <motion.div className={styles.icongrid} variants={fadeUp}>
-              <img src={AddressIcon} alt="AddressIcon" />
-              <div>
-                <h3>Address</h3>
-                <p>
-                  {loading
-                    ? "Loading..."
-                    : utilityData?.location || "Address not available"}
-                </p>
-              </div>
-            </motion.div>
-            <motion.div className={styles.icongrid} variants={fadeUp}>
-              <img src={CallIcon} alt="CallIcon" />
-              <div>
-                <h3>Contact Details</h3>
-                <a href={`tel:${utilityData?.phoneNo || ""}`}>
-                  {loading
-                    ? "Loading..."
-                    : utilityData?.phoneNo || "Phone not available"}
-                </a>
-              </div>
-            </motion.div>
+              {/* <motion.div className={styles.icongrid} variants={fadeUp}>
+                <img src={AddressIcon} alt="AddressIcon" />
+                <div>
+                  <h3>Address</h3>
+                  <p>
+                    {loading
+                      ? "Loading..."
+                      : utilityData?.location || "Address not available"}
+                  </p>
+                </div>
+              </motion.div> */}
+              <motion.div className={styles.icongrid} variants={fadeUp}>
+                <img src={CallIcon} alt="CallIcon" />
+                <div>
+                  <h3>Contact Details</h3>
+                  <a href={`tel:${utilityData?.phoneNo || ""}`}>
+                    {loading
+                      ? "Loading..."
+                      : utilityData?.phoneNo || "Phone not available"}
+                  </a>
+                </div>
+              </motion.div>
 
-            <motion.div className={styles.icongrid} variants={fadeUp}>
-              <img src={GmailIcon} alt="GmailIcon" />
-              <div>
-                <h3>Email Us</h3>
-                <a href={`mailto:${utilityData?.email || ""}`}>
-                  {loading
-                    ? "Loading..."
-                    : utilityData?.email || "Email not available"}
-                </a>
-              </div>
-            </motion.div>
+              <motion.div className={styles.icongrid} variants={fadeUp}>
+                <img src={GmailIcon} alt="GmailIcon" />
+                <div>
+                  <h3>Email Us</h3>
+                  <a href={`mailto:${utilityData?.email || ""}`}>
+                    {loading
+                      ? "Loading..."
+                      : utilityData?.email || "Email not available"}
+                  </a>
+                </div>
+              </motion.div>
 
-            <motion.div className={styles.line} variants={fadeUp} />
+              <motion.div className={styles.line} variants={fadeUp} />
 
-            <motion.div className={styles.followus} variants={fadeUp}>
-              <span>Follow Us :</span>
-              <div className={styles.socialIcon}>
-                {loading ? (
-                  <span>Loading...</span>
-                ) : (
-                  <>
-                    {utilityData?.facebookLink && (
-                      <motion.a
-                        href={utilityData.facebookLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ y: -4, scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <img src={FacebookIcon} alt="Facebook" />
-                      </motion.a>
-                    )}
-                    {utilityData?.instagramLink && (
-                      <motion.a
-                        href={utilityData.instagramLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ y: -4, scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <img src={InstagramIcon} alt="Instagram" />
-                      </motion.a>
-                    )}
-                    {utilityData?.youtubeLink && (
-                      <motion.a
-                        href={utilityData.youtubeLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ y: -4, scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <img
-                          className={styles.youtubeIcon}
-                          src={YouTubeIcon}
-                          alt="youtubeIcon"
-                        />
-                      </motion.a>
-                    )}
-                    {utilityData?.linkedin && (
-                      <motion.a
-                        href={utilityData.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ y: -4, scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <img src={LinkdinIcon} alt="LinkedIn" />
-                      </motion.a>
-                    )}
-                  </>
-                )}
-              </div>
-            </motion.div>
+              <motion.div className={styles.followus} variants={fadeUp}>
+                <span>Follow Us :</span>
+                <div className={styles.socialIcon}>
+                  {loading ? (
+                    <span>Loading...</span>
+                  ) : (
+                    <>
+                      {utilityData?.facebookLink && (
+                        <motion.a
+                          href={utilityData.facebookLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ y: -4, scale: 1.05 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <img src={FacebookIcon} alt="Facebook" />
+                        </motion.a>
+                      )}
+                      {utilityData?.instagramLink && (
+                        <motion.a
+                          href={utilityData.instagramLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ y: -4, scale: 1.05 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <img src={InstagramIcon} alt="Instagram" />
+                        </motion.a>
+                      )}
+                      {utilityData?.youtubeLink && (
+                        <motion.a
+                          href={utilityData.youtubeLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ y: -4, scale: 1.05 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <img
+                            className={styles.youtubeIcon}
+                            src={YouTubeIcon}
+                            alt="youtubeIcon"
+                          />
+                        </motion.a>
+                      )}
+                      {utilityData?.linkedin && (
+                        <motion.a
+                          href={utilityData.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ y: -4, scale: 1.05 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          <img src={LinkdinIcon} alt="LinkedIn" />
+                        </motion.a>
+                      )}
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
 
           {/* Right Form */}
           <motion.div className={styles.griditems} variants={fadeRight}>
-            <motion.div className={styles.blackBox} variants={container}>
-              <form onSubmit={handleSubmit}>
-                <motion.h4 variants={fadeUp}>Leave Us Your Info.</motion.h4>
+            <div className={styles.contentWrapper}>
+              <motion.div className={styles.blackBox} variants={container}>
+                <form onSubmit={handleSubmit}>
+                  <motion.h4 variants={fadeUp}>Leave Us Your Info.</motion.h4>
 
-                <motion.div className={styles.formControl} variants={fadeUp}>
-                  <input
-                    placeholder="Your Name"
-                    type="text"
-                    name="firstName"
-                    label="First Name"
-                    value={form.firstName}
-                    onChange={(e) => handleChange("firstName", e.target.value)}
-                  />
-                  {errors.firstName && (
-                    <p className={styles.error}>{errors.firstName}</p>
-                  )}
-                </motion.div>
+                  <motion.div className={styles.formControl} variants={fadeUp}>
+                    <input
+                      placeholder="Your Name"
+                      type="text"
+                      name="firstName"
+                      label="First Name"
+                      value={form.firstName}
+                      onChange={(e) => handleChange("firstName", e.target.value)}
+                    />
+                    {errors.firstName && (
+                      <p className={styles.error}>{errors.firstName}</p>
+                    )}
+                  </motion.div>
 
-                <motion.div className={styles.formControl} variants={fadeUp}>
-                  <input
-                    type="text"
-                    placeholder="Email Address"
-                    name="email"
-                    label="Email"
-                    value={form.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
-                  />
-                  {errors.email && (
-                    <p className={styles.error}>{errors.email}</p>
-                  )}
-                </motion.div>
+                  <motion.div className={styles.formControl} variants={fadeUp}>
+                    <input
+                      type="text"
+                      placeholder="Email Address"
+                      name="email"
+                      label="Email"
+                      value={form.email}
+                      onChange={(e) => handleChange("email", e.target.value)}
+                    />
+                    {errors.email && (
+                      <p className={styles.error}>{errors.email}</p>
+                    )}
+                  </motion.div>
 
-                <motion.div className={styles.formControl} variants={fadeUp}>
-                  <textarea
-                    placeholder="Message"
-                    name="description"
-                    label="Message"
-                    value={form.description}
-                    onChange={(e) =>
-                      handleChange("description", e.target.value)
-                    }
-                  />
-                  {errors.description && (
-                    <p className={styles.error}>{errors.description}</p>
-                  )}
-                </motion.div>
-
-                <motion.div className={styles.checkboxText} variants={fadeUp}>
-                  <input
-                    type="checkbox"
-                    checked={isPrivacyChecked}
-                    onChange={(e) => {
-                      setIsPrivacyChecked(e.target.checked);
-                      if (e.target.checked && errors.privacy) {
-                        setErrors((prev) => ({ ...prev, privacy: "" }));
+                  <motion.div className={styles.formControl} variants={fadeUp}>
+                    <textarea
+                      placeholder="Message"
+                      name="description"
+                      label="Message"
+                      value={form.description}
+                      onChange={(e) =>
+                        handleChange("description", e.target.value)
                       }
-                    }}
-                  />
-                  <label>
-                    You agree to our friendly
-                    <span
-                      onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href = "/privacy-policy";
-                      }}
-                    >
-                      {" "}
-                      Privacy policy.{" "}
-                    </span>
-                  </label>
-                  {errors.privacy && (
-                    <p className={styles.error}>{errors.privacy}</p>
-                  )}
-                </motion.div>
+                    />
+                    {errors.description && (
+                      <p className={styles.error}>{errors.description}</p>
+                    )}
+                  </motion.div>
 
-                <motion.div variants={fadeUp}>
-                  <Button
-                    text="Send Message"
-                    type="submit"
-                    disabled={!isPrivacyChecked || isSubmitting}
-                    style={{
-                      cursor:
-                        !isPrivacyChecked || isSubmitting
-                          ? "not-allowed"
-                          : "pointer",
-                    }}
-                  />
-                </motion.div>
-              </form>
-            </motion.div>
+                  <motion.div className={styles.checkboxText} variants={fadeUp}>
+                    <input
+                      type="checkbox"
+                      id="privacy-contact"
+                      checked={isPrivacyChecked}
+                      onChange={(e) => {
+                        setIsPrivacyChecked(e.target.checked);
+                        if (e.target.checked && errors.privacy) {
+                          setErrors((prev) => ({ ...prev, privacy: "" }));
+                        }
+                      }}
+                    />
+                    <label htmlFor="privacy-contact">
+                      You agree to our friendly
+                      <span
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.location.href = "/privacy-policy";
+                        }}
+                      >
+                        {" "}
+                        Privacy policy.{" "}
+                      </span>
+                    </label>
+                    {errors.privacy && (
+                      <p className={styles.error}>{errors.privacy}</p>
+                    )}
+                  </motion.div>
+
+                  <motion.div variants={fadeUp}>
+                    <Button
+                      text="Send Message"
+                      type="submit"
+                      disabled={!isPrivacyChecked || isSubmitting}
+                      style={{
+                        cursor:
+                          !isPrivacyChecked || isSubmitting
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    />
+                  </motion.div>
+                </form>
+              </motion.div>
+            </div>
           </motion.div>
         </motion.div>
       </div>

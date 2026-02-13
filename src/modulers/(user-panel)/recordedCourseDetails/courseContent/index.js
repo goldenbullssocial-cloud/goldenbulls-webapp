@@ -85,7 +85,7 @@ export default function CourseContent({ onVideoSelect, chapters, onChaptersLoade
                             <motion.div
                                 key={index}
                                 className={styles.box}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.4, delay: index * 0.05 }}

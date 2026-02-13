@@ -340,8 +340,31 @@
                     .twoText {
                         display: flex;
                         align-items: center;
-                        gap: 20px;
+                        gap: 16px;
                         padding: 0 0 30px 0;
+
+                        .typeBadge {
+                            padding: 4px 12px;
+                            border-radius: 50px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            text-transform: capitalize;
+                            @include font-bold;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            line-height: normal;
+
+                            &.free {
+                                background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                                color: #000;
+                            }
+
+                            &.paid {
+                                background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                                color: #000;
+                            }
+                        }
 
                         ul {
                             margin: 0;
@@ -367,6 +390,59 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .successModalContent {
+        background: #0C0C0C;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 500px;
+        padding: 40px;
+        position: relative;
+        border: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .iconWrapper {
+            margin-bottom: 24px;
+
+            svg {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        h2 {
+            color: #FFF;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            @include font-bold;
+
+            @include respond-to("sm") {
+                font-size: 24px;
+            }
+        }
+
+        p {
+            color: #B6B6B6;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 360px;
+            @include font-normal;
+        }
+
+        .successButton {
+            width: 100%;
+
+            button {
+                width: 100%;
+                justify-content: center;
             }
         }
     }

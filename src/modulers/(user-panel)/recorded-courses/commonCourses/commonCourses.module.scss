@@ -119,8 +119,31 @@
                 .secContent {
                     display: flex;
                     align-items: center;
-                    gap: 20px;
+                    gap: 16px;
                     padding: 0 0 14px 0;
+
+                    .typeBadge {
+                        padding: 4px 12px;
+                        border-radius: 50px;
+                        font-size: 14px;
+                        font-weight: 600;
+                        text-transform: capitalize;
+                        @include font-bold;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        line-height: normal;
+
+                        &.free {
+                            background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                            color: #000;
+                        }
+
+                        &.paid {
+                            background: var(--GOLD, linear-gradient(90deg, #F9F490 0%, #E4AB40 25.48%, #FEFBA5 75%, #BD894E 100%));
+                            color: #000;
+                        }
+                    }
 
                     h4 {
                         color: #FFF;

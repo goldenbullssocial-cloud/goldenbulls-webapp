@@ -120,10 +120,8 @@ export default function EarningHistory({ activeTab }) {
                             ))
                         ) : filteredHistoryData.length > 0 ? (
                             filteredHistoryData.map((item, index) => (
-                                console.log(item, "-----item"),
-
                                 <tr key={item._id || index}>
-                                    <td>{index + 1}</td>
+                                    <td>{(page - 1) * limit + index + 1}</td>
                                     {isEarning ? (
                                         <>
                                             <td>{item?.user?.name || '-'}</td>
@@ -140,8 +138,15 @@ export default function EarningHistory({ activeTab }) {
                                         </>
                                     )}
                                     <td>
-                                        <span className={item.status === 'paid' ? styles.green : styles.red}>
-                                            {item.status === 'paid' ? 'Paid' : 'Pending'}
+                                        <span className={
+                                            item.status?.toLowerCase() === 'paid' || item.status?.toLowerCase() === 'approved' ? styles.green :
+                                                item.status?.toLowerCase() === 'rejected' ? styles.red :
+                                                    styles.yellow
+                                        }>
+                                            {item.status?.toLowerCase() === 'paid' ? 'Paid' :
+                                                item.status?.toLowerCase() === 'approved' ? 'Approved' :
+                                                    item.status?.toLowerCase() === 'rejected' ? 'Rejected' :
+                                                        'Pending'}
                                         </span>
                                     </td>
                                 </tr>

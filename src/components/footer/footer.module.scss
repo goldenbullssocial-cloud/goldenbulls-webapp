@@ -122,6 +122,8 @@
                         height: 22px;
                         margin: 0;
                         padding: 0;
+                        accent-color: #EEB92B;
+                        cursor: pointer;
                     }
 
                     label {
@@ -131,7 +133,18 @@
                         font-style: normal;
                         font-weight: 400;
                         line-height: 28px;
+                        cursor: pointer;
                         @include font-normal;
+
+                        a {
+                            color: #EEB92B;
+                            text-decoration: underline;
+                            transition: .3s ease-in-out;
+
+                            &:hover {
+                                color: #fff;
+                            }
+                        }
                     }
                 }
 
@@ -188,6 +201,13 @@
                         line-height: normal;
                         @include font-normal;
                     }
+                }
+
+                .errorText {
+                    color: #ff4d4f;
+                    font-size: 14px;
+                    margin: 8px 0 0 12px;
+                    @include font-normal;
                 }
 
                 p {
