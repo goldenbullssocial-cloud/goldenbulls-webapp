@@ -1,6 +1,27 @@
-@use '../../../scss/main.scss' as *;
-@use '../../../scss/breakpoints/breakpoints.scss' as *;
-@use '../../../scss/font/font.scss' as *;
+@use "../../../scss/main.scss" as *;
+@use "../../../scss/breakpoints/breakpoints.scss" as *;
+@use "../../../scss/font/font.scss" as *;
+
+// Theme variables matching your design system
+$gold: #e4ab40;
+$gold-light: #f9f490;
+$gold-gradient: linear-gradient(
+  90deg,
+  #f9f490 0%,
+  #e4ab40 25.48%,
+  #fefba5 75%,
+  #bd894e 100%
+);
+$bg-main: #000;
+$card-bg: #1a1a1a;
+$text-primary: #fff;
+$text-muted: rgba(255, 255, 255, 0.7);
+$text-dim: rgba(255, 255, 255, 0.6);
+$text-faint: rgba(255, 255, 255, 0.5);
+$text-placeholder: rgba(255, 255, 255, 0.3);
+$border-color: rgba(255, 255, 255, 0.1);
+$border-light: rgba(255, 255, 255, 0.05);
+$bg-subtle: rgba(255, 255, 255, 0.02);
 
 .positionSizeCalculator {
   display: grid;
@@ -26,7 +47,7 @@
 
     label {
       display: block;
-      color: rgba(255, 255, 255, 0.7);
+      color: $text-muted;
       font-size: 14px;
       font-weight: 400;
       margin-bottom: 6px;
@@ -37,17 +58,17 @@
     .select {
       width: 100%;
       padding: 10px 14px;
-      background: #2A2A2A;
-      border: 1px solid #393939;
+      background: $card-bg;
+      border: 1px solid $border-color;
       border-radius: 8px;
-      color: #fff;
+      color: $text-primary;
       font-size: 16px;
       @include font-normal;
       transition: all 0.3s ease;
 
       &:focus {
         outline: none;
-        border-color: #E4AB40;
+        border-color: $gold;
       }
 
       &:disabled {
@@ -56,8 +77,20 @@
       }
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.3);
+        color: $text-placeholder;
       }
+    }
+
+    .input[type="number"] {
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+        margin: 0;
+      }
+
+      -moz-appearance: textfield;
+      appearance: textfield;
     }
 
     .errorMessage {
@@ -81,10 +114,10 @@
   .calculateBtn {
     width: 100%;
     padding: 12px;
-    background: #E4AB40;
+    background: $gold-gradient;
     border: none;
     border-radius: 99px;
-    color: #000;
+    color: $bg-main;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -93,7 +126,6 @@
     margin-top: 4px;
 
     &:hover:not(:disabled) {
-      background: #f0b84d;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(228, 171, 64, 0.4);
     }
@@ -133,7 +165,7 @@
     border-radius: 12px;
 
     h3 {
-      color: #fff;
+      color: $text-primary;
       font-size: 16px;
       font-weight: 500;
       margin: 0 0 16px 0;
@@ -147,11 +179,11 @@
         display: inline-flex;
         width: 20px;
         height: 20px;
-        background: #E4AB40;
+        background: $gold-gradient;
         border-radius: 50%;
         align-items: center;
         justify-content: center;
-        color: #000;
+        color: $bg-main;
         font-size: 14px;
       }
     }
@@ -161,20 +193,24 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid $border-light;
 
       &:last-of-type {
         border-bottom: none;
       }
 
       span {
-        color: rgba(255, 255, 255, 0.6);
+        color: $text-dim;
         font-size: 14px;
         @include font-normal;
       }
 
       strong {
-        color: #E4AB40;
+        background: $gold-gradient;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
         font-size: 18px;
         font-weight: 600;
         @include font-medium;
@@ -184,8 +220,8 @@
     .helpText {
       margin-top: 16px;
       padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.5);
+      border-top: 1px solid $border-color;
+      color: $text-faint;
       font-size: 12px;
       line-height: 1.5;
       @include font-normal;
@@ -195,13 +231,13 @@
 
   .emptyState {
     padding: 32px 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid #393939;
+    background: $bg-subtle;
+    border: 1px solid $border-color;
     border-radius: 12px;
     text-align: center;
 
     p {
-      color: rgba(255, 255, 255, 0.5);
+      color: $text-faint;
       font-size: 14px;
       margin: 0;
       @include font-normal;
