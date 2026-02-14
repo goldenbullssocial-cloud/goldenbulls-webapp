@@ -78,7 +78,7 @@ export default function CommonCourses({ title, activeType, excludeCourseId }) {
             </div>
             <div className={styles.grid}>
                 {loading ? (
-                    Array(4).fill(0).map((_, i) => (
+                    Array(3).fill(0).map((_, i) => (
                         <div className={styles.griditems} key={i}>
                             <div className={`${styles.cardImage} ${styles.skeleton} ${styles.skeletonImage}`} />
 
