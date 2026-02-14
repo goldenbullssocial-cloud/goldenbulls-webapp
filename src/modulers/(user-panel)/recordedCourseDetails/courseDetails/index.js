@@ -69,10 +69,17 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
     const type = searchParams.get('type');
     const isPaymentSuccess = searchParams.get('isPayment');
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showFailureModal, setShowFailureModal] = useState(false);
 
     useEffect(() => {
         if (isPaymentSuccess === 'true') {
             setShowSuccessModal(true);
+            // Clean up the URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('isPayment');
+            window.history.replaceState({}, '', url);
+        } else if (isPaymentSuccess === 'false') {
+            setShowFailureModal(true);
             // Clean up the URL
             const url = new URL(window.location.href);
             url.searchParams.delete('isPayment');
@@ -232,6 +239,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
         try {
             const batchId = selectedBatch?._id;
             const successUrl = new URL(window.location.href);
+            successUrl.searchParams.set("isPayment", "true");
             if (batchId) {
                 successUrl.searchParams.set("batchId", batchId);
             }
@@ -239,9 +247,15 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
             const walletAmount = useWalletBalance ? Math.min(userProfile?.earningBalance || 0, courseData?.price || 0) : 0;
             const actualAmount = useWalletBalance ? Math.max(0, (courseData?.price || 0) - (userProfile?.earningBalance || 0)) : courseData?.price || 0;
 
+            const cancelUrl = new URL(window.location.href);
+            cancelUrl.searchParams.set("isPayment", "false");
+            if (batchId) {
+                cancelUrl.searchParams.set("batchId", batchId);
+            }
+
             const paymentData = {
                 success_url: successUrl.toString(),
-                cancel_url: window.location.href,
+                cancel_url: cancelUrl.toString(),
                 courseId: id,
                 isWalletUse: useWalletBalance,
                 walletAmount: walletAmount,
@@ -959,13 +973,37 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                             </svg>
                         </div>
                         <h2>Enrollment Successful!</h2>
-                        <p>You’ve been successfully enrolled in this course. You now have full access to all course content.</p>
+                        <p>You've been successfully enrolled in this course. You now have full access to all course content.</p>
                         <div className={styles.successButton}>
                             <Button
                                 text="Start Learning"
                                 onClick={() => {
                                     setShowSuccessModal(false);
                                     window.location.reload();
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Failure Modal */}
+            {showFailureModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.successModalContent}>
+                        <div className={styles.iconWrapper}>
+                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="40" cy="40" r="40" fill="#FFEBEE" />
+                                <path d="M50 30L30 50M30 30L50 50" stroke="#F44336" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                        <h2>Payment Failed!</h2>
+                        <p>Your payment was cancelled or expired. Please try again to enroll in this course.</p>
+                        <div className={styles.successButton}>
+                            <Button
+                                text="Try Again"
+                                onClick={() => {
+                                    setShowFailureModal(false);
                                 }}
                             />
                         </div>

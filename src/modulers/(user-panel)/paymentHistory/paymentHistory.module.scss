@@ -388,3 +388,44 @@
         transform: translateY(-2px);
     }
 }
+.downloadButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+
+    &:hover:not(:disabled) {
+        background: rgba(249, 244, 144, 0.1);
+        transform: translateY(-2px);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.downloadAnimation {
+    display: inline-block;
+    animation: downloadBounce 1s ease-in-out infinite;
+}
+
+@keyframes downloadBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(4px);
+    }
+}
+

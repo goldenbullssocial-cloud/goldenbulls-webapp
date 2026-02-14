@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import styles from './paymentHistory.module.scss';
 import PagePagination from '@/components/pagePagination';
-import { getpaymentHistory, addmetaAccountNo } from '@/services/paymentHistory';
+import { getpaymentHistory, addmetaAccountNo, downloadInvoice } from '@/services/paymentHistory';
 import NoData from '@/components/noData';
 import PaymentIcon from '@/icons/paymentIcon';
+import DownloadIcon from '@/icons/downloadIcon';
 import { useSearch } from '@/contexts/SearchContext';
+import toast from 'react-hot-toast';
 
 
 export default function PaymentHistory() {
@@ -22,6 +24,7 @@ export default function PaymentHistory() {
     const [savingMeta, setSavingMeta] = useState(false);
     const [viewMode, setViewMode] = useState(false);
     const [metaAccountError, setMetaAccountError] = useState('');
+    const [loadingInvoices, setLoadingInvoices] = useState({});
 
     // Debounce search query with 500ms delay
     useEffect(() => {
@@ -113,6 +116,98 @@ export default function PaymentHistory() {
         }
     };
 
+    // Helper function to calculate expiry date based on plan type
+    const calculateExpiryDate = (createdAt, planType) => {
+        if (!createdAt) return 'N/A';
+
+        const date = new Date(createdAt);
+        if (isNaN(date.getTime())) return 'N/A';
+
+        switch (planType?.toLowerCase()) {
+            case 'monthly':
+                date.setMonth(date.getMonth() + 1);
+                break;
+            case 'quarterly':
+                date.setMonth(date.getMonth() + 3);
+                break;
+            case 'yearly':
+                date.setFullYear(date.getFullYear() + 1);
+                break;
+            default:
+                return 'N/A';
+        }
+
+        return date.toLocaleDateString("en-US");
+    };
+
+    const handleDownloadInvoice = async (payment) => {
+        console.log(payment);
+        try {
+            setLoadingInvoices(prev => ({ ...prev, [payment._id]: true }));
+            const expiryDate = payment.planExpiry ||
+                calculateExpiryDate(payment.createdAt, payment.planType);
+
+            // Handle date safely
+            let purchaseDate = 'N/A';
+            if (payment.createdAt) {
+                const date = new Date(payment.createdAt);
+                purchaseDate = !isNaN(date.getTime()) ? date.toLocaleDateString("en-US") : 'Invalid date';
+            }
+
+            const invoicePayload = {
+                transactionId: payment.orderId,
+                purchaseDate: purchaseDate,
+                expiryDate: expiryDate,
+                items: [
+                    {
+                        planName:
+                            payment.telegramId?.telegramId?.channelName ||
+                            payment.botId?.strategyId?.title ||
+                            payment.courseId?.CourseName ||
+                            "N/A",
+                        planDuration: payment.planType || "N/A",
+                        metaNo: payment.telegramAccountNo || payment.metaAccountNo?.[0] || "N/A",
+                        qty: payment.noOfBots || 1,
+                        amount: parseFloat(payment.price) || 0,
+                    },
+                ],
+                couponDiscount: payment.couponDiscount > 0 ? `${payment.couponDiscount}` : "0",
+                planDiscount: payment.discount > 0 ? `${(payment.price * payment.discount / 100).toFixed(2)}` : "0",
+                totalValue: (parseFloat((payment.initialPrice * payment.noOfBots) || payment.price) || 0).toString(),
+                total: (parseFloat(payment.price) || 0).toString(),
+                invoiceNo: payment?.invoiceNo || "N/A",
+            };
+
+            const response = await downloadInvoice(invoicePayload);
+
+            if (response.success && response.payload) {
+                const pdfRes = await fetch(response.payload);
+                const blob = await pdfRes.blob();
+
+                const url = window.URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `invoice-${payment.orderId || Date.now()}.pdf`;
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                window.URL.revokeObjectURL(url);
+
+                toast.success("Invoice downloaded successfully!");
+            } else {
+                throw new Error("Failed to generate invoice");
+            }
+        } catch (error) {
+            console.error("Error generating invoice:", error);
+            toast.error(error.message || "Failed to generate invoice");
+        } finally {
+            setLoadingInvoices(prev => ({ ...prev, [payment._id]: false }));
+        }
+    };
+
     return (
         <div className={styles.paymentHistory}>
             <div className={styles.title}>
@@ -132,13 +227,14 @@ export default function PaymentHistory() {
                             <th>Transaction ID</th>
                             <th>Meta Account No</th>
                             <th>Status</th>
+                            <th>Invoice</th>
                         </tr>
                     </thead>
                     <tbody>
                         {loading ? (
                             Array.from({ length: limit }).map((_, index) => (
                                 <tr key={`skeleton-${index}`} className={styles.skeletonRow}>
-                                    {Array.from({ length: 8 }).map((_, i) => (
+                                    {Array.from({ length: 9 }).map((_, i) => (
                                         <td key={`cell-${i}`}>
                                             <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
                                         </td>
@@ -176,11 +272,35 @@ export default function PaymentHistory() {
                                             {item.status === "paid" ? "Paid" : "Pending"}
                                         </span>
                                     </td>
+                                    <td>
+                                        {item.status === "paid" ? (
+                                            <button
+                                                onClick={() => handleDownloadInvoice(item)}
+                                                disabled={loadingInvoices[item._id]}
+                                                className={styles.downloadButton}
+                                                title={
+                                                    loadingInvoices[item._id]
+                                                        ? "Generating invoice..."
+                                                        : "Download Invoice"
+                                                }
+                                            >
+                                                {loadingInvoices[item._id] ? (
+                                                    <span className={styles.downloadAnimation}>
+                                                        <DownloadIcon />
+                                                    </span>
+                                                ) : (
+                                                    <DownloadIcon />
+                                                )}
+                                            </button>
+                                        ) : (
+                                            "-"
+                                        )}
+                                    </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="8">
+                                <td colSpan="9">
                                     <NoData
                                         icon={<PaymentIcon />}
                                         title="No payment history found"
