@@ -747,7 +747,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                             <h4>{batch.batchName || `Batch ${batch.startDate ? new Date(batch.startDate).getFullYear() : '2025'}`}</h4>
                                             <p>Starts: <strong>{batch.startDate ? new Date(batch.startDate).toLocaleDateString('en-GB') : (batch.startTime ? new Date(batch.startTime).toLocaleDateString('en-GB') : 'N/A')}</strong></p>
                                             <p>Ends: <strong>{batch.endDate ? new Date(batch.endDate).toLocaleDateString('en-GB') : (batch.endTime ? new Date(batch.endTime).toLocaleDateString('en-GB') : 'N/A')}</strong></p>
-                                            <p>Center: <strong>{batch.centerId?.centerName || batch.centerName || 'Main Center'}</strong></p>
+                                            {type === 'physical' && <p>Center: <strong>{batch.centerId?.centerName || batch.centerName || 'Main Center'}</strong></p>}
                                         </div>
                                     ))
                                 ) : (
@@ -808,6 +808,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                     </p>
                                 ) : (
                                     <>
+                                    {type === 'physical' && (
                                         <div className={styles.detailsSection}>
                                             <h3>Location Details</h3>
                                             <div className={styles.detailsGrid}>
@@ -825,6 +826,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                                                 </div>
                                             </div>
                                         </div>
+                                    )}
                                         <div className={styles.detailsSection}>
                                             <h3>Batch Details</h3>
                                             <div className={styles.simpleList}>
