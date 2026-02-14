@@ -1,16 +1,16 @@
-import CalculatorBanner from '@/modulers/calculators/calculatorBanner'
-import CalenderData from '@/modulers/calender/CalenderData'
-import FaqSection from '@/modulers/home/faqSection'
-import React from 'react'
+import CalculatorBanner from "@/modulers/calculators/calculatorBanner";
+import EconomicCalendarBanner from "@/modulers/calculators/economicCalendarBanner";
+import CalenderData from "@/modulers/calender/CalenderData";
+import FaqSection from "@/modulers/home/faqSection";
+import React from "react";
 
 const Calender = () => {
   return (
     <>
-      <CalculatorBanner />
-      <CalenderData />
+      <EconomicCalendarBanner /> <CalenderData />
       <FaqSection />
     </>
-  )
-}
+  );
+};
 
-export default Calender
+export default Calender;
