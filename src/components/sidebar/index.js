@@ -23,6 +23,7 @@ import { getProfile } from '@/services/dashboard';
 
 export default function Sidebar({ unreadCount, toogle, setToogle }) {
     const [user, setUser] = useState(null);
+    const [profileImage, setProfileImage] = useState(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const router = useRouter();
@@ -39,6 +40,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                             const data = response.payload.data[0];
                             const fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
                             setUser(fullName || parsedUser.firstName || 'User');
+                            setProfileImage(data.profileImage || null);
                         } else {
                             setUser(parsedUser.firstName || 'User');
                         }
@@ -152,7 +154,11 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                     onClick={toggleDropdown}
                 >
                     <div className={styles.profile}>
-                        <UserIcon />
+                        {profileImage ? (
+                            <img src={profileImage} alt="Profile" />
+                        ) : (
+                            <UserIcon />
+                        )}
                     </div>
                     <div className={styles.textgrid}>
                         <span>
