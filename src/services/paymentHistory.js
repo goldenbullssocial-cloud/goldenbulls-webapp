@@ -21,3 +21,13 @@ export const addmetaAccountNo = async (paymentId, metaAccountNo) => {
         throw error;
     }
 };
+
+export const downloadInvoice = async (paymentData) => {
+    try {
+        const response = await api.post(`/payment/createInvoice`,paymentData);
+        return response.data;
+    } catch (error) {
+        console.error('Error downloading invoice:', error);
+        throw error;
+    }
+};
