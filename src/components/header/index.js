@@ -9,7 +9,7 @@ import { header } from "framer-motion/client";
 import { useRouter } from "next/navigation";
 import classNames from "classnames";
 const Logo = "/assets/logo/logo.svg";
-import { getCookie, removeCookie } from '../../../cookie';
+import { getCookie, removeCookie } from "../../../cookie";
 import toast from "react-hot-toast";
 
 export default function Header() {
@@ -60,10 +60,10 @@ export default function Header() {
                   Blogs
                 </Link>
                 <Link href="/calender" aria-label="Tools">
-                  Tools
+                  Economic Calender
                 </Link>
                 <Link href="/calculators" aria-label="Economic Calender">
-                  Economic Calender
+                  Tools
                 </Link>
                 <Link href="/contact-us" aria-label="Contact Us">
                   Contact Us
@@ -81,8 +81,24 @@ export default function Header() {
                       text={
                         <span className={styles.userButtonContent}>
                           User
-                          <svg className={classNames(styles.dropdownArrow, dropdownOpen ? styles.open : "")} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <svg
+                            className={classNames(
+                              styles.dropdownArrow,
+                              dropdownOpen ? styles.open : "",
+                            )}
+                            width="12"
+                            height="8"
+                            viewBox="0 0 12 8"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1 1L6 6L11 1"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
                           </svg>
                         </span>
                       }
@@ -105,7 +121,10 @@ export default function Header() {
                   <Button onClick={() => router.push("/login")} text="Login" />
                 )}
               </div>
-              <div className={styles.menuIcon} onClick={() => setHeaderOpen(!headerOpen)}>
+              <div
+                className={styles.menuIcon}
+                onClick={() => setHeaderOpen(!headerOpen)}
+              >
                 <MenuIcon />
               </div>
               <div className={styles.line}></div>
@@ -113,7 +132,12 @@ export default function Header() {
           </div>
         </header>
       </div>
-      <div className={classNames(styles.mobileSidebar, headerOpen ? styles.show : styles.hide)}>
+      <div
+        className={classNames(
+          styles.mobileSidebar,
+          headerOpen ? styles.show : styles.hide,
+        )}
+      >
         <div className={styles.mobileSidebarTop}>
           <div className={styles.logo} onClick={() => setHeaderOpen(false)}>
             <Link href="/">
@@ -126,7 +150,10 @@ export default function Header() {
             </svg>
           </div>
         </div>
-        <div className={styles.mobileSidebarBody} onClick={() => setHeaderOpen(false)}>
+        <div
+          className={styles.mobileSidebarBody}
+          onClick={() => setHeaderOpen(false)}
+        >
           <Link href="/about-us" aria-label="About Us">
             About Us
           </Link>
@@ -159,8 +186,24 @@ export default function Header() {
               text={
                 <span className={styles.userButtonContent}>
                   User
-                  <svg className={classNames(styles.dropdownArrow, dropdownOpen ? styles.open : "")} width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    className={classNames(
+                      styles.dropdownArrow,
+                      dropdownOpen ? styles.open : "",
+                    )}
+                    width="12"
+                    height="8"
+                    viewBox="0 0 12 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 1L6 6L11 1"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </span>
               }
