@@ -256,20 +256,16 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
             }
 
             const response = await getPaymentUrl(paymentData);
-
-            console.log(response,"======response");
-            
-
-            // if (response?.payload?.code !== "00000") {
-            //     toast.error(
-            //         "A payment session is already active and will expire in 10 minutes. Please complete the current payment or try again after it expires."
-            //     );
-            // } else if (response?.payload?.data?.checkout_url) {
-            //     toast.success("Redirecting to payment...");
-            //     router.replace(response.payload.data.checkout_url);
-            // } else {
-            //     toast.error(response?.message || "Failed to process payment. Please try again.");
-            // }
+            if (response?.payload?.code !== "00000") {
+                toast.error(
+                    "A payment session is already active and will expire in 10 minutes. Please complete the current payment or try again after it expires."
+                );
+            } else if (response?.payload?.data?.checkout_url) {
+                toast.success("Redirecting to payment...");
+                router.replace(response.payload.data.checkout_url);
+            } else {
+                toast.error(response?.message || "Failed to process payment. Please try again.");
+            }
         } catch (error) {
             console.error("Payment error:", error);
             toast.error("Failed to process payment. Please try again.");

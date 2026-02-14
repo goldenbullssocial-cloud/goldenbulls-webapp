@@ -6,6 +6,7 @@ const BullImageMobile = '/assets/images/bull-mobile-about.png'
 import Button from '@/components/button'
 import { motion } from 'framer-motion'
 import DownloadApp from '@/components/downloadApp'
+import Link from 'next/link';
 
 /* Left Content Animation */
 const textVariants = {
@@ -68,7 +69,9 @@ export default function AboutUsBanner() {
                                 className={styles.buttonAlignment}
                                 variants={itemVariants}
                             >
-                                <Button text="Explore Courses" className={styles.fillbutton} />
+                                <Link href="/courses">
+                                    <Button text="Explore Courses" className={styles.fillbutton} />
+                                </Link>
                                 <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
                                     Download App
                                 </button>
