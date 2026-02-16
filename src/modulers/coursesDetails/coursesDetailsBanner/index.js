@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import styles from "./coursesDetailsBanner.module.scss";
 import Button from "@/components/button";
 import ClockIcon from "@/icons/clockIcon";
@@ -113,7 +114,8 @@ export default function CoursesDetailsBanner() {
     if (user) {
       router.push(`/recorded-course-details?id=${params?.id}&type=${courseType || "recorded"}`);
     } else {
-      router.push("/login");
+      const returnUrl = encodeURIComponent(`/recorded-course-details?id=${params?.id}&type=${courseType || "recorded"}`);
+      router.push(`/login?returnTo=${returnUrl}`);
     }
   };
 
@@ -189,7 +191,7 @@ export default function CoursesDetailsBanner() {
                       <li>{course?.instructor}</li>
                     </ul>
                   </div>
-                  <Button text={user && course?.isPayment ? (courseType === "live" ? "Meeting Link" : courseType === "physical" ? "Download Student ID" : "Enrolled") : "Enroll Now"} className={styles.buttonWidth} onClick={courseType === "live" ? handleJoinMeeting : handleEnrollClick} />
+                  <Button text={user && course?.isPayment ? (courseType === "live" ? "Meeting Link" : courseType === "physical" ? "Download Student ID" : "Enrolled") : "Enroll Now"} className={styles.buttonWidth} onClick={courseType === "live" ? handleEnrollClick : handleEnrollClick} />
                 </div>
               </div>
             </motion.div>

@@ -17,6 +17,7 @@ import BlogSection from "./blogSection";
 import GetCertified from "./getCertified";
 import ImageGallery from "./imageGallery";
 import DownloadApp from "@/components/downloadApp";
+import YouTube from "./youTube";
 
 export default function HomePage() {
   return (
@@ -30,6 +31,7 @@ export default function HomePage() {
       <MarqueeSection />
       <MeetTheFounder />
       <StudentSay />
+      <YouTube />
       <AutomateTrades />
       <JoinChannel />
       <RecognizedSection />
