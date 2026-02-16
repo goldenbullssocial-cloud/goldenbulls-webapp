@@ -58,21 +58,24 @@
         }
 
         :global(.swiper) {
-            overflow: visible;
+            overflow-x: clip !important;
+            overflow-y: visible !important;
         }
 
         :global(.swiper-wrapper) {
-            overflow: visible;
+            overflow: visible !important;
+            z-index: 10;
         }
 
         :global(.swiper-slide) {
-            overflow: visible;
+            overflow: visible !important;
         }
 
         :global(.swiper-pagination) {
             position: relative;
             margin-top: 40px;
             bottom: 0;
+            z-index: 1; // Ensure it stays below dropdowns
 
             @include respond-to("sm") {
                 margin-top: 30px;
@@ -157,7 +160,7 @@
     .box {
         background-image: url('/assets/images/card-img.png');
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: 100% 100%;
         width: 100%;
         padding: 49px 0 20px 0;
         border-radius: 16px;
@@ -172,16 +175,6 @@
         }
 
         .btn {
-            padding: 24px 0 0 0;
-
-            @include respond-to("xl") {
-                padding: 20px 0 0 0;
-            }
-
-            @include respond-to("sm") {
-                padding: 12px 0 0 0;
-            }
-
             button {
                 width: 100%;
                 display: flex;
@@ -202,7 +195,7 @@
 
                 // Enforce 2 lines
                 line-height: 1.4em;
-                height: 2.8em;
+                height: 2em;
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
                 line-clamp: 2;
@@ -227,7 +220,7 @@
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin: 12px 0 18px 0;
+                margin: 18px 0 18px 0;
                 cursor: pointer;
                 width: 100%;
 
@@ -480,12 +473,32 @@
         border-radius: 8px;
     }
 
+    .skeletonWrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        width: 100%;
+
+        @media (min-width: 576px) {
+            gap: 30px;
+        }
+
+        @media (min-width: 1024px) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (min-width: 1200px) {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
     .skeletonBox {
         background-image: url('/assets/images/card-img.png');
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: 100% 100%;
         width: 100%;
-        padding: 20px 0 20px 0;
+        padding: 49px 0 20px 0;
         border-radius: 16px;
     }
 

@@ -33,6 +33,11 @@ export default function Login() {
     const callback = searchParams.get("callback");
     const planData = searchParams.get("plan");
     const scroll = searchParams.get("scroll");
+    const returnTo = searchParams.get("returnTo");
+
+    if (returnTo) {
+      sessionStorage.setItem("returnTo", returnTo);
+    }
 
     if (callback && planData) {
       try {
@@ -122,6 +127,7 @@ export default function Login() {
         const callbackUrl = sessionStorage.getItem("callbackUrl");
         const selectedPlan = sessionStorage.getItem("selectedPlan");
         const scrollParam = sessionStorage.getItem("scrollParam");
+        const returnTo = sessionStorage.getItem("returnTo");
 
         if (callbackUrl && selectedPlan) {
           // Redirect to the original page with scroll parameter if present
@@ -133,6 +139,9 @@ export default function Login() {
           sessionStorage.removeItem("callbackUrl");
           sessionStorage.removeItem("selectedPlan");
           sessionStorage.removeItem("scrollParam");
+        } else if (returnTo) {
+          router.push(returnTo);
+          sessionStorage.removeItem("returnTo");
         } else {
           // Default redirect
           router.push("/library");

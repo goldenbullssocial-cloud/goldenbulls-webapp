@@ -81,43 +81,9 @@ export default function AutomateTrades() {
                 <div className={styles.relative}>
                     {loading ? (
                         <div className={styles.paginationWrapper}>
-                            <Swiper
-                                effect={"coverflow"}
-                                grabCursor={true}
-                                loop={false}
-                                slidesPerView={"4"}
-                                spaceBetween={24}
-                                speed={800}
-                                pagination={{
-                                    clickable: true,
-                                }}
-                                modules={[Pagination, Navigation]}
-                                breakpoints={{
-                                    1800: {
-                                        slidesPerView: 4,
-                                    },
-                                    1200: {
-                                        slidesPerView: 4,
-                                    },
-                                    1024: {
-                                        slidesPerView: 2,
-                                    },
-                                    576: {
-                                        slidesPerView: 1,
-                                        spaceBetween: 30,
-                                    },
-                                    480: {
-                                        slidesPerView: 1,
-                                        spaceBetween: 12,
-                                    },
-                                    360: {
-                                        slidesPerView: 1,
-                                        spaceBetween: 10,
-                                    },
-                                }}
-                            >
+                            <div className={styles.skeletonWrapper}>
                                 {Array.from({ length: 4 }).map((_, index) => (
-                                    <SwiperSlide key={index}>
+                                    <div key={index} className={styles.skeletonSlide}>
                                         <div className={`${styles.box} ${styles.skeletonBox}`}>
                                             <div className={styles.skeletonDetailsBox}>
                                                 <div className={`${styles.statItem} ${styles.skeletonText} ${styles.skeleton}`} style={{ width: '120px', height: '16px', marginBottom: '8px' }} />
@@ -138,9 +104,9 @@ export default function AutomateTrades() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </SwiperSlide>
+                                    </div>
                                 ))}
-                            </Swiper>
+                            </div>
                         </div>
                     ) : bots?.length > 0 ? (
                         <>
