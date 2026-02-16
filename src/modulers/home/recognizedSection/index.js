@@ -60,15 +60,7 @@ export default function RecognizedSection() {
                   const logo = mediaLogos[index % mediaLogos.length];
                   return (
                     <div className={styles.smallBox} key={`marquee1-${index}`}>
-                      <img
-                        src={logo.src}
-                        alt={logo.alt}
-                        style={{
-                          width: "120px",
-                          height: "30px",
-                          objectFit: "contain",
-                        }}
-                      />
+                      <img src={logo.src} alt={logo.alt} />
                     </div>
                   );
                 })}
@@ -80,15 +72,7 @@ export default function RecognizedSection() {
                   const logo = mediaLogos[(index + 2) % mediaLogos.length];
                   return (
                     <div className={styles.smallBox} key={`marquee2-${index}`}>
-                      <img
-                        src={logo.src}
-                        alt={logo.alt}
-                        style={{
-                          width: "120px",
-                          height: "30px",
-                          objectFit: "contain",
-                        }}
-                      />
+                      <img src={logo.src} alt={logo.alt} />
                     </div>
                   );
                 })}
@@ -99,15 +83,7 @@ export default function RecognizedSection() {
                 const logo = mediaLogos[(index + 4) % mediaLogos.length];
                 return (
                   <div className={styles.smallBox} key={`marquee3-${index}`}>
-                    <img
-                      src={logo.src}
-                      alt={logo.alt}
-                      style={{
-                        width: "120px",
-                        height: "30px",
-                        objectFit: "contain",
-                      }}
-                    />
+                    <img src={logo.src} alt={logo.alt} />
                   </div>
                 );
               })}

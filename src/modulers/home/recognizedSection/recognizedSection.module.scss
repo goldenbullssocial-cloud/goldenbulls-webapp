@@ -61,11 +61,14 @@
 
       .smallBox {
         border-radius: 12px;
-        width: fit-content;
+        width: 203px;
+        height: 78px;
         margin-right: 16px;
         border: 1px solid rgba(204, 204, 204, 0);
         background: rgba(255, 255, 255, 0.1);
-        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         @include respond-to("sm") {
           padding: 18px 12px;
@@ -73,6 +76,9 @@
 
         img {
           display: block;
+          width: 180px;
+          height: 60px;
+          object-fit: contain;
         }
       }
 
