@@ -13,6 +13,8 @@ const mediaLogos = [
   { src: "/assets/images/nbc-news.svg", alt: "NBC News" },
   { src: "/assets/images/times.svg", alt: "Times" },
   { src: "/assets/images/newsNation.png", alt: "News Nation" },
+  { src: "/assets/images/money.svg", alt: "Money" },
+  { src: "/assets/images/et.jpeg", alt: "ET" },
 ];
 export default function RecognizedSection() {
   return (
