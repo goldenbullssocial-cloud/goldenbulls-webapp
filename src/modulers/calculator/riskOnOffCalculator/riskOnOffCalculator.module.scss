@@ -91,6 +91,24 @@
     display: flex;
     gap: 1.5rem;
     padding: 0 2rem;
+    position: relative;
+  }
+
+  // Alternating row backgrounds that span full width
+  .alternatingRow {
+    position: absolute;
+    left: -15rem; // Account for contentWrapper padding
+    right: -1rem; // Account for contentWrapper padding
+    height: 3rem;
+    z-index: 2;
+
+    &:nth-child(odd) {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
   }
 
   // Asset List
@@ -105,6 +123,10 @@
       align-items: center;
       gap: 0.5rem;
       height: 3rem;
+      padding: 0 0.75rem;
+      border-radius: 0.5rem;
+      position: relative;
+      z-index: 1;
 
       .assetIcons {
         display: flex;
@@ -127,11 +149,12 @@
     gap: 0.75rem;
     position: relative;
     align-items: stretch;
+    z-index: 1;
   }
 
   // Scale Sliders (left and right)
   .scaleSlider {
-    width: 4rem;
+    // width: 4rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -143,17 +166,20 @@
       inset: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 1.75rem;
+      width: 2rem;
       background-color: #4a4a4a;
       border-radius: 0.625rem;
+      z-index: 1;
     }
 
     &.leftSlider .scaleSliderBar {
-      background-color: #c2185b;
+      background-color: #ef4444;
+      z-index: 3;
     }
 
     &.rightSlider .scaleSliderBar {
       background-color: #4caf50;
+      z-index: 3;
     }
 
     .scaleLabel {
@@ -176,6 +202,7 @@
   .columnWrapper {
     flex: 1;
     position: relative;
+    z-index: 2;
 
     .columnLabel {
       position: absolute;
@@ -196,11 +223,10 @@
   // Risk Column
   .riskColumn {
     height: 100%;
-    background: #c2185b;
+    background: #db4040;
     border-radius: 1.5rem;
     position: relative;
     overflow: visible;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 
     .stripesPattern {
       position: absolute;
@@ -210,19 +236,6 @@
 
     // Corner circles for scale markers
     &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      width: 1.25rem;
-      height: 1.25rem;
-      background-color: #c2185b;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    }
-
     &::before {
       top: 0.5rem;
     }
@@ -235,31 +248,15 @@
   // Risk-On Column
   .riskOnColumn {
     height: 100%;
-    background: #4caf50;
+    background: #45a048;
     border-radius: 1.5rem;
     position: relative;
     overflow: visible;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 
     .stripesPatternReverse {
       position: absolute;
       inset: 0;
       opacity: 0;
-    }
-
-    // Corner circles for scale markers
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      width: 1.25rem;
-      height: 1.25rem;
-      background-color: #4caf50;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
     }
 
     &::before {
@@ -313,7 +310,7 @@
     height: 2rem;
     background-color: #ffffff;
     border-radius: 9999px;
-    border: 3px solid #1a1a1a;
+    border: 3px solid #727070;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     transform: translate(-50%, -50%);
     z-index: 20;

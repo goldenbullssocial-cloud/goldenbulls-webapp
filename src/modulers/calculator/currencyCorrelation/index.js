@@ -5,17 +5,9 @@ import axios from "axios";
 
 // Correlation Bar Component
 const CorrelationBar = ({ pair, correlation }) => {
-  const getBarColor = (corr) => {
-    if (corr > 0.7) return "#22c55e";
-    if (corr > 0.3) return "#84cc16";
-    if (corr > -0.3) return "#94a3b8";
-    if (corr > -0.7) return "#f97316";
-    return "#ef4444";
-  };
-
-  const barColor = getBarColor(correlation);
+  const barColor = correlation >= 0 ? "#22C55E" : "#EF4444";
   const barWidth = Math.abs(correlation) * 100;
-  
+
   const isPositive = correlation >= 0;
 
   return (
@@ -276,7 +268,7 @@ export default function CurrencyCorrelation() {
               {currencyOptions.map((pair) => {
                 if (pair === selectedPair) return null;
                 const pairCorr = correlationData[pair] || 0;
-               
+
                 return (
                   <CorrelationBar
                     key={pair}
@@ -286,7 +278,6 @@ export default function CurrencyCorrelation() {
                 );
               })}
             </div>
-
           </>
         )}
       </div>
