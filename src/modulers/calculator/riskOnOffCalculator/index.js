@@ -26,18 +26,7 @@ export default function RiskOnOffCalculator() {
 
   // Get color based on zone
   const getColorByZone = (zone) => {
-    switch (zone) {
-      case "STRONG_RISK_OFF":
-        return { color: "#E91E63", textColor: "#E91E63" };
-      case "WEAK_RISK_OFF":
-        return { color: "#FF9800", textColor: "#FF9800" };
-      case "WEAK_RISK_ON":
-        return { color: "#8BC34A", textColor: "#8BC34A" };
-      case "STRONG_RISK_ON":
-        return { color: "#4CAF50", textColor: "#4CAF50" };
-      default:
-        return { color: "#9E9E9E", textColor: "#9E9E9E" };
-    }
+    return { color: "#ecececff", textColor: "#968d8dff" };
   };
 
   useEffect(() => {
@@ -54,9 +43,12 @@ export default function RiskOnOffCalculator() {
           const apiData = response.data.data;
 
           // Calculate global score as average of all normalizedRisk values
-          const totalScore = apiData.reduce((sum, item) => sum + item.normalizedRisk, 0);
+          const totalScore = apiData.reduce(
+            (sum, item) => sum + item.normalizedRisk,
+            0,
+          );
           const avgScore = Math.round(totalScore / apiData.length);
-          
+
           // Determine global zone based on average score
           let zone = "NEUTRAL";
           if (avgScore >= 0 && avgScore < 25) {
@@ -188,15 +180,15 @@ export default function RiskOnOffCalculator() {
               {indicators.map((item, index) => {
                 // Position based on 0-100 scale across entire chart area
                 const leftPosition = item.position;
-                
+
                 return (
                   <div
                     key={index}
                     className={styles.indicatorDot}
-                    style={{ 
-                      top: `${indicators.indexOf(item) * (100 / (indicators.length + 1)) + (100 / (indicators.length + 1))}%`,
+                    style={{
+                      top: `${index * 4 + 1.5}rem`, // Align with center of each row (index * 4rem + 1.5rem offset)
                       left: `${leftPosition}%`,
-                      backgroundColor: item.color
+                      backgroundColor: item.color,
                     }}
                   ></div>
                 );
@@ -204,8 +196,12 @@ export default function RiskOnOffCalculator() {
 
               <div className={`${styles.scaleSlider} ${styles.leftSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>0</div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>0</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
+                  0
+                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
+                  0
+                </div>
               </div>
 
               <div className={styles.columnWrapper}>
@@ -217,21 +213,30 @@ export default function RiskOnOffCalculator() {
 
               <div className={`${styles.scaleSlider} ${styles.leftSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>35</div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>35</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
+                  35
+                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
+                  35
+                </div>
               </div>
 
               <div className={styles.centerSlider}>
                 <div className={styles.sliderLine}></div>
-                <div className={styles.sliderHandle}></div>
                 <div className={`${styles.sliderLabel} ${styles.top}`}>50</div>
-                <div className={`${styles.sliderLabel} ${styles.bottom}`}>50</div>
+                <div className={`${styles.sliderLabel} ${styles.bottom}`}>
+                  50
+                </div>
               </div>
 
               <div className={`${styles.scaleSlider} ${styles.rightSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>65</div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>65</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
+                  65
+                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
+                  65
+                </div>
               </div>
 
               <div className={styles.columnWrapper}>
@@ -243,9 +248,24 @@ export default function RiskOnOffCalculator() {
 
               <div className={`${styles.scaleSlider} ${styles.rightSlider}`}>
                 <div className={styles.scaleSliderBar}></div>
-                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>100</div>
-                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>100</div>
+                <div className={`${styles.scaleLabel} ${styles.scaleTop}`}>
+                  100
+                </div>
+                <div className={`${styles.scaleLabel} ${styles.scaleBottom}`}>
+                  100
+                </div>
               </div>
+
+              {/* Alternating row backgrounds */}
+              {indicators.map((item, index) => (
+                <div
+                  key={`row-${index}`}
+                  className={styles.alternatingRow}
+                  style={{
+                    top: `${index * 4}rem`, // 3rem height + 1rem gap = 4rem total
+                  }}
+                />
+              ))}
             </div>
           </div>
 
