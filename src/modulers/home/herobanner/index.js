@@ -1,10 +1,11 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import styles from './herobanner.module.scss'
 import Button from '@/components/button'
 import Link from 'next/link'
 import DownloadApp from '@/components/downloadApp'
+import { getCookie } from '../../../../cookie'
 
 const BullImage = '/assets/images/bull.png'
 const BullImageMobile = '/assets/images/hero-banner-bull.png'
@@ -46,6 +47,12 @@ const bullVariants = {
 
 export default function Herobanner() {
     const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const userToken = getCookie("userToken");
+        setIsAuthenticated(!!userToken);
+    }, []);
 
     return (
         <div className={styles.herobanner}>
@@ -75,7 +82,7 @@ export default function Herobanner() {
                                 className={styles.buttonAlignment}
                                 variants={itemVariants}
                             >
-                                <Link href="/courses">
+                                <Link href={isAuthenticated ? "/recorded-courses" : "/login?returnTo=/recorded-courses"}>
                                     <Button text="Explore Courses" className={styles.fillbutton} />
                                 </Link>
                                 <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
