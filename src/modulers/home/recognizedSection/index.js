@@ -81,7 +81,7 @@ export default function RecognizedSection() {
               </Marquee>
             </div>
             <Marquee>
-              {[...Array(9)].map((_, index) => {
+              {[...Array(10)].map((_, index) => {
                 const logo = mediaLogos[(index + 4) % mediaLogos.length];
                 return (
                   <div className={styles.smallBox} key={`marquee3-${index}`}>
