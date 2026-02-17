@@ -163,7 +163,7 @@ export default function TopCourses() {
                   rating={item?.averageRating ? item?.averageRating : "0.0"}
                   image={item?.courseVideo}
                   location={item?.location || ""}
-                  btnLink={user ? `/recorded-course-details?id=${item?._id}&type=${activeTab}` : `/login?returnTo=/courses/${item._id}?courseType=${activeTab}  `}
+                  btnLink={user ? `/recorded-course-details?id=${item?._id}&type=${activeTab}` : `/login?returnTo=${encodeURIComponent(`/recorded-course-details?id=${item?._id}&type=${activeTab}`)}`}
                   btnTitle={item?.isPayment ? `Enrolled` : `Enroll Now`}
                   isFree={item?.isFree}
                 />

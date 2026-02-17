@@ -161,7 +161,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                         )}
                     </div>
                     <div className={styles.textgrid}>
-                        <span>
+                        <span title={user}>
                             {user}
                         </span>
                         <div className={classNames(styles.arrow, { [styles.open]: isDropdownOpen })}>

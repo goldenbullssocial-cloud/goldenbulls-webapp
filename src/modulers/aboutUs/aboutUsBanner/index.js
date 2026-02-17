@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './aboutUsBanner.module.scss';
 const BullImage = '/assets/images/about-banner.png'
 const BullImageMobile = '/assets/images/bull-mobile-about.png'
@@ -7,6 +7,7 @@ import Button from '@/components/button'
 import { motion } from 'framer-motion'
 import DownloadApp from '@/components/downloadApp'
 import Link from 'next/link';
+import { getCookie } from '../../../../cookie'
 
 /* Left Content Animation */
 const textVariants = {
@@ -42,6 +43,12 @@ const bullVariants = {
 }
 export default function AboutUsBanner() {
     const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const userToken = getCookie("userToken");
+        setIsAuthenticated(!!userToken);
+    }, []);
 
     return (
         <div className={styles.aboutUsBanner}>
@@ -69,7 +76,7 @@ export default function AboutUsBanner() {
                                 className={styles.buttonAlignment}
                                 variants={itemVariants}
                             >
-                                <Link href="/courses">
+                                <Link href={isAuthenticated ? "/recorded-courses" : "/login?returnTo=/recorded-courses"}>
                                     <Button text="Explore Courses" className={styles.fillbutton} />
                                 </Link>
                                 <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>

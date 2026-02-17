@@ -99,7 +99,6 @@ export default function Register() {
 
   const handleSignup = () => {
     const firstNameError = validateName(data.firstName, "First Name");
-    const lastNameError = validateName(data.lastName, "Last Name");
     const emailError = validateEmail(data.email);
     const passwordError = validatePassword(data.password);
     const confirmPasswordError = validateConfirmPassword(
@@ -109,7 +108,6 @@ export default function Register() {
 
     const newErrors = {
       firstName: firstNameError,
-      lastName: lastNameError,
       email: emailError,
       password: passwordError,
       confirmPassword: confirmPasswordError,
@@ -120,7 +118,6 @@ export default function Register() {
 
     if (
       firstNameError ||
-      lastNameError ||
       emailError ||
       passwordError ||
       confirmPasswordError
