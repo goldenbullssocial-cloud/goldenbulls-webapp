@@ -22,7 +22,7 @@ export default function TrustedSection() {
             <div className='container-md'>
                 <div className={styles.title}>
                     <h2>
-                        trusted by over  learers
+                        trusted by over  leaders
                     </h2>
                     <p>
                         Over 4,000 learners have chosen our academy to build their understanding of global financial markets and trading concepts. From beginners to experienced market enthusiasts, our students come from diverse backgrounds and learning goals. Our structured courses focus on knowledge, discipline, and skill development—helping
