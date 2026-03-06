@@ -267,7 +267,7 @@ const BotCard = ({ bot }) => {
                                         setOpen(false);
                                     }}
                                 >
-                                    {plan?.initialPrice}$/{plan?.planType}
+                                    ${plan?.initialPrice} / {plan?.planType}
                                 </div>
                             ))}
                         </div>
