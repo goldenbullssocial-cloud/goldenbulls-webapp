@@ -407,71 +407,128 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
         }
     };
 
-    const handleDownloadStudentID = async () => {
-        if (isDownloadingStudentID) return;
+  const handleDownloadStudentID = async () => {
+    if (isDownloadingStudentID) return;
+    setIsDownloadingStudentID(true);
 
-        setIsDownloadingStudentID(true);
-        try {
-            if (!id) {
-                throw new Error("No course selected");
-            }
+    try {
+      const batch = courseData?.payment?.[0]?.batchId;
+      const center = batch?.centerId;
+      const firstName = userProfile?.firstName || "";
+      const lastName = userProfile?.lastName || "";
+      const fullName = `${firstName} ${lastName}`.trim() || "Student";
+      const courseName = courseData?.CourseName || "Bull Market";
 
-            const batchId = courseData?.payment?.[0]?.batchId?._id;
-            if (!batchId) {
-                throw new Error("No batch selected");
-            }
+      const formatDate = (dateStr) => {
+        if (!dateStr) return "N/A";
+        const d = new Date(dateStr);
+        return d.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      };
 
-            const response = await downloadStudentID(id, batchId);
+      const startDate = formatDate(batch?.startDate || batch?.startTime);
+      const endDate = formatDate(batch?.endDate || batch?.endTime);
+      const location = center
+        ? [center.city, center.state, center.country].filter(Boolean).join(", ")
+        : userProfile?.city || "N/A";
 
-            if (!response) {
-                throw new Error("No response received from the server");
-            }
+      const rawId = courseData?.payment?.[0]?._id || courseData?._id || "";
+      const studentId = rawId
+        ? "CFV" + rawId.toString().slice(-7).toUpperCase()
+        : "CFV0000000";
 
-            const fileUrl = typeof response === "object" ? response.payload : response;
+      const profilePhotoUrl = userProfile?.profileImage || "https://img.freepik.com/free-photo/front-view-business-woman-suit_23-2148603018.jpg?semt=ais_hybrid&w=740&q=80";
 
-            if (!fileUrl) {
-                throw new Error("Student ID URL is missing in the response");
-            }
+      // ── Create Template Container ──────────────────────────────────
+      const container = document.createElement("div");
+      container.style.position = "absolute";
+      container.style.left = "-9999px";
+      container.style.top = "0";
+      container.style.width = "390px";
+      
+      container.innerHTML = `
+        <div style="width: 390px; background: #0F0F0F; color: #fff; position: relative; overflow: hidden; font-family: 'Outfit', sans-serif;">
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+            </style>
+            <div>
+                <img style="display: block; width: 100%;" src="https://i.ibb.co/27gDVfSr/Group-1321314217.png" alt="header" />
+            </div>
+            <div style="display: flex; padding: 40px 0 30px 0; justify-content: center; align-items: center;">
+                <img src="${profilePhotoUrl}"
+                    style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid #F9F490;" />
+            </div>
+            <div style="padding: 0 30px;">
+                <h2 style="font-size: 24px; font-weight: 500; color: #fff; text-align: center; margin: 0 0 6px 0; text-transform: capitalize;">
+                    ${fullName}
+                </h2>
+                <p style="font-size: 16px; color: #fff; font-weight: 400; margin: 0 0 24px 0; text-align: center; text-transform: uppercase;">
+                    ${courseName}
+                </p>
+                <div style="display: grid; grid-template-columns: 135px 1fr; gap: 30px; align-items: start; padding: 0 0 16px 0;">
+                    <p style="text-align: right; font-size: 15px; color: #fff; font-weight: 400; margin: 0;">Student ID:</p>
+                    <p style="font-size: 15px; color: #fff; font-weight: 400; margin: 0;">${studentId}</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 135px 1fr; gap: 30px; align-items: start; padding: 0 0 16px 0;">
+                    <p style="text-align: right; font-size: 15px; color: #fff; font-weight: 400; margin: 0;">Course Begin Date:</p>
+                    <p style="font-size: 15px; color: #fff; font-weight: 400; margin: 0;">${startDate}</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 135px 1fr; gap: 30px; align-items: start; padding: 0 0 16px 0;">
+                    <p style="text-align: right; font-size: 15px; color: #fff; font-weight: 400; margin: 0;">Course End Date:</p>
+                    <p style="font-size: 15px; color: #fff; font-weight: 400; margin: 0;">${endDate}</p>
+                </div>
+                <div style="display: grid; grid-template-columns: 135px 1fr; gap: 30px; align-items: start;">
+                    <p style="text-align: right; font-size: 15px; color: #fff; font-weight: 400; margin: 0;">Center Location:</p>
+                    <p style="font-size: 15px; color: #fff; font-weight: 400; margin: 0;">${location}</p>
+                </div>
+                <div style="padding: 40px 0;">
+                    <p style="margin: 0 auto; text-align: center; font-size: 14px; color: #FFFFFFCC; line-height: 1.4;">
+                        This ID Will be valid till the course is completed. <br />After the course is completed this ID will be void.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <img style="width: 100%; display: block;" src="https://i.ibb.co/9HSHD3Jz/Group-1171277092.png" alt="footer" />
+            </div>
+        </div>
+      `;
+      document.body.appendChild(container);
 
-            const fileRes = await fetch(fileUrl);
-            if (!fileRes.ok) throw new Error("Failed to fetch student ID");
+      // ── Capture and PDF Generation ─────────────────────────────────
+      const html2canvas = (await import("html2canvas")).default;
+      const { jsPDF } = await import("jspdf");
 
-            const blob = await fileRes.blob();
+      const canvas = await html2canvas(container, {
+        scale: 4, // 4x for high resolution
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#0F0F0F",
+        logging: false,
+      });
 
-            const contentType = fileRes.headers.get("content-type") || "application/octet-stream";
+      const imgData = canvas.toDataURL("image/png", 1.0);
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: [390, canvas.height / (canvas.width / 390)]
+      });
 
-            const extensionMap = {
-                "application/pdf": "pdf",
-                "image/jpeg": "jpg",
-                "image/png": "png",
-                "image/webp": "webp",
-                "text/html": "html",
-                "application/json": "json",
-            };
+      pdf.addImage(imgData, "PNG", 0, 0, 390, pdf.internal.pageSize.getHeight());
+      pdf.save(`student-id-${fullName.replace(/\s+/g, "-").toLowerCase()}.pdf`);
 
-            const extension = extensionMap[contentType] || "bin";
-            const fileName = `student-${Date.now()}.${extension}`;
+      document.body.removeChild(container);
+      toast.success("Student ID downloaded successfully!");
+      setIsDownloadingStudentID(false);
 
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-
-            setTimeout(() => {
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-            }, 100);
-
-            toast.success("Student ID downloaded successfully!");
-        } catch (error) {
-            console.error("Download error:", error);
-            toast.error(error.message || "Failed to download student ID");
-        } finally {
-            setIsDownloadingStudentID(false);
-        }
-    };
+    } catch (error) {
+      console.error("Student ID generation error:", error);
+      toast.error(error.message || "Failed to generate student ID");
+      setIsDownloadingStudentID(false);
+    }
+  };
 
     // Calculate average completion percentage
     const averageCompletion = chapters && chapters.length > 0
