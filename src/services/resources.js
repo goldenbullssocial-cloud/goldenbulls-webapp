@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const getAuthToken = () => {
     if (typeof window !== "undefined") {
