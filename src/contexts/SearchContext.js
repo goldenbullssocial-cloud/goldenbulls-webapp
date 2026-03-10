@@ -5,18 +5,31 @@ const SearchContext = createContext();
 
 export function SearchProvider({ children }) {
     const [searchQuery, setSearchQuery] = useState('');
+    const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
     };
 
     const handleSearch = () => {
-        // Search is handled by filtering in real-time via onChange
-        // This function can be used for additional search actions if needed
+        setSubmittedSearchQuery(searchQuery);
+    };
+
+    const clearSearch = () => {
+        setSearchQuery('');
+        setSubmittedSearchQuery('');
     };
 
     return (
-        <SearchContext.Provider value={{ searchQuery, handleSearchChange, handleSearch, setSearchQuery }}>
+        <SearchContext.Provider value={{ 
+            searchQuery, 
+            submittedSearchQuery, 
+            handleSearchChange, 
+            handleSearch, 
+            setSearchQuery,
+            setSubmittedSearchQuery,
+            clearSearch
+        }}>
             {children}
         </SearchContext.Provider>
     );

@@ -21,8 +21,7 @@ export default function PaymentHistory() {
   const [total, setTotal] = useState(0);
   const limit = 10;
   const [loading, setLoading] = useState(false);
-  const { searchQuery } = useSearch();
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const { submittedSearchQuery } = useSearch();
   const [showMetaModal, setShowMetaModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [metaAccountInput, setMetaAccountInput] = useState("");
@@ -31,25 +30,14 @@ export default function PaymentHistory() {
   const [metaAccountError, setMetaAccountError] = useState("");
   const [loadingInvoices, setLoadingInvoices] = useState({});
 
-  // Debounce search query with 500ms delay
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [searchQuery]);
-
-  // Filter payment data based on debounced search query
+  // Filter payment data based on submitted search query
   const filteredPaymentData = paymentData.filter((item) => {
-    if (!debouncedSearchQuery.trim()) return true;
+    if (!submittedSearchQuery.trim()) return true;
 
     const productName = item.courseId?.CourseName?.toLowerCase() || "";
     const transactionId = item?.orderId?.toLowerCase() || "";
     const status = item?.status?.toLowerCase() || "";
-    const query = debouncedSearchQuery.toLowerCase();
+    const query = submittedSearchQuery.toLowerCase();
 
     return (
       productName.includes(query) ||

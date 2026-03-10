@@ -28,6 +28,7 @@ export const getAllResources = async ({ page = 1, limit = 10, search = "" } = {}
         const res = await axios.get(`${BaseUrl}/resource/getResources?${params.toString()}`, {
             headers: getHeaders(),
         });
+
         return res.data;
     } catch (error) {
         console.error("Error fetching resources", error);

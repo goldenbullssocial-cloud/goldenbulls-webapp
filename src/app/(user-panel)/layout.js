@@ -5,11 +5,17 @@ import React, { useEffect, useState } from 'react'
 import { getSocket } from '@/utils/webSocket'
 import MobileHeader from '@/components/mobileHeader'
 import { SearchProvider, useSearch } from '@/contexts/SearchContext'
+import { usePathname } from 'next/navigation'
 
 function LayoutContent({ children }) {
     const [toogle, setToogle] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
-    const { searchQuery, handleSearchChange, handleSearch } = useSearch();
+    const { searchQuery, handleSearchChange, handleSearch, clearSearch } = useSearch();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        clearSearch();
+    }, [pathname]);
 
     useEffect(() => {
         const socket = getSocket();
