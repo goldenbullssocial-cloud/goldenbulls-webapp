@@ -19,6 +19,7 @@ const Logo = "/assets/logo/logo.svg";
 const errorMessages = {
   EMAIL_ALREADY_EXISTS: "This email is already registered.",
   SERVER_ERROR: "Something went wrong. Please try again.",
+  "Disposable Email Detection: Temporary emails are not allowed.": "Temporary emails are not allowed. Please use a valid email address.",
 };
 
 export default function Register() {
@@ -149,23 +150,25 @@ export default function Register() {
             confirmPassword: "",
             submit: "",
           });
-          router.push("/login"); // Fixed to /login as per previous correction
+          router.push("/login");
         } else {
           setIsSubmitting(false);
-          toast.error(
-            errorMessages[response?.message] ??
-            "User Signup failed. Please try again.",
-          );
+          const message = errorMessages[response?.message] || response?.message || "User Signup failed. Please try again.";
+          toast.error(message);
+          setErrors((prev) => ({
+            ...prev,
+            submit: message,
+          }));
         }
       })
       .catch((error) => {
         setIsSubmitting(false);
         const serverMessage = error.response?.data?.message;
+        const message = (serverMessage && errorMessages[serverMessage]) || serverMessage || "User Signup failed. Please try again.";
+        toast.error(message);
         setErrors((prev) => ({
           ...prev,
-          submit:
-            (serverMessage && errorMessages[serverMessage]) ||
-            "User Signup failed. Please try again.",
+          submit: message,
         }));
       });
   };

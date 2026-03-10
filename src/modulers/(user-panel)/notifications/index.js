@@ -17,27 +17,15 @@ export default function () {
     const [isLoading, setIsLoading] = useState(true);
     const notificationsRef = React.useRef(notifications);
     const router = useRouter();
-    const { searchQuery } = useSearch();
-    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+    const { submittedSearchQuery } = useSearch();
 
-    // Debounce search query with 500ms delay
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearchQuery(searchQuery);
-        }, 500);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [searchQuery]);
-
-    // Filter notifications based on debounced search query
+    // Filter notifications based on submitted search query
     const filteredNotifications = notifications.filter(notification => {
-        if (!debouncedSearchQuery.trim()) return true;
+        if (!submittedSearchQuery.trim()) return true;
 
         const title = notification?.title?.toLowerCase() || '';
         const description = notification?.description?.toLowerCase() || '';
-        const query = debouncedSearchQuery.toLowerCase();
+        const query = submittedSearchQuery.toLowerCase();
 
         return title.includes(query) || description.includes(query);
     });

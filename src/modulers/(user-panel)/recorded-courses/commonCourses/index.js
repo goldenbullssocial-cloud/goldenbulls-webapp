@@ -17,19 +17,7 @@ export default function CommonCourses({ title, activeType, excludeCourseId }) {
     const router = useRouter();
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { searchQuery } = useSearch();
-    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
-
-    // Debounce search query with 500ms delay
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearchQuery(searchQuery);
-        }, 500);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [searchQuery]);
+    const { submittedSearchQuery } = useSearch();
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -39,7 +27,7 @@ export default function CommonCourses({ title, activeType, excludeCourseId }) {
                     page: 1,
                     limit: 10,
                     courseType: activeType || "recorded",
-                    ...(debouncedSearchQuery && { searchQuery: debouncedSearchQuery })
+                    ...(submittedSearchQuery && { searchQuery: submittedSearchQuery })
                 };
 
                 const response = await getCourses(params);
@@ -67,7 +55,7 @@ export default function CommonCourses({ title, activeType, excludeCourseId }) {
         if (activeType) {
             fetchCourses();
         }
-    }, [activeType, excludeCourseId, debouncedSearchQuery]);
+    }, [activeType, excludeCourseId, submittedSearchQuery]);
 
     return (
         <div className={styles.commonCourses}>

@@ -12,6 +12,7 @@ import AlgobotsIcon from '@/icons/algobotsIcon';
 import NotificationsIcon from '@/icons/notificationsIcon';
 import PaymentIcon from '@/icons/paymentIcon';
 import ReferIcon from '@/icons/referIcon';
+import ResourcesIcon from '@/icons/resourcesIcon';
 import classNames from 'classnames';
 const Logo = '/assets/logo/logo.svg';
 const ProfileIcon = '/assets/icons/profileIcon.svg';
@@ -106,7 +107,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                 <Link href='/algobots' className={classNames({ [styles.active]: isActive('/algobots') }, styles.menu)}>
                     <AlgobotsIcon />
                     <span>
-                        Algobots
+                        Marketplace
                     </span>
                 </Link>
                 <Link href='/notifications' className={classNames({ [styles.active]: isActive('/notifications') }, styles.menu)}>
@@ -132,6 +133,12 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                     <ReferIcon />
                     <span>
                         Refer and Earn
+                    </span>
+                </Link>
+                <Link href='/resources' className={classNames({ [styles.active]: isActive('/resources') }, styles.menu)}>
+                    <ResourcesIcon />
+                    <span>
+                        Resources
                     </span>
                 </Link>
             </div>

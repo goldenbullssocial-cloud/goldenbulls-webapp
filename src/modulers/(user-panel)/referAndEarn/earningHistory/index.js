@@ -14,25 +14,13 @@ export default function EarningHistory({ activeTab }) {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const limit = 10;
-    const { searchQuery } = useSearch();
-    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+    const { submittedSearchQuery } = useSearch();
 
-    // Debounce search query with 500ms delay
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearchQuery(searchQuery);
-        }, 500);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [searchQuery]);
-
-    // Filter history data based on debounced search query
+    // Filter history data based on submitted search query
     const filteredHistoryData = historyData.filter(item => {
-        if (!debouncedSearchQuery.trim()) return true;
+        if (!submittedSearchQuery.trim()) return true;
 
-        const query = debouncedSearchQuery.toLowerCase();
+        const query = submittedSearchQuery.toLowerCase();
         const isEarning = activeTab === 'Earning History';
 
         if (isEarning) {

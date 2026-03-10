@@ -27,25 +27,13 @@ const getYouTubeEmbedUrl = (url) => {
 export default function Algobots() {
     const [bots, setBots] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { searchQuery } = useSearch();
-    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
-
-    // Debounce search query with 500ms delay
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearchQuery(searchQuery);
-        }, 500);
-
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [searchQuery]);
+    const { submittedSearchQuery } = useSearch();
 
     useEffect(() => {
         const fetchBots = async () => {
             try {
                 setLoading(true);
-                const res = await getAlgobot('', debouncedSearchQuery);
+                const res = await getAlgobot('', submittedSearchQuery);
 
                 if (res?.payload) {
                     setBots(res?.payload?.result);
@@ -60,7 +48,7 @@ export default function Algobots() {
         };
 
         fetchBots();
-    }, [debouncedSearchQuery]);
+    }, [submittedSearchQuery]);
     return (
         <div className={styles.algobotsPageAlignment}>
             <div className={styles.title}>

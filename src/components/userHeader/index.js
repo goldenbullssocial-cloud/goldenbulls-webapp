@@ -10,6 +10,16 @@ export default function UserHeader({ searchValue = '', onSearchChange, onSearch 
     const [user, setUser] = useState(null);
     const pathname = usePathname();
 
+    const getPlaceholder = () => {
+        if (pathname.includes('algobots')) return 'Search Algobots...';
+        if (pathname.includes('resources')) return 'Search Resources...';
+        if (pathname.includes('recorded-courses')) return 'Search Courses...';
+        if (pathname.includes('payment-history')) return 'Search Payments...';
+        if (pathname.includes('notifications')) return 'Search Notifications...';
+        if (pathname.includes('library')) return 'Search Library...';
+        return 'Search here...';
+    };
+
     const showSearchBar = pathname !== '/profile';
 
     useEffect(() => {
@@ -54,9 +64,10 @@ export default function UserHeader({ searchValue = '', onSearchChange, onSearch 
                 <div className={styles.rightContent}>
                     <input
                         type='text'
-                        placeholder='Search Courses and Algobots'
+                        placeholder={getPlaceholder()}
                         value={searchValue}
                         onChange={onSearchChange}
+                        onKeyDown={(e) => e.key === 'Enter' && onSearch()}
                     />
                     <Button text="Search" onClick={onSearch} />
                 </div>

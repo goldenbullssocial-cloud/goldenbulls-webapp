@@ -24,8 +24,9 @@ export default function HomePage() {
     <div>
       <Herobanner />
       <HeroCard />
-      <ShapingConfident />
       <AboutUs />
+      <GetCertified />
+      <ShapingConfident />
       <WhatWeOffer />
       <TopCourses />
       <MarqueeSection />
@@ -36,7 +37,6 @@ export default function HomePage() {
       <JoinChannel />
       <RecognizedSection />
       <BlogSection />
-      <GetCertified />
       <ClassroominYourPocket />
       <FaqSection />
       <ImageGallery />
