@@ -107,7 +107,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                 <Link href='/algobots' className={classNames({ [styles.active]: isActive('/algobots') }, styles.menu)}>
                     <AlgobotsIcon />
                     <span>
-                        Algobots
+                        Marketplace
                     </span>
                 </Link>
                 <Link href='/notifications' className={classNames({ [styles.active]: isActive('/notifications') }, styles.menu)}>
