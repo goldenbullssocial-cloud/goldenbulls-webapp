@@ -66,7 +66,7 @@ export default function AutomateTrades() {
         if (user) {
             router.push(`/algobots?botId=${botId}&showModal=true`);
         } else {
-            router.push('/login');
+            router.push(`/login?returnTo=${encodeURIComponent(`/algobots?botId=${botId}&showModal=true`)}`);
         }
     };
     return (

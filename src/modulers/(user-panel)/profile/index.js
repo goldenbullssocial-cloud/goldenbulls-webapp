@@ -223,17 +223,10 @@ export default function Profile() {
             newErrors.firstName = "First name is required";
         } else if (formData.firstName.length < 2) {
             newErrors.firstName = "First name must be at least 2 characters";
-        } else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
-            newErrors.firstName = "First name can only contain letters and spaces";
-        }
-
-        if (!formData.lastName.trim()) {
-            newErrors.lastName = "Last name is required";
-        } else if (formData.lastName.length < 2) {
-            newErrors.lastName = "Last name must be at least 2 characters";
-        } else if (!/^[a-zA-Z\s]+$/.test(formData.lastName)) {
-            newErrors.lastName = "Last name can only contain letters and spaces";
-        }
+        } 
+        // else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
+        //     newErrors.firstName = "First name can only contain letters and spaces";
+        // }
 
         if (!formData.phoneNumber.trim()) {
             newErrors.phoneNumber = "Phone number is required";

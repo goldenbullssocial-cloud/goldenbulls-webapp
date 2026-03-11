@@ -151,7 +151,7 @@
             position: relative;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-sizing: border-box;
@@ -211,6 +211,10 @@
                     @include font-normal;
                     @include gradient-text;
                     line-height: normal;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 120px;
 
                     @include respond-to("xl") {
                         font-size: 16px;

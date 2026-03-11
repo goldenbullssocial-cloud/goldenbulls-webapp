@@ -171,7 +171,7 @@ export default function OnDemandCourses({ title, activeType, bgColor = "#0C0C0C"
                     rating={item?.averageRating ? Number(item.averageRating).toFixed(1) : "0.0"}
                     image={item.courseVideo}
                     location={item?.location || ""}
-                    btnLink={`/courses/${item._id}?courseType=${activeType}`}
+                    btnLink={user ? `/recorded-course-details?id=${item?._id}&type=${activeType}` : `/courses/${item._id}?courseType=${activeType}`}
                     btnTitle={item?.isPayment ? "Enrolled" : "Enroll Now"}
                     isFree={item?.isFree}
                   />

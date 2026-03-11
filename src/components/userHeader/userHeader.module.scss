@@ -121,19 +121,19 @@
 
         h2 {
             color: #FFF;
-            font-size: 24px;
+            font-size: 30px;
             font-style: normal;
             font-weight: 400;
             line-height: normal;
             text-transform: uppercase;
-            @include heading-font;
+            @include font-bold;
 
             @include respond-to("xl") {
-                font-size: 20px;
+                font-size: 24px;
             }
 
             @include respond-to("md") {
-                font-size: 16px;
+                font-size: 20px;
                 font-style: normal;
                 font-weight: 400;
                 line-height: normal;
