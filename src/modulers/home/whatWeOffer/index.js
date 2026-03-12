@@ -8,6 +8,8 @@ const ComputerIcon = "/assets/icons/computer.png";
 const GroupComputerIcon = "/assets/icons/group-computer.png";
 const PersonIcon = "/assets/icons/Person.png";
 const LineImage = "/assets/images/line.png";
+const CardImage = "/assets/images/what-we-offer-card.png";
+const MaskImage = "/assets/images/mask.png";
 
 const offerData = [
   {
@@ -169,12 +171,12 @@ export default function WhatWeOffer() {
                 <div className={styles.cardFront}>
                   <div className={styles.griditems}>
                     {/* Rotating line */}
-                    <motion.div className={styles.lineImage}>
+                    {/* <motion.div className={styles.lineImage}>
                       <img src={LineImage} alt="Line" />
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Icon pop */}
-                    <motion.div
+                    {/* <motion.div
                       className={styles.iconCemter}
                       initial={{ scale: 0.8, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
@@ -182,9 +184,15 @@ export default function WhatWeOffer() {
                       transition={{ delay: 0.2, duration: 0.4 }}
                     >
                       <img src={item.icon} alt={item.title} />
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Text */}
+                    <div className={styles.maskimage}>
+                      <img src={MaskImage} alt="MaskImage" />
+                    </div>
+                    <div className={styles.cardimage}>
+                      <img src={CardImage} alt="CardImage" />
+                    </div>
                     <div className={styles.details}>
                       <h3>{item.title}</h3>
                       <p>{item.description}</p>
@@ -225,15 +233,12 @@ export default function WhatWeOffer() {
                     </div>
 
                     <div className={styles.priceItem}>
-                      <span
-                        className={styles.priceValue}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          window.location.href = "/courses";
-                        }}
-                      >
+                      <button onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = "/courses";
+                      }}>
                         {item.backContent.price}
-                      </span>
+                      </button>
                     </div>
                   </div>
                 </div>
