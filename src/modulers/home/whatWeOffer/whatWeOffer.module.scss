@@ -119,15 +119,15 @@
       min-height: clamp(850px, 80vh, 850px);
 
       @include respond-to("xl") {
-        min-height: clamp(700px, 65vh, 750px);
+        min-height: clamp(810px, 65vh, 750px);
       }
 
       @include respond-to("lg") {
-        min-height: clamp(700px, 60vh, 650px);
+        min-height: clamp(810px, 60vh, 650px);
       }
 
       @include respond-to("md") {
-        min-height: clamp(650px, 55vh, 550px);
+        min-height: clamp(810px, 55vh, 550px);
       }
     }
 
