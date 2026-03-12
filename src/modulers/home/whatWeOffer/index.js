@@ -288,15 +288,14 @@ export default function WhatWeOffer() {
                           ←
                         </button>
                       </div>
-                      <span
-                        className={styles.priceValue}
-                        onClick={(e) => {
+                      <div className={styles.priceItem}>
+                        <button onClick={(e) => {
                           e.stopPropagation();
                           window.location.href = "/courses";
-                        }}
-                      >
-                        {item.backContent.price}
-                      </span>
+                        }}>
+                          {item.backContent.price}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
