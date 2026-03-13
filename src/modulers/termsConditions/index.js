@@ -8,14 +8,14 @@ export default function TermsConditions() {
           Terms and Conditions
         </h1>
         <p>
-          Welcome to Golden Bulls International. These Terms and Conditions, together with our Privacy Policy, Disclaimer, and any other applicable policies (collectively referred to as the “Policies”), govern your access to and use of the Golden Bulls International website
+          Welcome to Golden Bulls 2.0 International. These Terms and Conditions, together with our Privacy Policy, Disclaimer, and any other applicable policies (collectively referred to as the “Policies”), govern your access to and use of the Golden Bulls 2.0 International website
           and related services.
         </p>
         <p>
           These Policies are published in accordance with applicable information technology and digital services regulations governing online platforms.
         </p>
         <p>
-          Throughout these Terms, “Golden Bulls International,” “we,” “us,” or “our” refer to the platform owner and operator. “You,” “your,” or “user” refers to any individual who accesses, browses, registers, or uses the website or
+          Throughout these Terms, “Golden Bulls 2.0 International,” “we,” “us,” or “our” refer to the platform owner and operator. “You,” “your,” or “user” refers to any individual who accesses, browses, registers, or uses the website or
           its services.
         </p>
         <div className={styles.line}></div>
@@ -23,7 +23,7 @@ export default function TermsConditions() {
           Registration & Eligibility
         </h2>
         <p>
-          Access to certain features, programs, or services on Golden Bulls International may require registration. By registering or using the platform, you confirm that you meet the minimum eligibility criteria specified for the relevant service and that any registration or participation requirements, including fees where applicable, have
+          Access to certain features, programs, or services on Golden Bulls 2.0 International may require registration. By registering or using the platform, you confirm that you meet the minimum eligibility criteria specified for the relevant service and that any registration or participation requirements, including fees where applicable, have
           been fulfilled.
         </p>
         <p>
@@ -31,7 +31,7 @@ export default function TermsConditions() {
           or not.
         </p>
         <p>
-          Golden Bulls International shall not be responsible for any loss or damage arising from unauthorized use of your account. In the event of misuse, unauthorized sharing of content, or violation of these Terms, we reserve the right to suspend or permanently terminate access and take appropriate legal action
+          Golden Bulls 2.0 International shall not be responsible for any loss or damage arising from unauthorized use of your account. In the event of misuse, unauthorized sharing of content, or violation of these Terms, we reserve the right to suspend or permanently terminate access and take appropriate legal action
           where required.
         </p>
         <div className={styles.line}></div>
@@ -61,7 +61,7 @@ export default function TermsConditions() {
           Termination & Suspension
         </h2>
         <p>
-          Golden Bulls International reserves the right, at its sole discretion, to suspend or terminate user access—temporarily or permanently—without prior notice if:
+          Golden Bulls 2.0 International reserves the right, at its sole discretion, to suspend or terminate user access—temporarily or permanently—without prior notice if:
         </p>
         <ul>
           <li>These Terms or any applicable Policies are violated
@@ -70,7 +70,7 @@ export default function TermsConditions() {
           </li>
           <li>The user engages in competing or conflicting activities that harm the platform’s interests
           </li>
-          <li>The user’s behavior negatively impacts the community, reputation, or operations of Golden Bulls International</li>
+          <li>The user’s behavior negatively impacts the community, reputation, or operations of Golden Bulls 2.0 International</li>
         </ul>
         <p>
           Upon termination, all rights granted to you under these Terms shall immediately cease.
@@ -80,7 +80,7 @@ export default function TermsConditions() {
           Modifications to Terms
         </h2>
         <p>
-          Golden Bulls International may revise or update these Terms and Conditions at any time. Updated versions will be effective upon posting on the website. Continued use of the platform after such changes constitutes acceptance of the
+          Golden Bulls 2.0 International may revise or update these Terms and Conditions at any time. Updated versions will be effective upon posting on the website. Continued use of the platform after such changes constitutes acceptance of the
           revised Terms.
         </p>
         <div className={styles.line}></div>

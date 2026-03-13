@@ -19,6 +19,8 @@ import {
 } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
 import { regions } from "@/utils/regions";
+import { useAuth } from "@/context/AuthContext";
+import { isFieldIncomplete } from "@/utils/profileUtils";
 
 const ProfileImagePlaceholder = "/assets/images/profile-upload.png";
 const EditIcon = "/assets/icons/edit.svg";
@@ -34,6 +36,7 @@ export default function Profile() {
         country: "",
         gender: "",
     });
+    const { refreshProfile, completionPercentage } = useAuth();
     const [errors, setErrors] = useState({});
     const [countryId, setCountryId] = useState(0);
     const [stateId, setStateId] = useState(0);
@@ -68,6 +71,7 @@ export default function Profile() {
                 }
 
                 const response = await getProfile(parsedUser._id);
+                console.log("DEBUG Profile component fetchProfile response:", response);
 
                 if (response.success) {
                     const data = response.payload.data[0];
@@ -80,6 +84,12 @@ export default function Profile() {
                         state: data.state || "",
                         country: data.country || "",
                         gender: data.gender || "",
+                    });
+                    
+                    console.log("DEBUG Profile component setFormData DONE:", {
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        email: data.email
                     });
 
                     if (data.countryCode) {
@@ -223,7 +233,7 @@ export default function Profile() {
             newErrors.firstName = "First name is required";
         } else if (formData.firstName.length < 2) {
             newErrors.firstName = "First name must be at least 2 characters";
-        } 
+        }
         // else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
         //     newErrors.firstName = "First name can only contain letters and spaces";
         // }
@@ -304,6 +314,8 @@ export default function Profile() {
             if (response.success) {
                 toast.success("Profile updated successfully!");
                 setSelectedFile(null);
+                // Refresh global profile context
+                refreshProfile(parsedUser._id);
             } else {
                 toast.error(response.message || "Failed to update profile");
             }
@@ -322,7 +334,18 @@ export default function Profile() {
     return (
         <div className={styles.profilePage}>
             <div className={styles.title}>
-                <h2>Edit Profile</h2>
+                <h2>Edit Profile </h2>
+                <p>
+                    {completionPercentage < 100 && (
+                        <div className={styles.profileAlertWarning}>
+                            <div className={styles.warningIcon}>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM7 4H9V10H7V4ZM7 12H9V14H7V12Z" fill="#ffc107" />
+                                </svg>
+                            </div>
+                            <span>Your profile is {completionPercentage}% complete. Please complete your profile.</span>                        </div>
+                    )}
+                </p>
             </div>
             <div className={styles.profile} onClick={triggerFileInput}>
                 <img
@@ -351,7 +374,7 @@ export default function Profile() {
                         value={formData.firstName}
                         onChange={handleChange}
                         smallInput
-                        error={errors.firstName}
+                        error={errors.firstName || (isFieldIncomplete(formData, 'firstName') ? "Please fill this detail" : "")}
                     />
                     <Input
                         label="Last Name"
@@ -360,7 +383,7 @@ export default function Profile() {
                         value={formData.lastName}
                         onChange={handleChange}
                         smallInput
-                        error={errors.lastName}
+                        error={errors.lastName || (isFieldIncomplete(formData, 'lastName') ? "Please fill this detail" : "")}
                     />
                     <div className={styles.telephoninputmain}>
                         <div className={styles.dropdownrelative} ref={countryRef}>
@@ -458,11 +481,11 @@ export default function Profile() {
                                                 setPhoneError("");
                                             }
                                         }}
-                                        className={`${styles.phoneInput} ${(phoneError || errors.phoneNumber) ? styles.error : ""}`}
+                                        className={`${styles.phoneInput} ${(phoneError || errors.phoneNumber || isFieldIncomplete(formData, 'phoneNumber')) ? styles.error : ""}`}
                                     />
-                                    {(phoneError || errors.phoneNumber) && (
+                                    {(phoneError || errors.phoneNumber || isFieldIncomplete(formData, 'phoneNumber')) && (
                                         <span className={styles.errorMessage}>
-                                            {phoneError || errors.phoneNumber}
+                                            {phoneError || errors.phoneNumber || (isFieldIncomplete(formData, 'phoneNumber') ? "Please fill this detail" : "")}
                                         </span>
                                     )}
                                 </div>
@@ -477,7 +500,7 @@ export default function Profile() {
                         onChange={handleChange}
                         smallInput
                         disabled
-                        error={errors.email}
+                        error={errors.email || (isFieldIncomplete(formData, 'email') ? "Please fill this detail" : "")}
                     />
                     <div className={styles.selectWrapper}>
                         <label>Country</label>
@@ -487,7 +510,11 @@ export default function Profile() {
                             defaultValue={countryId}
                             key={`country-${countryId}`}
                         />
-                        {errors.country && <span className={styles.errorMessage}>{errors.country}</span>}
+                        {(errors.country || isFieldIncomplete(formData, 'country')) && (
+                            <span className={styles.errorMessage}>
+                                {errors.country || "Please fill this detail"}
+                            </span>
+                        )}
                     </div>
                     <div className={styles.selectWrapper}>
                         <label>State</label>
@@ -498,7 +525,11 @@ export default function Profile() {
                             defaultValue={stateId}
                             key={`state-${stateId}`}
                         />
-                        {errors.state && <span className={styles.errorMessage}>{errors.state}</span>}
+                        {(errors.state || isFieldIncomplete(formData, 'state')) && (
+                            <span className={styles.errorMessage}>
+                                {errors.state || "Please fill this detail"}
+                            </span>
+                        )}
                     </div>
                     <div className={styles.selectWrapper}>
                         <label>City</label>
@@ -510,7 +541,11 @@ export default function Profile() {
                             defaultValue={cityId}
                             key={`city-${cityId}`}
                         />
-                        {errors.city && <span className={styles.errorMessage}>{errors.city}</span>}
+                        {(errors.city || isFieldIncomplete(formData, 'city')) && (
+                            <span className={styles.errorMessage}>
+                                {errors.city || "Please fill this detail"}
+                            </span>
+                        )}
                     </div>
                     <div className={styles.selectWrapper}>
                         <label>Gender</label>
@@ -544,8 +579,10 @@ export default function Profile() {
                             className={styles.customSelect}
                             classNamePrefix="react-select"
                         />
-                        {errors.gender && (
-                            <span className={styles.errorMessage}>{errors.gender}</span>
+                        {(errors.gender || isFieldIncomplete(formData, 'gender')) && (
+                            <span className={styles.errorMessage}>
+                                {errors.gender || "Please fill this detail"}
+                            </span>
                         )}
                     </div>
                 </div>

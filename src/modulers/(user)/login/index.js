@@ -18,8 +18,24 @@ const Logo = "/assets/logo/logo.svg";
 export default function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("rememberMe");
+      if (saved && JSON.parse(saved)) {
+        return localStorage.getItem("rememberedEmail") || "";
+      }
+    }
+    return "";
+  });
+  const [password, setPassword] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("rememberMe");
+      if (saved && JSON.parse(saved)) {
+        return localStorage.getItem("rememberedPassword") || "";
+      }
+    }
+    return "";
+  });
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -27,7 +43,13 @@ export default function Login() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("rememberMe");
+      return saved !== null ? JSON.parse(saved) : false;
+    }
+    return false;
+  });
 
   useEffect(() => {
     const callback = searchParams.get("callback");
@@ -55,6 +77,7 @@ export default function Login() {
       }
     }
   }, [searchParams]);
+
 
   const validateEmail = (value) => {
     const trimmedValue = value.trim().toLowerCase();
@@ -111,6 +134,17 @@ export default function Login() {
       if (data.success) {
         toast.dismiss();
         toast.success("Login successfully.");
+
+        // Save or clear remember me data on successful login
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", JSON.stringify(true));
+          localStorage.setItem("rememberedEmail", email.trim().toLowerCase());
+          localStorage.setItem("rememberedPassword", password);
+        } else {
+          localStorage.setItem("rememberMe", JSON.stringify(false));
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberedPassword");
+        }
 
         const cookieOptions = rememberMe ? { expires: 30 } : {};
 

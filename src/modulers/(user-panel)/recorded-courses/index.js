@@ -7,7 +7,7 @@ export default function RecordedCourses() {
 
     return (
         <div className={styles.recordedCourses}>
-            <CommonCourses title='Recorded Courses' activeType="recorded" />
+            <CommonCourses title='Beginner Courses' activeType="recorded" />
             <CommonCourses title='live online Courses' activeType="live" />
             <CommonCourses title='In-person Courses' activeType="physical" />
         </div>

@@ -12,6 +12,12 @@ export const signUp = async (data) => {
   fromdata.append("state", data.state);
   fromdata.append("city", data.city);
   fromdata.append("referredBy", data.referredBy);
+
+  // Add dynamic redirect URL
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+  const redirectUrl = `${baseUrl}/login`;
+  fromdata.append("redirectUrl", redirectUrl);
+
   try {
     const response = await api.post(`/user/signup`, fromdata, {
       headers: {

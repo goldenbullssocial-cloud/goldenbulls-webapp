@@ -13,13 +13,13 @@ export async function generateMetadata({ params }) {
 
   if (!course) {
     return {
-      title: "Course Details - Golden Bulls",
+      title: "Course Details - Golden Bulls 2.0",
       description: "Explore detailed information about our trading courses.",
     };
   }
 
   return {
-    title: `${course.title} - Golden Bulls`,
+    title: `${course.title} - Golden Bulls 2.0`,
     description: `Learn ${course.title} with ${course.author}. ${course.duration} of comprehensive content. Level: ${course.level}. Price: ${course.price}`,
     keywords: `${course.title}, trading course, ${course.author}, forex, crypto, ${course.level} level`,
   };

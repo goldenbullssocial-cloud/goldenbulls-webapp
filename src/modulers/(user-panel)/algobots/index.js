@@ -362,7 +362,7 @@ const BotCard = ({ bot }) => {
                                 />
                             </div>
                         </div>
-                        <div className={styles.modalFrameDesign}>
+                        {/* <div className={styles.modalFrameDesign}>
                             <div className={styles.box}>
                                 <iframe
                                     width="100%"
@@ -375,7 +375,7 @@ const BotCard = ({ bot }) => {
                                     style={{ borderRadius: "16px" }}
                                 ></iframe>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             )}

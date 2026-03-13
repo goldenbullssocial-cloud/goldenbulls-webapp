@@ -89,7 +89,7 @@ export default function TopCourses() {
               className={activeTab === "recorded" ? styles.active : ""}
               onClick={() => setActiveTab("recorded")}
             >
-              <span>Recorded Courses</span>
+              <span>Beginner Courses</span>
             </button>
             <button
               className={activeTab === "live" ? styles.active : ""}
@@ -109,7 +109,7 @@ export default function TopCourses() {
           <div className={styles.relativeDiv}>
             <button>
               <span>
-                Recorded Courses
+                Beginner Courses
               </span>
               <div className={classNames(styles.icons, toggle ? styles.rotate : "")} onClick={() => setToggle(!toggle)}>
                 <DownPrimaryIcon />
@@ -117,7 +117,7 @@ export default function TopCourses() {
               <div className={classNames(styles.dropdown, toggle ? styles.show : styles.hide)}>
                 <div className={styles.dropdownDesign}>
                   <div className={styles.dropdownSpacing}>
-                    <p>Recorded Courses</p>
+                    <p>Beginner Courses</p>
                     <p>Live Online Courses</p>
                     <p>In Person Courses</p>
                   </div>

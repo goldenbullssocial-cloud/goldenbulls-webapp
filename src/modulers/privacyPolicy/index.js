@@ -8,7 +8,7 @@ export default function PrivacyPolicy() {
                     Privacy Policy
                 </h1>
                 <p>
-                    Golden Bulls International welcomes you to our website and thanks you for your interest in our educational content, products, and services. We are committed to safeguarding the privacy and security of our users and handling personal data responsibly. This Privacy Policy explains how personal information is collected, used, and protected when
+                    Golden Bulls 2.0 International welcomes you to our website and thanks you for your interest in our educational content, products, and services. We are committed to safeguarding the privacy and security of our users and handling personal data responsibly. This Privacy Policy explains how personal information is collected, used, and protected when
                     you access or use our platform.
                 </p>
                 <div className={styles.line}></div>
@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
                     Data Protection & Security
                 </h2>
                 <p>
-                    Golden Bulls International places high importance on the protection of personal data. Any personal information provided by users including but not limited to name, contact details, email address, or other identifying information is processed and stored in accordance with applicable data protection laws
+                    Golden Bulls 2.0 International places high importance on the protection of personal data. Any personal information provided by users including but not limited to name, contact details, email address, or other identifying information is processed and stored in accordance with applicable data protection laws
                     and regulations.
                 </p>
                 <p>
@@ -24,11 +24,11 @@ export default function PrivacyPolicy() {
                     technological standards.
                 </p>
                 <p>
-                    Golden Bulls International does not store, sell, rent, lease, or share users’ personally identifiable information or payment details with third parties, except where required by law or necessary to
+                    Golden Bulls 2.0 International does not store, sell, rent, lease, or share users’ personally identifiable information or payment details with third parties, except where required by law or necessary to
                     deliver services.
                 </p>
                 <p>
-                    Upon reasonable request, users may inquire about the personal data processed by Golden Bulls International and request updates or
+                    Upon reasonable request, users may inquire about the personal data processed by Golden Bulls 2.0 International and request updates or
                     corrections where applicable.
                 </p>
                 <div className={styles.line}></div>
@@ -36,11 +36,11 @@ export default function PrivacyPolicy() {
                     Use of Website & Services
                 </h2>
                 <p>
-                    By accessing or using the Golden Bulls International website, you acknowledge and agree to be bound by the Website Policies, Privacy Policy, and Terms & Conditions in their current version. We reserve the right to revise or update these policies at any time without prior notice. Continued use of the website constitutes acceptance of
+                    By accessing or using the Golden Bulls 2.0 International website, you acknowledge and agree to be bound by the Website Policies, Privacy Policy, and Terms & Conditions in their current version. We reserve the right to revise or update these policies at any time without prior notice. Continued use of the website constitutes acceptance of
                     any modifications.
                 </p>
                 <p>
-                    While we strive to ensure continuous website availability, uninterrupted access cannot be guaranteed. Temporary disruptions may occur due to maintenance, technical issues, or circumstances beyond our control. Golden Bulls International shall not be held liable for any unavailability or interruption
+                    While we strive to ensure continuous website availability, uninterrupted access cannot be guaranteed. Temporary disruptions may occur due to maintenance, technical issues, or circumstances beyond our control. Golden Bulls 2.0 International shall not be held liable for any unavailability or interruption
                     of service.
                 </p>
                 <p>
@@ -52,7 +52,7 @@ export default function PrivacyPolicy() {
                     User Registration & Access Control
                 </h2>
                 <p>
-                    Certain services or features may require user registration. Golden Bulls International reserves the right to restrict, suspend, or terminate access for any user without prior notice if there is reasonable
+                    Certain services or features may require user registration. Golden Bulls 2.0 International reserves the right to restrict, suspend, or terminate access for any user without prior notice if there is reasonable
                     suspicion of:
                 </p>
                 <ul>
@@ -64,14 +64,14 @@ export default function PrivacyPolicy() {
                     </li>
                 </ul>
                 <p>
-                    Users who suspect unauthorized access to their account are required to notify Golden Bulls International immediately.
+                    Users who suspect unauthorized access to their account are required to notify Golden Bulls 2.0 International immediately.
                 </p>
                 <div className={styles.line}></div>
                 <h2>
                     Restricted Jurisdictions
                 </h2>
                 <p>
-                    Golden Bulls International does not offer services or conduct business with individuals or entities located in jurisdictions subject to international sanctions or restrictions, in compliance with applicable laws
+                    Golden Bulls 2.0 International does not offer services or conduct business with individuals or entities located in jurisdictions subject to international sanctions or restrictions, in compliance with applicable laws
                     and regulations.
                 </p>
                 <div className={styles.line}></div>
@@ -91,7 +91,7 @@ export default function PrivacyPolicy() {
                     Cookies & Tracking Technologies
                 </h2>
                 <p>
-                    Golden Bulls International uses cookies and similar technologies to enhance user experience and improve website functionality. Cookies are small data files stored on a user’s device that help recognize preferences and facilitate
+                    Golden Bulls 2.0 International uses cookies and similar technologies to enhance user experience and improve website functionality. Cookies are small data files stored on a user’s device that help recognize preferences and facilitate
                     smoother navigation.
                 </p>
                 <p>
@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
                     the website.
                 </p>
                 <p>
-                    Third-party service providers or advertisers may also use cookies or tracking technologies to display relevant content or advertisements. Golden Bulls International does not control these third parties and is not responsible for their
+                    Third-party service providers or advertisers may also use cookies or tracking technologies to display relevant content or advertisements. Golden Bulls 2.0 International does not control these third parties and is not responsible for their
                     data practices.
                 </p>
                 <div className={styles.line}></div>
@@ -107,7 +107,7 @@ export default function PrivacyPolicy() {
                     Intellectual Property Rights
                 </h2>
                 <p>
-                    All content on the Golden Bulls International website including text, graphics, images, logos, and other materials is the property of Golden Bulls International or its licensors, unless stated otherwise. Use of the website does not grant users any ownership, license, or intellectual
+                    All content on the Golden Bulls 2.0 International website including text, graphics, images, logos, and other materials is the property of Golden Bulls 2.0 International or its licensors, unless stated otherwise. Use of the website does not grant users any ownership, license, or intellectual
                     property rights.
                 </p>
                 <p>
@@ -119,7 +119,7 @@ export default function PrivacyPolicy() {
                     Policy Updates
                 </h2>
                 <p>
-                    Golden Bulls International may update this Privacy Policy and related website terms periodically to reflect legal, regulatory, or operational changes. Users are encouraged to review these policies regularly. Any updates will become effective upon publication on the website.
+                    Golden Bulls 2.0 International may update this Privacy Policy and related website terms periodically to reflect legal, regulatory, or operational changes. Users are encouraged to review these policies regularly. Any updates will become effective upon publication on the website.
                 </p>
             </div>
         </div>

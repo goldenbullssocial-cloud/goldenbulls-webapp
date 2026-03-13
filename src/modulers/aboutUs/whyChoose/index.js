@@ -38,7 +38,7 @@ export default function WhyChoose() {
             <div className='container-md'>
                 <div className={styles.text}>
                     <h2>
-                        Why choose golden bulls academy
+                        Why choose Golden Bulls 2.0 academy
                     </h2>
                 </div>
                 <div className={styles.allBoxAlignment}>

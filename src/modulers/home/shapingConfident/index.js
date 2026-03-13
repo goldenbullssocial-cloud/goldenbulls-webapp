@@ -88,7 +88,7 @@ export default function ShapingConfident() {
 
                             {/* Paragraphs */}
                             {[
-                                `Many traders join academies, watch lessons, and still feel confused when they face real market charts. The market keeps changing, new strategies evolve, and trading technology updates faster than ever, but most traders are taught outdated methods with little real support. What’s missing is clear guidance and practical understanding. "Golden Bulls Academy" was built from over five years of experience in this industry, focusing on modern strategies, evolving market technology, and real trading conditions.`,
+                                `Many traders join academies, watch lessons, and still feel confused when they face real market charts. The market keeps changing, new strategies evolve, and trading technology updates faster than ever, but most traders are taught outdated methods with little real support. What’s missing is clear guidance and practical understanding. "Golden Bulls 2.0 Academy" was built from over five years of experience in this industry, focusing on modern strategies, evolving market technology, and real trading conditions.`,
                                 `We help traders learn how to adapt, manage risk with confidence, and trade with clarity instead of guesswork.`,
                             ].map((text, i) => (
                                 <motion.p

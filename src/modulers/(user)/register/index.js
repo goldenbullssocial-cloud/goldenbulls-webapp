@@ -141,7 +141,7 @@ export default function Register() {
       .then((response) => {
         if (response.success) {
           setIsSubmitting(false);
-          toast.success("User Signup successfully.");
+          toast.success(response.messages ?? "User Signup successfully.");
           setErrors({
             firstName: "",
             lastName: "",
@@ -150,7 +150,19 @@ export default function Register() {
             confirmPassword: "",
             submit: "",
           });
-          router.push("/login");
+          setData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            referredBy: "",
+          });
+
+          // Redirect to login page for user to login after email verification
+          setTimeout(() => {
+            router.push("/login");
+          }, 3000);
         } else {
           setIsSubmitting(false);
           const message = errorMessages[response?.message] || response?.message || "User Signup failed. Please try again.";
