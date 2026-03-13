@@ -8,7 +8,7 @@ export default function RefundPolicy() {
                     Refund Policy
                 </h1>
                 <p>
-                    At Golden Bulls International, we strive to provide high-quality forex training and educational content. Before enrolling, please read this Refund Policy carefully. By purchasing any of our training programs, courses, or educational products (“Courses”), you agree to comply with and be bound by
+                    At Golden Bulls 2.0 International, we strive to provide high-quality forex training and educational content. Before enrolling, please read this Refund Policy carefully. By purchasing any of our training programs, courses, or educational products (“Courses”), you agree to comply with and be bound by
                     this policy.
                 </p>
                 <div className={styles.line}></div>
@@ -102,7 +102,7 @@ export default function RefundPolicy() {
                     7. Chargebacks & Disputes
                 </h2>
                 <p>
-                    By enrolling in any Golden Bulls International Course, you agree not to initiate chargebacks or payment disputes with your financial provider without first attempting to resolve the matter directly with us. Unauthorized chargeback attempts may result in denial of future access or
+                    By enrolling in any Golden Bulls 2.0 International Course, you agree not to initiate chargebacks or payment disputes with your financial provider without first attempting to resolve the matter directly with us. Unauthorized chargeback attempts may result in denial of future access or
                     other corrective action.
                 </p>
                 <div className={styles.line}></div>
@@ -133,7 +133,7 @@ export default function RefundPolicy() {
                     9. Changes to This Policy
                 </h2>
                 <p>
-                    Golden Bulls International reserves the right to modify or update this Refund Policy at any time. Any changes will be effective upon posting to
+                    Golden Bulls 2.0 International reserves the right to modify or update this Refund Policy at any time. Any changes will be effective upon posting to
                     our website.
                 </p>
             </div>

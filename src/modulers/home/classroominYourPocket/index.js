@@ -15,7 +15,7 @@ export default function ClassroominYourPocket({ spacingRemove }) {
                             Classroom in Your Pocket
                         </h2>
                         <p>
-                            Stay connected to your learning journey anytime, anywhere with the Golden Bulls mobile app. Access all your courses, track your progress, rewatch lessons, and stay engaged with our community—all
+                            Stay connected to your learning journey anytime, anywhere with the Golden Bulls 2.0 mobile app. Access all your courses, track your progress, rewatch lessons, and stay engaged with our community—all
                             from your phone.
                         </p>
                         <div className={styles.twoButtonAlignment}>

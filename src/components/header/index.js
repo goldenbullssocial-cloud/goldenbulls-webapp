@@ -11,11 +11,13 @@ import classNames from "classnames";
 const Logo = "/assets/logo/logo.svg";
 import { getCookie, removeCookie } from "../../../cookie";
 import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const [headerOpen, setHeaderOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { completionPercentage } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -111,7 +113,15 @@ export default function Header() {
                             setDropdownOpen(false);
                           }}
                         >
-                          Profile
+                          <div className={styles.profileCompletionWrap}>
+                            <div className={styles.profileContent}>
+                              Profile
+                              {completionPercentage < 100 && (
+                                <div className={styles.alertBadge}>!</div>
+                              )}
+                            </div>
+                            
+                          </div>
                         </button>
                         <button onClick={handleLogout}>Logout</button>
                       </div>
@@ -216,7 +226,15 @@ export default function Header() {
                     setDropdownOpen(false);
                   }}
                 >
-                  Profile
+                  <div className={styles.profileCompletionWrap}>
+                    <div className={styles.profileContent}>
+                      Profile
+                      {completionPercentage < 100 && (
+                        <div className={styles.alertBadge}>!</div>
+                      )}
+                    </div>
+                
+                  </div>
                 </button>
                 <button onClick={handleLogout}>Logout</button>
               </div>

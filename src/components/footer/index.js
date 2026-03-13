@@ -176,7 +176,7 @@ export default function Footer() {
           </div>
           <div className={styles.footerDetails}>
             <p>
-              The content provided by Golden Bulls is for educational and informational purposes only and should not be considered financial, investment, trading, or legal
+              The content provided by Golden Bulls 2.0 is for educational and informational purposes only and should not be considered financial, investment, trading, or legal
               advice. We do not provide personalized investment recommendations or guarantee any financial outcomes.
             </p>
             <p>
@@ -189,7 +189,7 @@ export default function Footer() {
               Users are responsible for conducting their own research and consulting with a qualified financial advisor before making any trading or investment decisions.
             </p>
             <p>
-              By using this website and enrolling in our courses, you acknowledge and agree that Golden Bulls is not responsible for any financial losses or decisions made based on the information provided.
+              By using this website and enrolling in our courses, you acknowledge and agree that Golden Bulls 2.0 is not responsible for any financial losses or decisions made based on the information provided.
             </p>
           </div>
           <div className={styles.bottomText}>
@@ -200,7 +200,7 @@ export default function Footer() {
       <div className={styles.copyRight}>
         <div className='container-md'>
           <p>
-            © 2025 Golden Bulls Academy. All rights reserved.
+            © 2025 Golden Bulls 2.0 Academy. All rights reserved.
           </p>
         </div>
       </div>

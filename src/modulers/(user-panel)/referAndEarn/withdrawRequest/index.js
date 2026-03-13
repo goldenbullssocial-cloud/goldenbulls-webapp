@@ -7,6 +7,7 @@ import Input from "@/components/input";
 import { addWithdrawalRequest, getAllChain } from "@/services/referAndEarn";
 import { getCookie } from "../../../../../cookie";
 import CustomDropdown from "@/components/customDropdown";
+import { useAuth } from "@/context/AuthContext";
 
 export default function WithdrawRequest() {
   const [amount, setAmount] = useState("");
@@ -16,6 +17,7 @@ export default function WithdrawRequest() {
   const [selectedMethod, setSelectedMethod] = useState("");
   const [step, setStep] = useState(1); // 1: selection, 2: details form
   const [chains, setChains] = useState([]);
+  const { profile } = useAuth();
 
   // Form fields
   const [walletId, setWalletId] = useState("");
@@ -72,6 +74,14 @@ export default function WithdrawRequest() {
       toast.error("Please enter a valid amount");
       return;
     }
+
+    const availableBalance = profile?.earningBalance || 0;
+    if (Number(amount) > availableBalance) {
+      toast.dismiss();
+      toast.error(`Insufficient balance. Your available balance is $${availableBalance}`);
+      return;
+    }
+
     setIsModalOpen(true);
   };
 
@@ -129,6 +139,13 @@ export default function WithdrawRequest() {
 
     if (!validateForm()) {
       toast.error("Please fix all validation errors");
+      return;
+    }
+
+    const availableBalance = profile?.earningBalance || 0;
+    if (Number(amount) > availableBalance) {
+      toast.dismiss();
+      toast.error(`Insufficient balance. Your available balance is $${availableBalance}`);
       return;
     }
 

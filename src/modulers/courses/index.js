@@ -10,7 +10,7 @@ export default function Courses() {
   return (
     <div>
       <CoursesBanner />
-      <OnDemandCourses title='Recorded courses' activeType={"recorded"} bgColor='#0C0C0C' />
+      <OnDemandCourses title='Beginner courses' activeType={"recorded"} bgColor='#0C0C0C' />
       <OnDemandCourses title="Live online courses" activeType={"live"} bgColor='#000' />
       <OnDemandCourses title='In person courses' activeType={"physical"} bgColor='#0C0C0C' />
       <TrustedSection />

@@ -3,7 +3,7 @@ import React, { Suspense } from 'react'
 import Loader from '@/components/loader'
 
 export const metadata = {
-    title: "Blog Post - Golden Bulls",
+    title: "Blog Post - Golden Bulls 2.0",
     description: "Read detailed insights and analysis on trading, forex, and cryptocurrency markets.",
     keywords: "trading article, forex analysis, crypto insights, market trends",
 };

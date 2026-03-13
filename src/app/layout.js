@@ -7,9 +7,9 @@ import ToasterProvider from "@/components/toasterProvider";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata = {
-  title: "Golden Bulls Learning Academy Private Limited",
+  title: "Golden Bulls 2.0 Learning Academy Private Limited",
   description:
-    "Master forex, crypto, and trading strategies with Golden Bulls. Expert-led courses for beginners to advanced traders.",
+    "Master forex, crypto, and trading strategies with Golden Bulls 2.0. Expert-led courses for beginners to advanced traders.",
 };
 
 export default function RootLayout({ children }) {

@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 
 export default function middleware(req) {
   const token = req.cookies.get("userToken");
-  const isAuthenticated = !!token;
+  const user = req.cookies.get("user");
+  const isAuthenticated = !!token && !!user;
 
   const { pathname, origin } = req.nextUrl;
 
@@ -18,6 +19,7 @@ export default function middleware(req) {
     "/new-password",
     "/otp-screen",
     "/successfully-password",
+    "/resources",
   ];
 
   const isProtected = protectedPaths.some((path) =>
@@ -26,7 +28,8 @@ export default function middleware(req) {
 
   // If not authenticated, block protected routes
   if (!isAuthenticated && isProtected) {
-    return NextResponse.redirect(new URL("/login", origin));
+    const url = new URL("/", origin);
+    return NextResponse.redirect(url);
   }
 
   // If authenticated, block auth routes
@@ -43,6 +46,7 @@ export const config = {
     "/notifications",
     "/payment-history",
     "/profile",
+    "/resources",
     "/login",
     "/signup",
     "/register",
@@ -51,6 +55,9 @@ export const config = {
     "/recorded-courses/:path*",
     "/algobots/:path*",
     "/refer-and-earn/:path*",
+    "/new-password/:path*",
+    "/otp-screen/:path*",
+    "/successfully-password/:path*",
   ],
 };
 

@@ -21,6 +21,7 @@ import { getCookie, removeCookie } from '../../../cookie';
 import Link from 'next/link';
 import { getSocket } from '@/utils/webSocket';
 import { getProfile } from '@/services/dashboard';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Sidebar({ unreadCount, toogle, setToogle }) {
     const [user, setUser] = useState(null);
@@ -28,32 +29,25 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const router = useRouter();
+    const { profile, completionPercentage } = useAuth();
+
 
     useEffect(() => {
-        const fetchProfile = async () => {
+        if (profile) {
+            const fullName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim();
+            setUser(fullName || profile.firstName || 'User');
+            setProfileImage(profile.profileImage || null);
+        } else {
+            // Fallback to cookie if profile isn't loaded yet in context
             const userCookie = getCookie('user');
             if (userCookie) {
                 try {
                     const parsedUser = JSON.parse(userCookie);
-                    if (parsedUser._id) {
-                        const response = await getProfile(parsedUser._id);
-                        if (response.success) {
-                            const data = response.payload.data[0];
-                            const fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim();
-                            setUser(fullName || parsedUser.firstName || 'User');
-                            setProfileImage(data.profileImage || null);
-                        } else {
-                            setUser(parsedUser.firstName || 'User');
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error fetching or parsing profile:', error);
-                }
+                    setUser(parsedUser.firstName || 'User');
+                } catch (e) {}
             }
-        };
-
-        fetchProfile();
-    }, []);
+        }
+    }, [profile]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -74,13 +68,34 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
 
     const handleLogout = async () => {
         try {
+            // Clear all authentication data
             removeCookie("userToken");
             removeCookie("user");
+
+            // Clear auth-related data but preserve "Remember Me" credentials
+            if (typeof window !== 'undefined') {
+                const rememberMe = localStorage.getItem("rememberMe");
+                const rememberedEmail = localStorage.getItem("rememberedEmail");
+                const rememberedPassword = localStorage.getItem("rememberedPassword");
+
+                localStorage.clear();
+                sessionStorage.clear();
+
+                // Restore remember me data if it was set
+                if (rememberMe) localStorage.setItem("rememberMe", rememberMe);
+                if (rememberedEmail) localStorage.setItem("rememberedEmail", rememberedEmail);
+                if (rememberedPassword) localStorage.setItem("rememberedPassword", rememberedPassword);
+            }
+
             toast.dismiss();
             toast.success("Logout successfully.");
-            await router.push('/login');
+
+            // Use window.location.href to ensure complete page reload and clear history
+            window.location.href = '/login';
         } catch (error) {
             console.error('Failed to log out', error);
+            // Fallback to router push if window.location fails
+            await router.push('/login');
         }
     };
 
@@ -120,7 +135,7 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                         )}
                     </div>
                     <span>
-                        Notifications
+                        Updates
                     </span>
                 </Link>
                 <Link href='/payment-history' className={classNames({ [styles.active]: isActive('/payment-history') }, styles.menu)}>
@@ -146,13 +161,20 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                 {isDropdownOpen && (
                     <div className={styles.dropdownMenu}>
                         <Link href="/profile" className={styles.dropdownItem} onClick={() => setIsDropdownOpen(false)}>
-                            <img src={ProfileIcon} alt="Profile" />
-                            <span>Profile</span>
+                            <div>
+                                <img src={ProfileIcon} alt="Profile" />
+                                <span>Profile</span>
+                            </div>
+                            {completionPercentage < 100 && (
+                                <div className={styles.alertBadge}>!</div>
+                            )}
                         </Link>
                         <div className={styles.divider}></div>
                         <div className={styles.dropdownItem} onClick={handleLogout}>
-                            <img src={LogoutIcon} alt="Logout" />
-                            <span>Logout</span>
+                            <div>
+                                <img src={LogoutIcon} alt="Logout" />
+                                <span>Logout</span>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -160,19 +182,34 @@ export default function Sidebar({ unreadCount, toogle, setToogle }) {
                     className={classNames(styles.profileBox, { [styles.active]: isDropdownOpen })}
                     onClick={toggleDropdown}
                 >
-                    <div className={styles.profile}>
-                        {profileImage ? (
-                            <img src={profileImage} alt="Profile" />
-                        ) : (
-                            <UserIcon />
-                        )}
+                    <div className={styles.profileContainer}>
+                        <div className={styles.profile}>
+                            {profileImage ? (
+                                <img src={profileImage} alt="Profile" />
+                            ) : (
+                                <UserIcon />
+                            )}
+                        </div>
+                        <div className={styles.profileTooltip}>
+                            Profile {completionPercentage || 0}% Complete
+                        </div>
                     </div>
                     <div className={styles.textgrid}>
-                        <span title={user}>
-                            {user}
-                        </span>
-                        <div className={classNames(styles.arrow, { [styles.open]: isDropdownOpen })}>
-                            <UpIcon />
+                        <div className={styles.nameWrapper}>
+                            <span title={user}>
+                                {user}
+                            </span>
+                            <div className={classNames(styles.arrow, { [styles.open]: isDropdownOpen })}>
+                                <UpIcon />
+                            </div>
+                        </div>
+                        <div className={styles.statusContainer}>
+                            <div className={styles.statusBar}>
+                                <div
+                                    className={styles.progress}
+                                    style={{ width: `${completionPercentage || 0}%` }}
+                                ></div>
+                            </div>
                         </div>
                     </div>
                 </div>
