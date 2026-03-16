@@ -5,10 +5,12 @@ import Button from '../button';
 import { getCookie } from '../../../cookie';
 import { usePathname } from 'next/navigation';
 import { getProfile } from '@/services/dashboard';
+import { useAuth } from '@/context/AuthContext';
 
 export default function UserHeader({ searchValue = '', onSearchChange, onSearch }) {
     const [user, setUser] = useState(null);
     const pathname = usePathname();
+    const { profile } = useAuth();
 
     const getPlaceholder = () => {
         if (pathname.includes('algobots')) return 'Search Algobots...';
@@ -46,6 +48,14 @@ export default function UserHeader({ searchValue = '', onSearchChange, onSearch 
 
         fetchProfile();
     }, []);
+
+    // Update user name when profile changes from AuthContext
+    useEffect(() => {
+        if (profile) {
+            const fullName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim();
+            setUser(fullName || 'User');
+        }
+    }, [profile]);
 
     return (
         <div className={styles.userHeader}>
