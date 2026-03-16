@@ -79,9 +79,9 @@ export default function AboutUsBanner() {
                                 <Link href={isAuthenticated ? "/recorded-courses" : "/login?returnTo=/recorded-courses"}>
                                     <Button text="Explore Courses" className={styles.fillbutton} />
                                 </Link>
-                                <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
+                                {/* <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
                                     Download App
-                                </button>
+                                </button> */}
                             </motion.div>
                         </motion.div>
                     </div>

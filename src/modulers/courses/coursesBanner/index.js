@@ -71,9 +71,9 @@ export default function CoursesBanner() {
                 className={styles.buttonAlignment}
                 variants={itemVariants}
               >
-                <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
+                {/* <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
                   Download App
-                </button>
+                </button> */}
               </motion.div>
             </motion.div>
           </div>

@@ -73,9 +73,9 @@ export default function TelegramChannelBanner({ onSubscribeClick }) {
                   className={styles.fillbutton}
                   onClick={onSubscribeClick}
                 />
-                <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
+                {/* <button className={styles.outlineButton} onClick={() => setIsDownloadModalOpen(true)}>
                   Download App
-                </button>
+                </button> */}
               </motion.div>
             </motion.div>
           </div>
