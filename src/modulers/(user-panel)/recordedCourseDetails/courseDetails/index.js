@@ -308,6 +308,12 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
         }
     };
 
+    const handleCloseReviewModal = () => {
+        setShowReviewModal(false);
+        setRating(0);
+        setReviewText("");
+    };
+
     const handleReviewSubmit = async () => {
         if (rating === 0) {
             toast.error("Please select a rating.");
@@ -323,9 +329,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
             const response = await submitReview(reviewData);
             if (response.success) {
                 toast.success(response.message || "Review submitted successfully!");
-                setShowReviewModal(false);
-                setRating(0);
-                setReviewText("");
+                handleCloseReviewModal();
             } else {
                 toast.error(response.message || "Failed to submit review");
             }
@@ -528,7 +532,8 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
       toast.error(error.message || "Failed to generate student ID");
       setIsDownloadingStudentID(false);
     }
-  };
+    };
+   
 
     // Calculate average completion percentage
     const averageCompletion = chapters && chapters.length > 0
@@ -588,15 +593,17 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
 
                             <div className={styles.ratingAlignment}>
                                 {courseData?.isPayment ? (
-                                    <div className={styles.time}>
-                                        <span
-                                            className={styles.addReviewLink}
-                                            onClick={() => setShowReviewModal(true)}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            Add a Review
-                                        </span>
-                                    </div>
+                                    !courseData?.isReview && (
+                                        <div className={styles.time}>
+                                            <span
+                                                className={styles.addReviewLink}
+                                                onClick={() => setShowReviewModal(true)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                Add a Review
+                                            </span>
+                                        </div>
+                                    )
                                 ) : (<>
                                     <div className={styles.dot}></div>
                                     <div className={styles.time}><span>{courseData?.language || "English"}</span></div></>)}
@@ -948,7 +955,7 @@ export default function CourseDetails({ selectedVideo, chapters, onVideoSelect, 
                         <div className={styles.modalHeader}>
 
                             <h2>Add Review</h2>
-                            <button className={styles.closeBtn} onClick={() => setShowReviewModal(false)}>
+                            <button className={styles.closeBtn} onClick={handleCloseReviewModal}>
                                 <CloseIcon />
                             </button>
                         </div>
